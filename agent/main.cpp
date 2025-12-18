@@ -1,7 +1,6 @@
 ﻿#include "sync_globals.h" 
 #include "ws_heartbeat.h" 
-#include "producer.h" 
-//#include "consumer.h" 
+#include "producer.h"  
 #include "ws_consumer.h"
 namespace json = boost::json;
 const std::string host = "[2406:5900:107c:248c:1298:9f9e:6e5d:653f]";
