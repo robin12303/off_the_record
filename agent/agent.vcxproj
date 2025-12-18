@@ -136,7 +136,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="consumer\consumer.cpp" />
     <ClCompile Include="consumer\ws_consumer.cpp" />
     <ClCompile Include="heartbeat\ws_heartbeat.cpp" />
     <ClCompile Include="main.cpp" />
@@ -148,7 +147,6 @@
     <ClCompile Include="utils\spec.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="consumer\consumer.h" />
     <ClInclude Include="consumer\ws_consumer.h" />
     <ClInclude Include="heartbeat\ws_heartbeat.h" />
     <ClInclude Include="network\WsConnection.h" />

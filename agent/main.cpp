@@ -45,9 +45,7 @@ int main()
     ws_heartbeat->start();  
     ws_consumer->run();
 
-    producer.start();
-    
-    //consumer.run();
+    producer.start(); 
    
     // Windows 메시지 루프
     MSG msg;

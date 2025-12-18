@@ -50,8 +50,7 @@ void WsConnection::send(std::string msg)
 }
 
 websocket::stream<tcp::socket>& WsConnection::ws()
-{
-    // TODO: 여기에 return 문을 삽입합니다.
+{ 
     return ws_;
 }
 
@@ -97,10 +96,7 @@ void WsConnection::do_read()
             if (prefix == "READ") {
                 if (taskType == "START") { 
                 }
-            }
-
-
-
+            } 
             json::object resp;
             resp["prefix"] = prefix;
             resp["commandId"] = commandId;
