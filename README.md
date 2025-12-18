@@ -1,40 +1,73 @@
-프로젝트명 (off_the_record / redteam2)
+알았어요. 한글 감성 걷어내고, GitHub에서 사람들이 “아, 얘는 사람이다” 하고 넘길 수 있는 **정석 영어 README 문장**으로 바꿔줄게요. 군더더기 없음.
 
-한 줄 소개: C++ 에이전트가 이벤트를 수집하고, Java(Spring) 백엔드로 전송, Vue 대시보드에서 확인하는 토이 프로젝트.
+---
 
-개요
+# Project Name
 
-목적: (예: Windows에서 키/이벤트 수집과 전송 파이프라인을 직접 구현해보는 학습용 프로젝트)
+**off_the_record / redteam2**
 
-구성: Agent(C++) + Backend(Java) + Dashboard(Vue)
+## Description
 
-상태: 
+A toy project where a **C++ agent collects system events**, sends them to a **Java (Spring Boot) backend**, and visualizes them in a **Vue-based dashboard**.
 
-주요 기능
+## Overview
 
- C++ 에이전트
+**Purpose**
+A learning-oriented project focused on implementing an end-to-end event collection and transmission pipeline on Windows.
 
+**Architecture**
 
- Java 백엔드
+* Agent (C++)
+* Backend (Java)
+* Dashboard (Vue)
 
+**Status**
+In progress / Experimental
 
- Vue 대시보드
+## Features
 
-기술 스택
+### C++ Agent
 
-Agent: C++ (예: WinAPI, std::jthread, semaphore 등)
+* Collects system-level events on Windows
+* Serializes events into JSON
+* Sends data to the backend over the network
 
-Backend: Java 17, Spring Boot, WebSocket, JPA, Flyway, MySQL
+### Java Backend
 
-Frontend: Vue
+* Receives events via WebSocket
+* Manages agent connections and health checks
+* Persists data using a relational database
 
-실행 방법
-1) 요구사항
+### Vue Dashboard
 
-Windows (Agent)
+* Displays incoming events in real time
+* Shows agent connection and status information
 
-JDK 17+
+## Tech Stack
 
-Node.js + npm(or pnpm)
+**Agent**
 
-MySQL
+* C++ (WinAPI, `std::jthread`, semaphores)
+
+**Backend**
+
+* Java 17
+* Spring Boot
+* WebSocket
+* JPA / Flyway
+* MySQL
+
+**Frontend**
+
+* Vue
+
+## Getting Started
+
+### Requirements
+
+* Windows (for the agent)
+* JDK 17 or higher
+* Node.js with npm or pnpm
+* MySQL (optional, if database persistence is enabled)
+
+--- 
