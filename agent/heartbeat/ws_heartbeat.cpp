@@ -14,7 +14,7 @@ WsHeartbeat::WsHeartbeat(asio::io_context& ioc,
     j["taskType"] = "HEARTBEAT";
     j["payload"] = spec_str;
     boost::system::error_code ec;
-    json::value v = json::parse(spec_str);      //  문자열 전체를 JSON으로 "만듦"(파싱)
+    json::value v = json::parse(spec_str);      
     const json::object& o = v.as_object();
     j["machineGuid"] = o.at("machineGuid").as_string();
 } 
