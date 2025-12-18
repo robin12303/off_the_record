@@ -37,4 +37,4 @@ JDK 17+
 
 Node.js + npm(or pnpm)
 
-MySQL (사용한다면)
+MySQL
