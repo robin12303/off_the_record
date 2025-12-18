@@ -19,3 +19,22 @@
 
 
  Vue 대시보드
+
+기술 스택
+
+Agent: C++ (예: WinAPI, std::jthread, semaphore 등)
+
+Backend: Java 17, Spring Boot, WebSocket, JPA, Flyway, MySQL
+
+Frontend: Vue
+
+실행 방법
+1) 요구사항
+
+Windows (Agent)
+
+JDK 17+
+
+Node.js + npm(or pnpm)
+
+MySQL (사용한다면)
