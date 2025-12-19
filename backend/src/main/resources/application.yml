@@ -1,20 +1,11 @@
 spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/redteam2db?serverTimezone=Asia/Seoul&characterEncoding=utf8
-    username: root
-    password: 1234
+  application:
+    name: off_the_record
 
-  jpa:
-    hibernate:
-      ddl-auto: none
-    open-in-view: false
+---
 
-  flyway:
-    enabled: true
-
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      # password: pass1234   # requirepass 설정했으면
-      timeout: 2s
+spring:
+  config:
+    import: classpath:security/application-local.yml
+    activate:
+      on-profile: local

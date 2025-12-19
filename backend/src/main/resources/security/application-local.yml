@@ -1,0 +1,16 @@
+server:
+  port: 8080
+  shutdown: immediate
+
+spring:
+  datasource:
+    url: ${OFF_THE_RECORD_DB_URL}
+    username: ${OFF_THE_RECORD_DB_USERNAME}
+    password: ${OFF_THE_RECORD_DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+
+  flyway:
+    enabled: true
