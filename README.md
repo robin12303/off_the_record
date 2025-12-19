@@ -70,3 +70,46 @@ In progress / Experimental
 * MySQL (optional, if database persistence is enabled)
 
 --- 
+
+
+
+
+
+
+# API 명세서
+
+# REST API
+
+| **API** | **Method** | **Endpoint** | **Request** | **Reponse** |
+| --- | --- | --- | --- | --- |
+| agent 읽기 시작 | POST | `/readStart/{machineGuid}/{commandId}` | PathVariable |  |
+| agent 읽기 중단 | POST | `/readStop/{machineGuid}/{commandId}` | PathVariable |  |
+
+---
+
+# SSE
+
+| **API** | **Method** | **Endpoint** | **Request** | **Reponse** |
+| --- | --- | --- | --- | --- |
+| SSE 연결 생성 | GET | `/stream/{machineGuid}` |  |  |
+
+---
+
+# WebSocket
+
+## Backend
+
+| **API** | **Prefix** | **Task Type** |
+| --- | --- | --- |
+| KeyHookEvent 송신 진행 | READ | START |
+| KeyHookEvent 송신 중단 | READ | STOP |
+|  |  |  |
+
+## Agent
+
+| **API** | **Prefix** | **Task Type** | **Payload** |
+| --- | --- | --- | --- |
+| KeyHookEvent 전송 | READ | START | string(json) |
+| Health check | HEARTBEAT | HEARTBEAT | string(json) |
+
+---
