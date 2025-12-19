@@ -57,9 +57,6 @@ public class WebSocketAgentHandler extends TextWebSocketHandler {
 
                     if ("KEY".equals(received.taskType())) {
                         KeyEventData data = objectMapper.readValue(received.payload(), KeyEventData.class);
-
-
-
                         // ✅ 여기서 SSE 구독자들에게만 전송 (machineGuid 채널)
                         ssePushService.broadcastToMachine(received.machineGuid(), "keyevent", data);
                     }

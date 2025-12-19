@@ -5,7 +5,6 @@ import dev.backend.components.WebSocketSessionRegistry;
 import dev.backend.dto.HeartBeat;
 import dev.backend.repository.AgentCommandLogRepository;
 import dev.backend.repository.AgentRepository;
-import dev.backend.components.CommandIdGenerator;
 import dev.backend.dto.ReceivedMessage;
 import dev.backend.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
