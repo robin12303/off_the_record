@@ -3,7 +3,7 @@
 
 # Project Name
 
-**off_the_record
+**off_the_record**
 
 ## Description
 
