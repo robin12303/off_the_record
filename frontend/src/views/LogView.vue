@@ -18,8 +18,7 @@
 </template>
 
 <script>
-import { api } from '@/libs/api.js'
-
+import api from '@/api/index.js'
 export default {
   data() {
     return {

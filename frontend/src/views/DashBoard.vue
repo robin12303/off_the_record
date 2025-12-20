@@ -23,29 +23,26 @@
 </template>
 
 <script>
-import { api } from '@/libs/api.js'
-export default {
-  props: {
+import api from '@/api/index.js'
 
-  },
-  data(){
-    return{
-      recentAgents: null,
-    };
+export default {
+  data() {
+    return {
+      recentAgents: [], // null 말고 배열로
+    }
   },
   mounted() {
     console.log("[DashBoard] mounted.")
     this.recent()
   },
-
   methods: {
     async recent() {
       try {
-        const resp = await api.get("/api/backend/recent")
+        const resp = await api.get('/api/backend/recent')
         this.recentAgents = resp.data
-        console.log(`[DashBoard] recent `,this.recentAgents)
-      }catch(e){
-        console.log(`[DashBoard] recent error`)
+        console.log("[DashBoard] recent", this.recentAgents)
+      } catch (e) {
+        console.log("[DashBoard] recent error", e)
       }
     },
   },
