@@ -10,14 +10,10 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOriginPatterns(
-                        "http://localhost:5173"
-                )
-                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                .allowedOrigins("http://localhost:5173")
+                .allowedMethods("GET","POST","PUT","DELETE","OPTIONS")
                 .allowedHeaders("*")
-                .exposedHeaders("Location") // 필요하면 추가
-                .allowCredentials(true)     // 쿠키/세션/인증 필요하면 true
-                .maxAge(3600);
+                .allowCredentials(true);
 
         registry.addMapping("/stream/**")
                 .allowedOriginPatterns(
