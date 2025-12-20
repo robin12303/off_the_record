@@ -19,10 +19,9 @@ namespace json = boost::json;
 
 
 extern std::counting_semaphore<INT_MAX> sem;
-extern std::mutex m;
-extern std::queue<json::object> q;
-extern std::atomic<bool> run_key_event;
-
+extern std::mutex m, km;
+extern std::queue<json::object> q; 
+extern bool run_key_event;
  
 
 

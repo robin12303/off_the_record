@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import api from '@/api/index.js'
 export default {
   props: {
 

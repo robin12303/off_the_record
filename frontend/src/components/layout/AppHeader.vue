@@ -2,32 +2,22 @@
   <header class="app-header">
     <nav class="nav">
       <div class="nav-left">
-        <router-link to="/home" class="link" exact-active-class="active">Home</router-link>
+        <router-link to="/" class="link" exact-active-class="active">Home</router-link>
         <router-link to="/about" class="link" exact-active-class="active">About</router-link>
         <router-link to="/dashboard" class="link" exact-active-class="active">DashBoard</router-link>
         <router-link to="/log" class="link" exact-active-class="active">Log</router-link>
       </div>
 
-      <div class="nav-right">
-        <button class="logout" type="button" @click="logout" aria-label="Logout">
-          <span class="logout-icon" aria-hidden="true">⎋</span>
-          <span>Logout</span>
-        </button>
-      </div>
+
     </nav>
   </header>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-// import { tokenStore } from "@/tokenStore"; // 쓰면 주석 해제
 
 const router = useRouter();
 
-function logout() {
-  // tokenStore.clear(); // access token 메모리 저장이면 이거 같이 해주는 게 깔끔
-  router.push("/");
-}
 </script>
 
 <style scoped>

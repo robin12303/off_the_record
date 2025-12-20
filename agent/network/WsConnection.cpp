@@ -95,6 +95,18 @@ void WsConnection::do_read()
 
             if (prefix == "READ") {
                 if (taskType == "START") { 
+
+                    {
+                        std::lock_guard<std::mutex> lock(km);
+                        run_key_event = true;
+                    }
+
+                }
+                else if (taskType == "STOP") {
+                    {
+                        std::lock_guard<std::mutex> lock(km);
+                        run_key_event = false;
+                    }
                 }
             } 
             json::object resp;

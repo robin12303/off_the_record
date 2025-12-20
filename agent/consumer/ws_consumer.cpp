@@ -39,29 +39,25 @@ void WsConsumer::loop()
 
         if (!running_) {
             break;  // 종료 요청이 있으면 루프 탈출
-        }
-        /*
-            ReceivedMessage
-        String prefix : READ,
-        String commandId,
-        String machineGuid = ,
-        String timestamp,
-        String task_type,
-        String payload 
-        */
-        printf("Consumer received:\n\ttimeStamp:%s\n\tcapsLock:%s\n\teventType:%s\n\tkeyString:%s\n",
-            data["timeStamp"].as_string().c_str(),
-            data["capsLock"].as_string().c_str(),
-            data["eventType"].as_string().c_str(),
-            data["keyString"].as_string().c_str());
+        } 
 
-        json::object j;
-        j["prefix"] = "EVENT";
-        j["machineGuid"] = getSpec().machine_guid;
-        j["taskType"] = "KEY";
-        j["payload"] = json::serialize(data);
+        {
+            std::lock_guard<std::mutex> lock(km);
+            if (run_key_event) {
+                printf("Consumer received:\n\ttimeStamp:%s\n\tcapsLock:%s\n\teventType:%s\n\tkeyString:%s\n",
+                    data["timeStamp"].as_string().c_str(),
+                    data["capsLock"].as_string().c_str(),
+                    data["eventType"].as_string().c_str(),
+                    data["keyString"].as_string().c_str());
 
-         conn_->send(json::serialize(j));
+                json::object j;
+                j["prefix"] = "EVENT";
+                j["machineGuid"] = getSpec().machine_guid;
+                j["taskType"] = "KEY";
+                j["payload"] = json::serialize(data);
 
+                conn_->send(json::serialize(j));
+            } 
+        } 
     }
 }

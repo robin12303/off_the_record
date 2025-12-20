@@ -14,11 +14,12 @@
       <button
           class="scan-btn"
           type="button"
-          @click="scan"
-          :disabled="isLoading || !input"
+          @click="isConnected ? stop() : scan()"
+          :disabled="isLoading || (!isConnected && !input)"
       >
-        {{ isLoading ? "Connecting..." : "Scan" }}
+        {{ isLoading ? "Connecting..." : (isConnected ? "Stop" : "Scan") }}
       </button>
+
     </div>
 
     <pre class="log">text_log:
@@ -38,17 +39,42 @@ export default {
       clientId: null,
       es: null,
       recentAgents: null,
-      isLoading: false, // ✅ 추가
+      isLoading: false,
+      isConnected: false, // ✅ 추가
     };
   },
+
   mounted() {
     this.clientId = "web-" + crypto.randomUUID();
     console.log("clientId fixed:", this.clientId);
   },
   unmounted() {
     if (this.es) this.es.close();
+    this.stop();
   },
   methods: {
+    async stop() {
+      // 1) SSE 먼저 끊기 (UI 즉시 반응)
+      if (this.es) {
+        this.es.close();
+        this.es = null;
+      }
+      this.isConnected = false;
+      this.isLoading = false;
+
+      // 2) 서버에 readStop 알리기
+      try {
+        if (this.input && this.clientId) {
+          await api.post(
+              `/api/backend/readStop/${encodeURIComponent(this.input)}/${encodeURIComponent(this.clientId)}`
+          );
+          console.log("[LogView] readStop sent");
+        }
+      } catch (e) {
+        console.log("[LogView] readStop failed:", e);
+      }
+    },
+
     async scan() {
       if (this.isLoading) return;
       if (!this.input) return;
@@ -63,31 +89,38 @@ export default {
         this.recentAgents = resp.data;
 
         const sse_url = `${this.API_BASE}/api/sse/stream/${encodeURIComponent(this.input)}`;
+
         if (this.es) this.es.close();
         this.es = new EventSource(sse_url);
+
+        // ✅ 연결 상태 ON (connected 이벤트를 기다렸다가 켜도 되고, 여기서 켜도 됨)
+        this.isConnected = true;
 
         this.es.addEventListener("keyevent", (e) => {
           const data = JSON.parse(e.data);
           const { timeStamp, capsLock, eventType, keyString } = data;
-
-          console.log("keyevent:", data);
           this.text_log += `${timeStamp}\t${capsLock}\t${eventType}\t${keyString}\n`;
         });
 
         this.es.addEventListener("connected", (e) => {
           console.log("connected:", e.data);
+          // 여기서 isConnected = true로 해도 됨 (서버가 connected 이벤트를 확실히 보내는 경우)
         });
 
         this.es.onerror = (err) => {
           console.log("SSE error:", err);
+          // ✅ 에러 나면 자동으로 Stop 상태로 (원하면 유지 가능)
+          this.stop();
         };
       } catch (e) {
         console.log(e);
+        this.stop();
       } finally {
         this.isLoading = false;
       }
     },
   },
+
 };
 </script>
 

@@ -3,12 +3,20 @@
 #include "producer.h"  
 #include "ws_consumer.h"
 namespace json = boost::json;
-const std::string host = "[2406:5900:107c:248c:1298:9f9e:6e5d:653f]";
-const std::string port = "8080";
-const std::string target = "/ws/agent";
+static constexpr const char* DEFAULT_HOST = "localhost";
+static constexpr const char* DEFAULT_PORT = "8080";
+static constexpr const char* DEFAULT_TARGET = "/ws/agent";
 void RunIoContext(boost::asio::io_context& ioc);
-int main()
+int main(int argc, char* argv[])
 {
+    std::string host = (argc > 1) ? argv[1] : DEFAULT_HOST;
+    std::string port = (argc > 2) ? argv[2] : DEFAULT_PORT;
+    std::string target = (argc > 3) ? argv[3] : DEFAULT_TARGET;
+
+    std::cout << "Connecting to host=" << host
+        << " port=" << port
+        << " target=" << target << "\n";
+
     // sys_info
     auto sys_info = getSpec();
 
