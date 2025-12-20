@@ -22,6 +22,7 @@ import api from '@/api/index.js'
 export default {
   data() {
     return {
+      API_BASE: import.meta.env.VITE_API_URL,
       input: "",
       text_log: "",
       clientId: null,
@@ -46,7 +47,7 @@ export default {
         );
         this.recentAgents = resp.data;
 
-        const sse_url = `http://localhost:8080/api/sse/stream/${encodeURIComponent(this.input)}`;
+        const sse_url = `${this.API_BASE}/api/sse/stream/${encodeURIComponent(this.input)}`;
         if (this.es) this.es.close(); // 중복 연결 방지
         this.es = new EventSource(sse_url);
 
