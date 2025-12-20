@@ -1,7 +1,12 @@
 <template>
   <div class="wrap">
     <div class="card">
-      <h1>Login</h1>
+      <h1>Sign up</h1>
+
+      <label>
+        Name (optional)
+        <input v-model.trim="name" type="text" placeholder="Your name" />
+      </label>
 
       <label>
         Email
@@ -14,15 +19,14 @@
       </label>
 
       <div class="btn-row">
-        <button :disabled="loading || !canSubmit" @click="login">
-          {{ loading ? "Logging in..." : "Login" }}
+        <button :disabled="loading || !canSubmit" @click="signup">
+          {{ loading ? "Creating..." : "Create account" }}
         </button>
 
-        <button class="secondary" :disabled="loading" @click="goSignup">
-          Sign up
+        <button class="secondary" :disabled="loading" @click="goLogin">
+          Back
         </button>
       </div>
-
 
       <p v-if="msg" class="msg">{{ msg }}</p>
     </div>
@@ -30,11 +34,12 @@
 </template>
 
 <script>
-import api from "@/api"; // 경로는 네 프로젝트에 맞게 수정 (예: "../api" 등)
+import api from "@/api"; // 네 api.js 경로에 맞게
 
 export default {
   data() {
     return {
+      name: "",
       email: "",
       password: "",
       loading: false,
@@ -44,19 +49,20 @@ export default {
 
   computed: {
     canSubmit() {
-      const email = this.email.trim();
-      return email.length > 0 && this.password.length >= 4 && !this.loading;
+      return this.email.trim().length > 0 && this.password.length >= 4;
     },
   },
 
   methods: {
-    async login() {
+    async signup() {
       this.msg = "";
+      if (!this.canSubmit) return;
 
+      // 최소 검증(진짜 검증은 서버에서)
       const email = this.email.trim();
+      const name = this.name.trim();
       const password = this.password;
 
-      // 최소 검증 (진짜 검증은 서버가 함)
       if (!email.includes("@")) {
         this.msg = "❌ Invalid email";
         return;
@@ -69,21 +75,34 @@ export default {
       this.loading = true;
 
       try {
-        // 백엔드: POST /auth/login
-        // 기대 응답: { accessToken: "...", tokenType: "Bearer" }
-        const res = await api.post("/auth/login", { email, password });
+        // 백엔드가 refresh token을 HttpOnly 쿠키로 내려주면
+        // 브라우저가 쿠키를 저장하려면 withCredentials: true 필요
+        const res = await api.post(
+            // 프록시/베이스URL 설정되어 있으면 "/auth/signin"만 써도 됨
+            "/auth/signin",
+            { name, email, password }, // SigninRequest(String name, String email, String password)
+            { withCredentials: true }
+        );
 
+        // 백엔드가 accessToken을 JSON body로 준다고 가정
+        // 예: { accessToken: "...", tokenType: "Bearer" }
         const accessToken = res?.data?.accessToken;
+
         if (!accessToken) {
-          this.msg = "❌ Login succeeded but no access token returned";
+          this.msg = "❌ Signup succeeded but no access token returned";
           return;
         }
-        // 이후 요청에 자동으로 Authorization 붙이려면(선택)
-        // api.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
-        this.msg = `✅ Logged in as ${email}`;
+        // 간단 버전: localStorage 저장 (편하지만 XSS에 약함)
+        localStorage.setItem("accessToken", accessToken);
+
+        // 이후 요청들에 자동으로 Authorization 붙이기(선택)
+        //axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+
+        this.msg = "✅ Account created";
         this.$router.push("/home");
       } catch (err) {
+        // 스프링에서 400/409/500 등으로 올 수 있음
         const status = err?.response?.status;
         const serverMsg =
             err?.response?.data?.message ||
@@ -91,16 +110,16 @@ export default {
             err?.response?.data ||
             err?.message;
 
-        if (status === 401) this.msg = "❌ Invalid email or password";
-        else this.msg = `❌ Login failed: ${serverMsg}`;
+        if (status === 409) this.msg = "❌ Email already exists";
+        else if (status === 400) this.msg = `❌ Bad request: ${serverMsg}`;
+        else this.msg = `❌ Signup failed: ${serverMsg}`;
       } finally {
         this.loading = false;
       }
     },
 
-    goSignup() {
-      this.msg = "";
-      this.$router.push("/signup");
+    goLogin() {
+      this.$router.push("/");
     },
   },
 };
@@ -126,9 +145,7 @@ export default {
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(15, 23, 42, 0.08);
-  box-shadow:
-      0 18px 45px rgba(15, 23, 42, 0.12),
-      0 2px 10px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12), 0 2px 10px rgba(15, 23, 42, 0.06);
   backdrop-filter: blur(10px);
 }
 
@@ -172,9 +189,7 @@ input:focus {
 }
 
 .btn-row button {
-  width: auto !important;
   flex: 1 1 0;
-  margin-top: 0;
 }
 
 button {
@@ -218,5 +233,4 @@ button:disabled {
   border: 1px solid rgba(15, 23, 42, 0.08);
   color: rgba(15, 23, 42, 0.85);
 }
-
 </style>
