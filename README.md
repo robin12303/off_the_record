@@ -113,3 +113,11 @@ In progress / Experimental
 | Health check | HEARTBEAT | HEARTBEAT | string(json) |
 
 ---
+flowchart LR
+  A[Source: OS/Event] -->|Event(JSON)| B[Agent/Collector]
+  B -->|WebSocket| C[Backend WS Handler]
+  C --> D[Service/Processor]
+  D -->|INSERT/UPSERT| E[(DB)]
+  D -->|SSE/WS| F[Frontend UI]
+
+
