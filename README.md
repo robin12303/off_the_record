@@ -225,12 +225,13 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
     }
 ]
 ```
-6) 
 ---
-
 ## Screenshots
+### [Frontend]
+<img width="1342" height="1038" alt="about" src="https://github.com/user-attachments/assets/e63e4173-9bcb-480c-a81a-c4295864d7b4" />
 
-![Dashboard](docs/images/dashboard.png)
+
+
 
 ---
 
