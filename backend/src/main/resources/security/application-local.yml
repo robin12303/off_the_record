@@ -13,3 +13,12 @@ spring:
     open-in-view: false
   flyway:
     enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+      cors:
+        allowed-origin-patterns: "http://localhost:*"
+        allowed-methods: "GET,OPTIONS"
+        allowed-headers: "*"
