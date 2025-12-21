@@ -228,10 +228,14 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
 ---
 ## Screenshots
 ### [Frontend]
+1) **Home.vue**
 <img width="1342" height="1038" alt="about" src="https://github.com/user-attachments/assets/e63e4173-9bcb-480c-a81a-c4295864d7b4" />
-
-
-
+2) **About.vue**
+<img width="1342" height="1038" alt="about" src="https://github.com/user-attachments/assets/4de65ec2-d894-4c4d-923b-99e1ffb580c4" />
+3) **DashBoard.vue**
+<img width="1131" height="366" alt="dashboard" src="https://github.com/user-attachments/assets/946871c3-c613-486d-92f9-dd3b3fb8f418" />
+4) **Log.vue**
+<img width="1734" height="916" alt="log" src="https://github.com/user-attachments/assets/79354516-c0e6-4ce9-98dc-70f2ea593144" />
 
 ---
 
