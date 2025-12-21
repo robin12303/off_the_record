@@ -163,7 +163,7 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
 | Key event | READ      | STOP      | `string(json)` |
 | Heartbeat | HEARTBEAT | HEARTBEAT | `string(json)` |
 
-**Example: Key event**
+** API 요청 및 응답 예시  **
 1) Command 요청 예시 (Web/Backend → Agent)
 ```json
 {
