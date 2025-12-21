@@ -244,7 +244,6 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
 
 2) **동의 후 실행 화면**
 <img width="1118" height="631" alt="running" src="https://github.com/user-attachments/assets/163e6580-aee9-4cf0-8b15-7fae481f2265" />
----
 
 
 ## Status
