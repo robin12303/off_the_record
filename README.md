@@ -179,7 +179,7 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
 {
   "prefix": "READ",
   "commandId": "web-6855092c-fd5c-4249-86d0-c54e2d3f39bc",
-  "machineGuid": "bea2fc93-9095-49c3-99ca-1de95e611325",
+  "machineGuid": "1111-11-1111-1111-111111111",
   "taskType": "START"
 }
 ```
@@ -190,7 +190,7 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
   "prefix": "READ",
   "commandId": "N/A",
   "taskType": "EVENT",
-  "machineGuid": "bea2fc93-9095-49c3-99ca-1de95e611325",
+  "machineGuid": "11111-11-11-11-1111111",
   "payload": "{\"timeStamp\":\"2025-12-21 11:12:42\",\"capsLock\":\"OFF\",\"eventType\":\"KEY_DOWN\",\"keyString\":\"a\"}"
 }
 ```
