@@ -183,8 +183,9 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
   "taskType": "START"
 }
 ```
-3) Key Event 메시지 예시 
+3) Key Event 메시지 예시
 
+```json
 {
   "prefix": "READ",
   "commandId": "N/A",
@@ -192,7 +193,8 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
   "machineGuid": "bea2fc93-9095-49c3-99ca-1de95e611325",
   "payload": "{\"timeStamp\":\"2025-12-21 11:12:42\",\"capsLock\":\"OFF\",\"eventType\":\"KEY_DOWN\",\"keyString\":\"a\"}"
 }
-**Example: Heartbeat**
+```
+4) Heartbeat
 
 ```json
 {
