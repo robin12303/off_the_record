@@ -99,8 +99,7 @@ cd agent
   "accepted": true
 }
 ```
-
-> 위 응답 포맷은 예시입니다. 실제 구현에 맞게 맞추세요.
+ 
 
 ---
 
@@ -149,10 +148,7 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
   "taskType": "HEARTBEAT",
   "payload": "{\"machineGuid\":\"...\",\"status\":\"OK\"}"
 }
-```
-
-> 메시지 envelope(prefix/taskType/payload) 구조는 예시입니다. 실제 구현과 다르면 구현에 맞춰 수정하세요.
-
+``` 
 ---
 
 ## Screenshots
