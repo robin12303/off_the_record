@@ -1,4 +1,3 @@
----
 Windows 환경에서 **C++ Agent가 시스템 이벤트(예: 키보드 입력)를 수집**하고,  
 이를 **Spring Boot Backend로 전송**하여 **저장(MySQL)** 및 **실시간 스트리밍(SSE)** 으로 **Vue Dashboard**에서 확인하는 학습용 프로젝트입니다.
 
@@ -247,6 +246,7 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
 <img width="1118" height="631" alt="running" src="https://github.com/user-attachments/assets/163e6580-aee9-4cf0-8b15-7fae481f2265" />
 ---
 
+---
 ## Status
 In progress / Experimental
 ```
