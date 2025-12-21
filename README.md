@@ -1,5 +1,5 @@
 ---
-# Off the record
+## Off the record
 Windows 환경에서 **C++ Agent가 시스템 이벤트(예: 키보드 입력)를 수집**하고,  
 이를 **Spring Boot Backend로 전송**하여 **저장(MySQL)** 및 **실시간 스트리밍(SSE)** 으로 **Vue Dashboard**에서 확인하는 학습용 프로젝트입니다.
 윤리/보안 주의: 본 프로젝트는 학습/실험 목적이며, 사용자 동의 없이 사용하면 안 됩니다.  
