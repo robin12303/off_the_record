@@ -18,9 +18,9 @@
 
 ### Vue Dashboard
 
-* 실시간 이벤트 표시(SSE)
-* 에이전트 연결 상태 표시
-* Start/Stop 등 제어 요청(REST)
+- 실시간 이벤트 표시(SSE)
+- 에이전트 연결 상태 표시
+- Start/Stop 등 제어 요청(REST)
 
 ---
 
