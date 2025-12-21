@@ -17,6 +17,36 @@
 
 ---
 
+## 소개
+
+**Windows 키보드 이벤트를 실시간 수집 → 서버 저장/스트리밍까지 연결한 멀티스레드 이벤트 처리 시스템**
+
+### Architecture
+
+- **C++ Agent (Windows)** → **WebSocket (Boost.Asio)** → **Spring Boot Backend** → **SSE** → **Vue Dashboard**
+
+### C++ Agent (Windows)
+
+- WinAPI로 **키보드 이벤트 실시간 캡처**
+- 이벤트를 **JSON 직렬화** 후 WebSocket으로 전송
+- `std::jthread`로 I/O 컨텍스트를 별도 스레드에서 실행
+- `std::counting_semaphore + std::mutex` 기반 **Producer–Consumer 이벤트 큐**
+- 별도 스레드 **Heartbeat**로 연결 유지
+
+### Backend (Spring Boot)
+
+- WebSocket 세션 관리 (**WebSocketAgentHandler**)
+- **RateLimiter**로 초당 이벤트 처리량 제한
+- 수신 이벤트 **MySQL(JPA)** 저장 + 동시에 **SSE로 대시보드 실시간 스트리밍**
+- `/readStart`, `/readStop` REST API로 스트리밍 제어
+
+### Key Points
+
+- 멀티스레딩 + 비동기 처리 기반의 **저지연 실시간 이벤트 파이프라인**
+- WebSocket / REST / SSE를 결합한 **복합 통신 구조 설계 및 구현**
+
+---
+
 ## Architecture
 <img width="965" height="744" alt="아키텍처6" src="https://github.com/user-attachments/assets/e2550f4f-0b7b-4f1f-8d2b-7527f8a54081" />
 
