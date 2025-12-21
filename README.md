@@ -80,8 +80,6 @@ $env:VITE_API_URL="http://localhost:8080"
 npm run dev
 ```
 
-### 3) Agent (Windows)
-
 ### 3) Agent (Windows / Visual Studio)
 
 #### Prerequisites
