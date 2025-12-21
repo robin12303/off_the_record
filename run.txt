@@ -1,4 +1,0 @@
-$env:OFF_THE_RECORD_DB_URL="jdbc:mysql://localhost:3306/off_the_record"
-$env:OFF_THE_RECORD_DB_USERNAME="root"
-$env:OFF_THE_RECORD_DB_PASSWORD="1234"
-.\gradlew bootRun --args="--spring.profiles.active=local"
