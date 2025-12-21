@@ -164,12 +164,23 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
 | Heartbeat | HEARTBEAT | HEARTBEAT | `string(json)` |
 
 **Example: Key event**
+1) Command 요청 예시 (Web/Backend → Agent)
+```json
+{
+  "prefix": "READ",
+  "commandId": "web-6855092-fd5c-4249-86d0-c54e2d3f39bc",
+  "machineGuid": "********-****-****-****-********",
+  "taskType": "START"
+}
+```
+2) Command 요청 예시 (Web/Backend → Agent, STOP)  
 
 ```json
 {
   "prefix": "READ",
-  "taskType": "START",
-  "payload": "{\"timeStamp\":\"...\",\"eventType\":\"KEYDOWN\",\"keyString\":\"A\"}"
+  "commandId": "web-6855092c-fd5c-4249-86d0-c54e2d3f39bc",
+  "machineGuid": "bea2fc93-9095-49c3-99ca-1de95e611325",
+  "taskType": "START"
 }
 ```
 
@@ -178,9 +189,12 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
 ```json
 {
   "prefix": "HEARTBEAT",
+  "commandId": "N/A",
   "taskType": "HEARTBEAT",
-  "payload": "{\"machineGuid\":\"...\",\"status\":\"OK\"}"
+  "payload": "{\"cpuName\":\"Intel(R) ...\",\"gpuName\":\"NVIDIA ...\",\"ramTotalMb\":32768,\"osName\":\"Windows 11\",\"osVersion\":\"10.0.22631\",\"machineGuid\":\"{A1B2-C3D4-...}\",\"hostName\":\"DESKTOP-XXXX\"}",
+  "machineGuid": "{A1B2-C3D4-...}"
 }
+
 ``` 
 ---
 
