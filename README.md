@@ -42,35 +42,49 @@ Windows 환경에서 **C++ Agent가 시스템 이벤트(예: 키보드 입력)�
 
 ---
 
-## Getting Started
+## 실행 방법
 
 ### Prerequisites
+- Docker Desktop (추천)
+- (로컬 실행 시) Windows, JDK 17+, Node.js, MySQL
 
-- Windows (Agent 실행용)
-- JDK 17+
-- Node.js (npm 또는 pnpm)
-- MySQL (DB 사용 시)
+---
 
-### 1) Backend
+### 1) Backend + MySQL (Docker Compose)
 
 ```bash
-# (예시) backend 디렉토리
-$env:OFF_THE_RECORD_DB_URL="jdbc:mysql://localhost:3306/off_the_record"
-$env:OFF_THE_RECORD_DB_USERNAME="root"
-$env:OFF_THE_RECORD_DB_PASSWORD="1234"
-.\gradlew clean bootRun --args="--spring.profiles.active=local"
+docker compose up --build
 ```
 
-환경변수 예시:
+ 
 
-* `OFF_THE_RECORD_DB_URL`
-* `OFF_THE_RECORD_DB_USERNAME`
-* `OFF_THE_RECORD_DB_PASSWORD`
+Health check:
 
-Health check (Actuator 사용 시):
+```bash
+curl http://localhost:8080/actuator/health
+```
 
-* `GET /actuator/health`
+Logs:
 
+```bash
+docker compose logs -f backend
+```
+
+Stop:
+
+```bash
+docker compose down
+```
+
+> DB 초기화(선택):
+> 
+
+```bash
+docker compose down -v
+```
+
+> Docker Compose 실행 시 DB 접속 정보는 compose 환경변수로 설정됩니다.
+>
 ### 2) Frontend
 
 ```bash
