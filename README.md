@@ -4,17 +4,17 @@
 
 ### C++ Agent
 
-* Windows 시스템 이벤트 수집 (예: 키 이벤트)
-* 이벤트 JSON 직렬화
-* WebSocket으로 백엔드에 전송
-* (선택) 연결/재연결, Heartbeat
+- Windows 시스템 이벤트 수집 (예: 키 이벤트)
+- 이벤트 JSON 직렬화
+- WebSocket으로 백엔드에 전송
+- (선택) 연결/재연결, Heartbeat
 
 ### Java Backend (Spring Boot)
 
-* WebSocket 연결 수신 및 에이전트 세션 관리
-* 이벤트 처리 및 DB 저장(MySQL)
-* 실시간 스트리밍(SSE)
-* Agent 제어용 REST API (Start/Stop)
+- WebSocket 연결 수신 및 에이전트 세션 관리
+- 이벤트 처리 및 DB 저장(MySQL)
+- 실시간 스트리밍(SSE)
+- Agent 제어용 REST API (Start/Stop)
 
 ### Vue Dashboard
 
@@ -26,9 +26,9 @@
 
 ## Tech Stack
 
-* **Agent**: C++ (WinAPI), `std::jthread`, semaphore
-* **Backend**: Java 17, Spring Boot, WebSocket, JPA, Flyway, MySQL
-* **Frontend**: Vue
+- **Agent**: C++ (WinAPI), `std::jthread`, semaphore
+- **Backend**: Java 17, Spring Boot, WebSocket, JPA, Flyway, MySQL
+- **Frontend**: Vue
 
 ---
 
@@ -36,10 +36,10 @@
 
 ### Prerequisites
 
-* Windows (Agent 실행용)
-* JDK 17+
-* Node.js (npm 또는 pnpm)
-* MySQL (DB 사용 시)
+- Windows (Agent 실행용)
+- JDK 17+
+- Node.js (npm 또는 pnpm)
+- MySQL (DB 사용 시)
 
 ### 1) Backend
 
