@@ -1,123 +1,181 @@
 ---
 
-# Project Name
-
-**off_the_record**
-
-
-## Description
-
-A toy project where a **C++ agent collects system events**, sends them to a **Java (Spring Boot) backend**, and visualizes them in a **Vue-based dashboard**.
-
-## Overview
-
-**Purpose**
-A learning-oriented project focused on implementing an end-to-end event collection and transmission pipeline on Windows.
-
-**Architecture**
-
-* Agent (C++)
-* Backend (Java)
-* Dashboard (Vue)
-
-**Status**
-In progress / Experimental
-
 ## Features
 
 ### C++ Agent
 
-* Collects system-level events on Windows
-* Serializes events into JSON
-* Sends data to the backend over the network
+* Windows 시스템 이벤트 수집 (예: 키 이벤트)
+* 이벤트 JSON 직렬화
+* WebSocket으로 백엔드에 전송
+* (선택) 연결/재연결, Heartbeat
 
-### Java Backend
+### Java Backend (Spring Boot)
 
-* Receives events via WebSocket
-* Manages agent connections and health checks
-* Persists data using a relational database
+* WebSocket 연결 수신 및 에이전트 세션 관리
+* 이벤트 처리 및 DB 저장(MySQL)
+* 실시간 스트리밍(SSE)
+* Agent 제어용 REST API (Start/Stop)
 
 ### Vue Dashboard
 
-* Displays incoming events in real time
-* Shows agent connection and status information
+* 실시간 이벤트 표시(SSE)
+* 에이전트 연결 상태 표시
+* Start/Stop 등 제어 요청(REST)
+
+---
 
 ## Tech Stack
 
-**Agent**
+* **Agent**: C++ (WinAPI), `std::jthread`, semaphore
+* **Backend**: Java 17, Spring Boot, WebSocket, JPA, Flyway, MySQL
+* **Frontend**: Vue
 
-* C++ (WinAPI, `std::jthread`, semaphores)
-
-**Backend**
-
-* Java 17
-* Spring Boot
-* WebSocket
-* JPA / Flyway
-* MySQL
-
-**Frontend**
-
-* Vue
+---
 
 ## Getting Started
 
-### Requirements
+### Prerequisites
 
-* Windows (for the agent)
-* JDK 17 or higher
-* Node.js with npm or pnpm
-* MySQL (optional, if database persistence is enabled)
+* Windows (Agent 실행용)
+* JDK 17+
+* Node.js (npm 또는 pnpm)
+* MySQL (DB 사용 시)
 
---- 
+### 1) Backend
 
+```bash
+# (예시) backend 디렉토리
+cd backend
+# (예시) Gradle
+./gradlew bootRun
+```
 
+환경변수 예시:
 
+* `OFF_THE_RECORD_DB_URL`
+* `OFF_THE_RECORD_DB_USERNAME`
+* `OFF_THE_RECORD_DB_PASSWORD`
 
+Health check (Actuator 사용 시):
 
+* `GET /actuator/health`
 
-# API 명세서
+### 2) Frontend
 
-# REST API
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-| **API** | **Method** | **Endpoint** | **Request** | **Reponse** |
-| --- | --- | --- | --- | --- |
-| agent 읽기 시작 | POST | `/readStart/{machineGuid}/{commandId}` | PathVariable |  |
-| agent 읽기 중단 | POST | `/readStop/{machineGuid}/{commandId}` | PathVariable |  |
+### 3) Agent (Windows)
+
+```bash
+cd agent
+# (빌드/실행 방법을 프로젝트 실제 방식대로 작성)
+```
+
+---
+
+## API Spec
+
+### REST API
+
+| Name                  | Method | Endpoint                               | Request     | Response            |
+| --------------------- | ------ | -------------------------------------- | ----------- | ------------------- |
+| Start agent streaming | POST   | `/readStart/{machineGuid}/{commandId}` | Path params | (예시) `202 Accepted` |
+| Stop agent streaming  | POST   | `/readStop/{machineGuid}/{commandId}`  | Path params | (예시) `202 Accepted` |
+
+**Path Params**
+
+* `machineGuid`: 에이전트 식별자
+* `commandId`: 요청 식별자(클라이언트에서 생성)
+
+**Response (example)**
+
+```json
+{
+  "commandId": "abc-123",
+  "accepted": true
+}
+```
+
+> 위 응답 포맷은 예시입니다. 실제 구현에 맞게 맞추세요.
 
 ---
 
-# SSE
+### SSE
 
-| **API** | **Method** | **Endpoint** | **Request** | **Reponse** |
-| --- | --- | --- | --- | --- |
-| SSE 연결 생성 | GET | `/stream/{machineGuid}` |  |  |
+| Name            | Method | Endpoint                | Request     | Response            |
+| --------------- | ------ | ----------------------- | ----------- | ------------------- |
+| Open SSE stream | GET    | `/stream/{machineGuid}` | Path params | `text/event-stream` |
+
+**Event (example)**
+
+```text
+event: key_event
+data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
+```
+
+---
+
+### WebSocket
+
+* Endpoint: (예시) `/ws/agent`
+* Payload: JSON string
+
+#### Agent → Backend
+
+| Type      | Prefix    | TaskType  | Payload        |
+| --------- | --------- | --------- | -------------- |
+| Key event | READ      | START     | `string(json)` |
+| Heartbeat | HEARTBEAT | HEARTBEAT | `string(json)` |
+
+**Example: Key event**
+
+```json
+{
+  "prefix": "READ",
+  "taskType": "START",
+  "payload": "{\"timeStamp\":\"...\",\"eventType\":\"KEYDOWN\",\"keyString\":\"A\"}"
+}
+```
+
+**Example: Heartbeat**
+
+```json
+{
+  "prefix": "HEARTBEAT",
+  "taskType": "HEARTBEAT",
+  "payload": "{\"machineGuid\":\"...\",\"status\":\"OK\"}"
+}
+```
+
+> 메시지 envelope(prefix/taskType/payload) 구조는 예시입니다. 실제 구현과 다르면 구현에 맞춰 수정하세요.
 
 ---
 
-# WebSocket
+## Screenshots
 
-## Backend
-
-| **API** | **Prefix** | **Task Type** |
-| --- | --- | --- |
-| KeyHookEvent 송신 진행 | READ | START |
-| KeyHookEvent 송신 중단 | READ | STOP |
-|  |  |  |
-
-## Agent
-
-| **API** | **Prefix** | **Task Type** | **Payload** |
-| --- | --- | --- | --- |
-| KeyHookEvent 전송 | READ | START | string(json) |
-| Health check | HEARTBEAT | HEARTBEAT | string(json) |
+![Dashboard](docs/images/dashboard.png)
 
 ---
-flowchart LR
-  A[Source: OS/Event] -->|Event(JSON)| B[Agent/Collector]
-  B -->|WebSocket| C[Backend WS Handler]
-  C --> D[Service/Processor]
-  D -->|INSERT/UPSERT| E[(DB)]
-  D -->|SSE/WS| F[Frontend UI]
 
+## Status
 
+In progress / Experimental
+
+```
+
+---
+
+## 3) 딱 3개만 더하면 “포트폴리오 문서”가 됨
+1) **Architecture 이미지 한 장** (draw.io png export)  
+2) **실행 순서**(backend → frontend → agent) 실제 명령어  
+3) **API 예시**(요청/응답 JSON 1개씩이라도)
+
+---
+
+원하면 너 레포 구조(backend/frontend/agent 디렉토리 이름이랑 실행 명령) 기준으로 위 “Getting Started”를 **진짜 실행 가능한** 형태로 딱 맞춰서 다시 정리해줄게요.
+::contentReference[oaicite:0]{index=0}
+```
