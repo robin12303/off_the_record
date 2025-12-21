@@ -57,9 +57,10 @@ Windows 환경에서 **C++ Agent가 시스템 이벤트(예: 키보드 입력)�
 
 ```bash
 # (예시) backend 디렉토리
-cd backend
-# (예시) Gradle
-./gradlew bootRun
+$env:OFF_THE_RECORD_DB_URL="jdbc:mysql://localhost:3306/off_the_record"
+$env:OFF_THE_RECORD_DB_USERNAME="root"
+$env:OFF_THE_RECORD_DB_PASSWORD="1234"
+.\gradlew clean bootRun --args="--spring.profiles.active=local"
 ```
 
 환경변수 예시:
@@ -75,8 +76,7 @@ Health check (Actuator 사용 시):
 ### 2) Frontend
 
 ```bash
-cd frontend
-npm install
+$env:VITE_API_URL="http://localhost:8080"
 npm run dev
 ```
 
