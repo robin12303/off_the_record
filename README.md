@@ -205,7 +205,27 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
   "machineGuid": "{A1B2-C3D4-...}"
 }
 
-``` 
+```
+
+5) Frontend 응답 예시 (Web/Backend → Frontend, /api/recent)
+
+```json
+[
+    {
+        "id": 1,
+         "machineGuid": "11111-11-11-11-1111111",
+        "ipAddress": "0:0:0:0:0:0:0:1",
+        "hostName": "device",
+        "cpuName": "12th Gen Intel(R) Core(TM) i7-12700K",
+        "gpuName": "Intel(R) UHD Graphics 770",
+        "ramTotalMb": "32.00 GB",
+        "osName": "Windows 10 Pro",
+        "osVersion": "24H2 (6.3.26100.7462)",
+        "lastSeenAt": "2025-12-21T10:56:09"
+    }
+]
+```
+6) 
 ---
 
 ## Screenshots
