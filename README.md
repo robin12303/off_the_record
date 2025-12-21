@@ -82,10 +82,32 @@ npm run dev
 
 ### 3) Agent (Windows)
 
-```bash
-cd agent
-# (빌드/실행 방법을 프로젝트 실제 방식대로 작성)
-```
+### 3) Agent (Windows / Visual Studio)
+
+#### Prerequisites
+- Windows 10/11
+- Visual Studio (C++ Desktop Development workload)
+- **Boost C++ Libraries** (required)
+
+#### Build / Run
+1. Repository를 클론합니다.
+2. `agent/agent.slnx` 를 Visual Studio로 엽니다.
+3. 빌드 구성(예: Debug/x64)을 선택합니다.
+4. Build 후 실행합니다.
+
+#### Boost Setup (Windows)
+이 프로젝트는 Boost를 사용하므로, 아래 중 한 방식으로 Boost include/lib 경로가 잡혀 있어야 합니다.
+
+**Option A) vcpkg 사용 (권장)**
+1. vcpkg 설치 후 Boost 설치:
+   ```bash
+   vcpkg install boost
+Visual Studio와 연동:
+
+bash
+코드 복사
+vcpkg integrate install
+Visual Studio에서 다시 열고 빌드합니다.
 
 ---
 
