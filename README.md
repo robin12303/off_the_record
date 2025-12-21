@@ -1,4 +1,4 @@
-# off_the_record
+<img width="1117" height="629" alt="warning" src="https://github.com/user-attachments/assets/b669f13b-fb95-4b31-b78a-ca417e821b54" /># off_the_record
 
 Windows 환경에서 **C++ Agent가 시스템 이벤트(예: 키보드 입력)를 수집**하고,  
 이를 **Spring Boot Backend로 전송**하여 **저장(MySQL)** 및 **실시간 스트리밍(SSE)** 으로 **Vue Dashboard**에서 확인하는 학습용 프로젝트입니다.
@@ -240,23 +240,15 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
 4) **Log.vue**
 <img width="1734" height="916" alt="log" src="https://github.com/user-attachments/assets/79354516-c0e6-4ce9-98dc-70f2ea593144" />
 
+### [Agent]
+1) **정보 수집 경고 팝업창**
+<img width="1117" height="629" alt="warning" src="https://github.com/user-attachments/assets/470b945e-e832-4899-8a8e-7ac80c7e550e" />
+
+2) **동의 후 실행 화면**
+<img width="1118" height="631" alt="running" src="https://github.com/user-attachments/assets/163e6580-aee9-4cf0-8b15-7fae481f2265" />
 ---
 
 ## Status
-
 In progress / Experimental
-
 ```
-
----
-
-## 3) 딱 3개만 더하면 “포트폴리오 문서”가 됨
-1) **Architecture 이미지 한 장** (draw.io png export)  
-2) **실행 순서**(backend → frontend → agent) 실제 명령어  
-3) **API 예시**(요청/응답 JSON 1개씩이라도)
-
----
-
-원하면 너 레포 구조(backend/frontend/agent 디렉토리 이름이랑 실행 명령) 기준으로 위 “Getting Started”를 **진짜 실행 가능한** 형태로 딱 맞춰서 다시 정리해줄게요.
-::contentReference[oaicite:0]{index=0}
-```
+ 
