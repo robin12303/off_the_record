@@ -140,6 +140,7 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
 | Type      | Prefix    | TaskType  | Payload        |
 | --------- | --------- | --------- | -------------- |
 | Key event | READ      | START     | `string(json)` |
+| Key event | READ      | STOP      | `string(json)` |
 | Heartbeat | HEARTBEAT | HEARTBEAT | `string(json)` |
 
 **Example: Key event**
