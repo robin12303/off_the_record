@@ -1,10 +1,9 @@
-<img width="965" height="744" alt="아키텍처6" src="https://github.com/user-attachments/assets/3a4eebf9-1de0-4d44-943a-759fec91d805" />
 ---
 
 # Project Name
 
 **off_the_record**
-<img width="965" height="744" alt="아키텍처6" src="https://github.com/user-attachments/assets/af21582c-87d4-4c4a-b037-685af1c738b1" />
+
 
 ## Description
 
