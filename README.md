@@ -135,7 +135,6 @@ docker compose down -v
 - Testcontainers로 로컬/환경 차이 없이 DB 의존성 재현 가능하게 구성
 - WebSocket 메시지 파싱 오류(Invalid JSON)에서도 서버가 죽지 않도록 예외 안전성 검증
 
-> Docker Compose 실행 시 DB 접속 정보는 compose 환경변수로 설정됩니다.
 >
 ### 2) Frontend
 
