@@ -98,19 +98,22 @@ docker compose up --build
 
  
 
-Health check:
+> Health check:
+> 
 
 ```bash
 curl http://localhost:8080/actuator/health
 ```
 
-Logs:
+> Logs:
+> 
 
 ```bash
 docker compose logs -f backend
 ```
 
-Stop:
+> Stop:
+> 
 
 ```bash
 docker compose down
@@ -122,6 +125,15 @@ docker compose down
 ```bash
 docker compose down -v
 ```
+
+> Docker Compose 실행 시 DB 접속 정보는 compose 환경변수로 설정됩니다.
+> 
+
+> **테스트 품질**
+> 
+- `./gradlew test`로 단위/통합 테스트 실행
+- Testcontainers로 로컬/환경 차이 없이 DB 의존성 재현 가능하게 구성
+- WebSocket 메시지 파싱 오류(Invalid JSON)에서도 서버가 죽지 않도록 예외 안전성 검증
 
 > Docker Compose 실행 시 DB 접속 정보는 compose 환경변수로 설정됩니다.
 >
