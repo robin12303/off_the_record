@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{b08bf03c-1369-45a6-bc5f-01a3973ef267}</ProjectGuid>
-    <RootNamespace>agent</RootNamespace>
+    <ProjectGuid>{c2f2e3ee-3332-4387-8c70-177e41a93299}</ProjectGuid>
+    <RootNamespace>agentv1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -80,7 +80,6 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)producer;$(ProjectDir)consumer;$(Projectdir)sync_globals;$(Projectdir)utils;$(ProjectDir)$heartbeat;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -96,7 +95,6 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)producer;$(ProjectDir)consumer;$(Projectdir)sync_globals;$(Projectdir)utils;$(Projectdir)heartbeat;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -109,8 +107,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)producer;$(ProjectDir)consumer;$(Projectdir)sync_globals;$(Projectdir)utils;$(ProjectDir)heartbeat;$(Projectdir)network;$(Projectdir)reader;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)common;$(ProjectDir)logger;$(ProjectDir)connection;$(ProjectDir)router;$(ProjectDir)heartbeat</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -127,7 +125,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)producer;$(ProjectDir)consumer;$(Projectdir)sync_globals;$(Projectdir)utils;$(ProjectDir)heartbeat;$(Projectdir)network;$(Projectdir)reader;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)common;$(ProjectDir)logger;$(ProjectDir)connection;$(ProjectDir)router;$(ProjectDir)heartbeat</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -136,25 +134,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="consumer\ws_consumer.cpp" />
-    <ClCompile Include="heartbeat\ws_heartbeat.cpp" />
+    <ClCompile Include="common\pch.cpp" />
+    <ClCompile Include="connection\connection.cpp" />
+    <ClCompile Include="heartbeat\heartbeat.cpp" />
+    <ClCompile Include="logger\log_consumer.cpp" />
+    <ClCompile Include="logger\log_producer.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="network\WsConnection.cpp" />
-    <ClCompile Include="producer\producer.cpp" />
-    <ClCompile Include="sync_globals\sync_globals.cpp" />
-    <ClCompile Include="utils\CurrentTimeStamp.cpp" />
-    <ClCompile Include="utils\key_converter.cpp" />
-    <ClCompile Include="utils\spec.cpp" />
+    <ClCompile Include="router\received_message_handler.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="consumer\ws_consumer.h" />
-    <ClInclude Include="heartbeat\ws_heartbeat.h" />
-    <ClInclude Include="network\WsConnection.h" />
-    <ClInclude Include="producer\producer.h" />
-    <ClInclude Include="sync_globals\sync_globals.h" />
-    <ClInclude Include="utils\CurrentTimeStamp.h" />
-    <ClInclude Include="utils\key_converter.h" />
-    <ClInclude Include="utils\spec.h" />
+    <ClInclude Include="common\pch.hpp" />
+    <ClInclude Include="connection\connection.h" />
+    <ClInclude Include="heartbeat\heartbeat.h" />
+    <ClInclude Include="logger\log_consumer.h" />
+    <ClInclude Include="logger\log_producer.h" />
+    <ClInclude Include="router\received_message_handler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -18,60 +18,42 @@
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="sync_globals\sync_globals.cpp">
+    <ClCompile Include="common\pch.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="consumer\consumer.cpp">
+    <ClCompile Include="logger\log_consumer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="producer\producer.cpp">
+    <ClCompile Include="logger\log_producer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="utils\key_converter.cpp">
+    <ClCompile Include="connection\connection.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="utils\spec.cpp">
+    <ClCompile Include="router\received_message_handler.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="utils\CurrentTimeStamp.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="network\WsConnection.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="heartbeat\ws_heartbeat.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="consumer\ws_consumer.cpp">
+    <ClCompile Include="heartbeat\heartbeat.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="sync_globals\sync_globals.h">
+    <ClInclude Include="common\pch.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="producer\producer.h">
+    <ClInclude Include="logger\log_consumer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="consumer\consumer.h">
+    <ClInclude Include="logger\log_producer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="utils\key_converter.h">
+    <ClInclude Include="connection\connection.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="utils\spec.h">
+    <ClInclude Include="router\received_message_handler.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="utils\CurrentTimeStamp.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="network\WsConnection.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="heartbeat\ws_heartbeat.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="consumer\ws_consumer.h">
+    <ClInclude Include="heartbeat\heartbeat.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,9 +2,11 @@ package dev.backend.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.backend.components.WebSocketSessionRegistry;
+import dev.backend.dto.AgentCommandRequest;
 import dev.backend.dto.KeyEventData;
 import dev.backend.dto.ReceivedMessage;
-import dev.backend.service.AgentService;
+import dev.backend.service.AgentPushService;
+import dev.backend.service.AgentHandlerService;
 import dev.backend.service.SsePushService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,12 +26,21 @@ public class WebSocketAgentHandler extends TextWebSocketHandler {
 
     private final WebSocketSessionRegistry registry;
     private final ObjectMapper objectMapper;
-    private final AgentService agentService;
+    private final AgentHandlerService agentHandlerService;
     private final SsePushService ssePushService;
 
     // machineGuid별 limiter
     private final ConcurrentHashMap<String, RateLimiter> keyLimiters = new ConcurrentHashMap<>();
+    private final AgentPushService agentPushService;
 
+    @Override
+    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+        log.info("WS connected: id={}, uri={}, remote={}",
+                session.getId(),
+                session.getUri(),
+                session.getRemoteAddress());
+
+    }
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         String machineGuid = (String) session.getAttributes().get("machineGuid");
@@ -47,12 +58,23 @@ public class WebSocketAgentHandler extends TextWebSocketHandler {
             ReceivedMessage received = objectMapper.readValue(payload, ReceivedMessage.class);
 
             switch (received.prefix()) {
-                case "READ" -> agentService.handleStartRead(session, received);
+                case "READ" -> {
+                    switch (received.taskType()){
+                        case "START" -> {
+                            agentHandlerService.handleStartRead(session, received);
+                        }
+                        case "STOP" -> {
+                            agentHandlerService.handleStopRead(session, received);
+                        }
+                        default -> log.info("Unrecognized taskType: {}", received.taskType());
+                    }
+                }
 
                 case "HEARTBEAT" -> {
                     session.getAttributes().put("machineGuid", received.machineGuid());
                     registry.put(received.machineGuid(), session);
-                    agentService.handleHeartBeat(session, received);
+                    agentHandlerService.handleHeartBeat(session, received);
+
                 }
 
                 case "EVENT" -> {

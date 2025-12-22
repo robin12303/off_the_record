@@ -6,7 +6,6 @@ import dev.backend.dto.HeartBeat;
 import dev.backend.repository.AgentCommandLogRepository;
 import dev.backend.repository.AgentRepository;
 import dev.backend.dto.ReceivedMessage;
-import dev.backend.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,23 +16,27 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Objects;
 
 @Slf4j
 @Transactional
 @Service
 @RequiredArgsConstructor
-public class AgentService {
+public class AgentHandlerService {
     private final AgentRepository agentRepository;
     private final AgentCommandLogRepository agentCommandLogRepository;
     private final WebSocketSessionRegistry registry;
     private final ObjectMapper objectMapper;
     public void handleStartRead(WebSocketSession session, ReceivedMessage received ) {
-
+        log.info("handleStartRead: {}", received);
+        agentCommandLogRepository.upsertByCommandId("READ",received.commandId(),received.machineGuid(),"START","ACCEPTED");
     }
     public void handleStopRead(WebSocketSession session, ReceivedMessage received ) {
-
+        log.info("handleStopRead: {}", received);
+        agentCommandLogRepository.upsertByCommandId("READ",received.commandId(),received.machineGuid(),"STOP","ACCEPTED");
     }
     public void handleHeartBeat(WebSocketSession session, ReceivedMessage received ) {
         String attrGuid = (String) session.getAttributes().get("machineGuid");
@@ -64,7 +67,8 @@ public class AgentService {
                     hb.machineGuid(), hb.hostName(), hb.cpuName(), hb.gpuName(),
                     hb.ramTotalMb(), hb.osName(), hb.osVersion());
 
-            LocalDateTime ts = TimeUtil.parseTs(received.timestamp());
+            LocalDateTime ts = LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault());
+
             agentRepository.upsertByMachineGuid(
                     hb.machineGuid(),
                     ipAddress,

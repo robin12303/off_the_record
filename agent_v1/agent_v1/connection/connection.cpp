@@ -1,6 +1,6 @@
-#include "WsConnection.h"
- 
-WsConnection::WsConnection(asio::io_context& ioc)
+#include "connection.h"
+
+Connection::Connection(asio::io_context& ioc)
     :
     strand_(asio::make_strand(ioc)),
     resolver_(strand_),
@@ -8,7 +8,7 @@ WsConnection::WsConnection(asio::io_context& ioc)
 {
 }
 
-void WsConnection::start(std::string host, std::string port, std::string target)
+void Connection::start(std::string host, std::string port, std::string target)
 {
     host_ = std::move(host);
     port_ = std::move(port);
@@ -39,7 +39,7 @@ void WsConnection::start(std::string host, std::string port, std::string target)
         });
 }
 
-void WsConnection::send(std::string msg)
+void Connection::send(std::string msg)
 {
     asio::post(strand_, [self = shared_from_this(), msg = std::move(msg)]() mutable {
         self->outq_.push_back(std::move(msg));
@@ -49,17 +49,17 @@ void WsConnection::send(std::string msg)
         });
 }
 
-websocket::stream<tcp::socket>& WsConnection::ws()
-{ 
+websocket::stream<tcp::socket>& Connection::ws()
+{
     return ws_;
 }
 
-asio::any_io_executor WsConnection::get_executor()
+asio::any_io_executor Connection::get_executor()
 {
     return ws_.get_executor();
 }
 
-void WsConnection::do_write()
+void Connection::do_write()
 {
     ws_.async_write(asio::buffer(outq_.front()),
         [self = shared_from_this()](beast::error_code ec, std::size_t) {
@@ -69,65 +69,30 @@ void WsConnection::do_write()
         });
 }
 
-void WsConnection::do_read()
+void Connection::do_read()
 {
     ws_.async_read(inbuf_,
         [self = shared_from_this()](beast::error_code ec, std::size_t) {
-            if (ec) return self->fail("read", ec); 
+            if (ec) return self->fail("read", ec);
 
 
             // 받은 메시지 처리 
-            std::string s = beast::buffers_to_string(self->inbuf_.data());
+            std::string msg_str = beast::buffers_to_string(self->inbuf_.data());
             self->inbuf_.consume(self->inbuf_.size()); 
 
-            json::object data = json::parse(s).as_object();
-
-            std::string prefix = std::string(data["prefix"].as_string());
-            std::string commandId = std::string(data["commandId"].as_string());
-            std::string machineGuid = std::string(data["machineGuid"].as_string());
-            std::string taskType = std::string(data["taskType"].as_string());
-
-
-            std::cout << "prefix: " << prefix << "\n";
-            std::cout << "commandId: " << commandId << "\n";
-            std::cout << "machineGuid: " << machineGuid << "\n";
-            std::cout << "taskType: " << taskType << "\n"; 
-
-            if (prefix == "READ") {
-                if (taskType == "START") { 
-
-                    {
-                        std::lock_guard<std::mutex> lock(km);
-                        run_key_event = true;
-                    }
-
-                }
-                else if (taskType == "STOP") {
-                    {
-                        std::lock_guard<std::mutex> lock(km);
-                        run_key_event = false;
-                    }
-                }
-            } 
-            json::object resp;
-            resp["prefix"] = prefix;
-            resp["commandId"] = commandId;
-            resp["machineGuid"] = machineGuid;
-            resp["taskType"] = taskType; 
-            resp["payload"] = "ACCEPTED";
-
-            self->send(json::serialize(resp));
-
-            self->do_read(); // 무한읽기
-
-
+            {
+                std::cout << "recv" << "\n";
+                std::lock_guard<std::mutex> lk(recv_m);
+                recv_q.push(msg_str);
+            }
+            recv_sem.release();
+            self->do_read();
         });
 }
 
-void WsConnection::fail(const char* what, beast::error_code ec)
+void Connection::fail(const char* what, beast::error_code ec)
 {
     std::cerr << what << ": " << ec.message() << "\n";
 }
 
 
- 
