@@ -10,20 +10,23 @@ void MetricConsumer::loop(std::stop_token st)
         json::object payload;
 
         {
-            std::lock_guard<std::mutex> lk(metric_m);
-            if (metric_q.empty()) continue;
+            std::lock_guard<std::mutex> lk(metric_m); 
             payload = std::move(metric_q.front());
             metric_q.pop();
         }
 
-        json::object resp;
-        resp["prefix"] = "EVENT";                 // 하나로 통일 추천
-        resp["machineGuid"] = getSpec().machine_guid;
-        resp["payload"] = json::serialize(payload);
-        resp["taskType"] = "METRIC";
+        if (payload["keystrokes"].as_int64() >= 0)
+        {
 
-        std::string msg = json::serialize(resp);  // 임시 문자열 수명 문제 방지
-        conn_->send(std::move(msg));              // move 가능하면 사용
+            json::object resp;
+            resp["prefix"] = "EVENT";                 // 하나로 통일 추천
+            resp["machineGuid"] = getSpec().machine_guid;
+            resp["payload"] = json::serialize(payload);
+            resp["taskType"] = "METRIC";
+
+            std::string msg = json::serialize(resp);  // 임시 문자열 수명 문제 방지
+            conn_->send(std::move(msg));              // move 가능하면 사용
+        }
     }
 }
 

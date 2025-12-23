@@ -19,11 +19,9 @@ void MetricProducer::loop(std::stop_token st)
 
         // 이번 윈도우 결과: (콜백이 올린 카운트를 읽으면서 0으로 초기화)
         auto c = g_keystrokes.exchange(0, std::memory_order_relaxed); 
-        if (c >= 0)
-        {
-            // 이 윈도우가 "끝난" 시각(틱 경계)을 epoch ms로 변환
-            int64_t window_end_ms = mapper.to_epoch_ms(next_tick);
-
+        // 이 윈도우가 "끝난" 시각(틱 경계)을 epoch ms로 변환
+        int64_t window_end_ms = mapper.to_epoch_ms(next_tick);
+        if (metric_running) {
             // 타임스템프
             SYSTEMTIME st;
             GetLocalTime(&st);
@@ -41,9 +39,7 @@ void MetricProducer::loop(std::stop_token st)
             }
             metric_sem.release();
         }
-        else {
-            g_keystrokes = -1;
-        }
+
       
 
         // 다음 틱을 위해 최신 window_ms를 다시 읽어서 반영 (프론트에서 바꿀 수 있다 했지?)

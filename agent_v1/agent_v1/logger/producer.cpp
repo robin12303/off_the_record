@@ -15,10 +15,7 @@ LRESULT Producer::LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
         KBDLLHOOKSTRUCT* kbStruct =
             reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
         instance->produceMetric(wParam, *kbStruct);
-    }
-    else { 
-        g_keystrokes = -1;
-    }
+    } 
     return CallNextHookEx(
         nullptr, nCode, wParam, lParam);
 }
@@ -64,9 +61,8 @@ void Producer::produceLog(WPARAM wParam, const KBDLLHOOKSTRUCT& kbStruct)
 
 void Producer::produceMetric(WPARAM wParam, const KBDLLHOOKSTRUCT& kbStruc)
 {
-    if (g_keystrokes < 0) g_keystrokes++;
     std::cout << "produceMetric : " << g_keystrokes << "\n";
-    g_keystrokes.fetch_add(1, std::memory_order_relaxed); 
+    g_keystrokes++;
 }
 
 Producer::Producer()
