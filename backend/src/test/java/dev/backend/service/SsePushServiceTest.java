@@ -18,30 +18,41 @@ class SsePushServiceTest {
         SseEmitterMetricsRegistry metricsRegistry = mock(SseEmitterMetricsRegistry.class);
         SsePushService service = new SsePushService(readRegistry, metricsRegistry);
 
-        SseEmitter emitter = mock(SseEmitter.class);
+        SseEmitter emitterRead = mock(SseEmitter.class);
+        SseEmitter emitterMetrics = mock(SseEmitter.class);
 
+        // read registry stub
         doAnswer(inv -> {
             var consumer = (java.util.function.BiConsumer<String, SseEmitter>) inv.getArgument(1);
-            consumer.accept("sub1", emitter);
+            consumer.accept("sub1", emitterRead);
             return null;
         }).when(readRegistry).forEach(eq("M-1"), any());
 
-        int sent_read = service.broadcastReadToMachine("M-1", "key_event", new KeyEventData(
-                "2025:12:22:54",
-                "ON",
-                "DOWN",
-                "a")
-                );
+        // metrics registry stub
+        doAnswer(inv -> {
+            var consumer = (java.util.function.BiConsumer<String, SseEmitter>) inv.getArgument(1);
+            consumer.accept("subM1", emitterMetrics);
+            return null;
+        }).when(metricsRegistry).forEach(eq("M-1"), any());
 
-        int sent_matric = service.broadcastMetricsToMachine("M-1", "matric_event", new MetricEventData(
-                "2025:12:22:54",
-                1000L,
-                1730000000L,
-                24L))
-                ;
+        int sentRead = service.broadcastReadToMachine(
+                "M-1", "key_event",
+                new KeyEventData("2025:12:22:54", "ON", "DOWN", "a")
+        );
 
-        assertThat(sent_read).isEqualTo(1);
-        assertThat(sent_matric).isEqualTo(1);
-        verify(emitter).send(any(SseEmitter.SseEventBuilder.class));
+        int sentMetrics = service.broadcastMetricsToMachine(
+                "M-1", "metric_event",
+                new MetricEventData("2025:12:22:54", 1000L, 1730000000L, 24L)
+        );
+
+        assertThat(sentRead).isEqualTo(1);
+        assertThat(sentMetrics).isEqualTo(1);
+
+        verify(emitterRead, times(1)).send(any(SseEmitter.SseEventBuilder.class));
+        verify(emitterMetrics, times(1)).send(any(SseEmitter.SseEventBuilder.class));
+
+        verify(readRegistry).forEach(eq("M-1"), any());
+        verify(metricsRegistry).forEach(eq("M-1"), any());
     }
+
 }
