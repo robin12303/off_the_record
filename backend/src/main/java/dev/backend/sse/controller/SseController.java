@@ -1,8 +1,13 @@
 package dev.backend.sse.controller;
 
-
 import dev.backend.components.SseEmitterMetricsRegistry;
 import dev.backend.components.SseEmitterReadRegistry;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -16,6 +21,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
+@Tag(name = "SSE", description = "Server-Sent Events 구독 API")
 @Slf4j
 @RestController
 @RequestMapping("/api/sse")
@@ -24,11 +30,13 @@ public class SseController {
 
     private final SseEmitterReadRegistry registry;
     private final SseEmitterMetricsRegistry metricsRegistry;
-    private SseEmitter subscribe(String machineGuid,
-                                 BiFunction<String, SseEmitter, String> add,
-                                 BiConsumer<String, String> remove) {
 
-        SseEmitter emitter = new SseEmitter(0L); // emitter 레벨 timeout
+    private SseEmitter subscribe(
+            String machineGuid,
+            BiFunction<String, SseEmitter, String> add,
+            BiConsumer<String, String> remove
+    ) {
+        SseEmitter emitter = new SseEmitter(0L);
         String subId = add.apply(machineGuid, emitter);
 
         AtomicBoolean cleaned = new AtomicBoolean(false);
@@ -50,20 +58,55 @@ public class SseController {
         } catch (Exception e) {
             cleanup.run();
             emitter.completeWithError(e);
-            return emitter; // 여기서 끝
+            return emitter;
         }
 
         return emitter;
     }
 
+    @Operation(
+            summary = "READ SSE 구독",
+            description = """
+            특정 machineGuid의 READ 스트림을 구독합니다.
+            클라이언트는 EventSource로 접속하세요.
+            이벤트 예: connected, (이후 read 이벤트들...)
+            """
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "SSE 스트림(text/event-stream)",
+            content = @Content(
+                    mediaType = "text/event-stream",
+                    schema = @Schema(type = "string", description = "SSE 프레임(event/data 라인)"),
+                    examples = @ExampleObject(
+                            name = "connected event",
+                            value = "event: connected\ndata: ok\nretry: 3000\n\n"
+                    )
+            )
+    )
     @GetMapping(value = "/stream/read/{machineGuid}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter stream(@PathVariable String machineGuid) {
         return subscribe(machineGuid, registry::add, registry::remove);
     }
 
+    @Operation(
+            summary = "METRICS SSE 구독",
+            description = "특정 machineGuid의 METRICS 스트림을 구독합니다."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "SSE 스트림(text/event-stream)",
+            content = @Content(
+                    mediaType = "text/event-stream",
+                    schema = @Schema(type = "string"),
+                    examples = @ExampleObject(
+                            name = "connected event",
+                            value = "event: connected\ndata: ok\nretry: 3000\n\n"
+                    )
+            )
+    )
     @GetMapping(value = "/stream/metrics/{machineGuid}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter streamMetrics(@PathVariable String machineGuid) {
         return subscribe(machineGuid, metricsRegistry::add, metricsRegistry::remove);
     }
-
 }
