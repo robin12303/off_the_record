@@ -302,6 +302,7 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
 
 4) **Log.vue**
 <img width="476" height="607" alt="log_view" src="https://github.com/user-attachments/assets/00e65043-dc33-4214-aa1c-6890878afa14" />
+
 5) **Metrics.vue**
 <img width="519" height="663" alt="metrics_view" src="https://github.com/user-attachments/assets/592209a5-1683-469e-a471-454027659647" />
 
