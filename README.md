@@ -3,7 +3,7 @@
 - [GitHub 링크](https://github.com/robin12303/off_the_record)
 - [Notion 링크](https://www.notion.so/2d0401ce7bab80eb8704c2c5dce7c4d5?pvs=21)
 
-**Off the record**는 Windows 환경에서 C++로 만든 에이전트가 키보드 입력 같은 시스템 이벤트를 실시간으로 수집하고, 이를 Spring Boot 백엔드로 전송해 **MySQL에 저장**하며, 동시에 **SSE(Server-Sent Events)** 로 Vue 대시보드에 실시간 스트리밍하는 학습용 프로젝트입니다.
+**Off the record**는 Windows 환경에서 C++로 만든 에이전트가 시스템 이벤트를 실시간으로 수집하고, 이를 Spring Boot 백엔드로 전송해 **MySQL에 저장**하며, 동시에 **SSE(Server-Sent Events)** 로 Vue 대시보드에 실시간 스트리밍하는 학습용 프로젝트입니다.
 
 에이전트–서버–대시보드까지 이어지는 전체 흐름을 직접 구현하면서, **멀티스레딩/비동기 처리(WebSocket·SSE)** 기반의 이벤트 파이프라인 구조를 이해하고 검증하는 데 초점을 맞췄습니다.
 
@@ -19,7 +19,7 @@
 
 ## 소개
 
-**Windows 키보드 이벤트를 실시간 수집 → 서버 저장/스트리밍까지 연결한 멀티스레드 이벤트 처리 시스템**
+**Windows 이벤트를 실시간 수집 → 서버 저장/스트리밍까지 연결한 멀티스레드 이벤트 처리 시스템**
 
 ### Architecture
 
