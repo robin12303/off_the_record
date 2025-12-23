@@ -28,17 +28,9 @@ Producer* Producer::GetInstanceFromHook()
     return instance_;
 }
 
-void Producer::UpdateCapsLockState(WORD vkCode, WPARAM wParam)
-{
-    if (vkCode == VK_CAPITAL && wParam == WM_KEYDOWN) {
-        capsLockOn_ = !capsLockOn_;
-    }
-}
 
 void Producer::produceLog(WPARAM wParam, const KBDLLHOOKSTRUCT& kbStruct)
 { 
-    // CapsLock 상태 업데이트
-    UpdateCapsLockState(kbStruct.vkCode, wParam);
 
     // 이벤트 타입 결정
     std::string eventType;
@@ -56,16 +48,17 @@ void Producer::produceLog(WPARAM wParam, const KBDLLHOOKSTRUCT& kbStruct)
     GetLocalTime(&st);
     std::string timestamp = FormatTime(st);
 
-    bool shiftPressed = IsKeyPressed(VK_SHIFT);
-    std::string keyString = VkCodeToString(
-        kbStruct.vkCode, shiftPressed, capsLockOn_);
+    //bool shiftPressed = IsKeyPressed(VK_SHIFT);
+    //std::string keyString = VkCodeToString(kbStruct.vkCode, shiftPressed, capsLockOn_);
+    std::string keyString = std::format("0x{:02X}", kbStruct.vkCode);
 
-    auto data = KeyEvent(timestamp,capsLockOn_ ? "ON" : "OFF", eventType, keyString);
-
+    
+    //auto data = KeyEvent(timestamp,capsLockOn_ ? "ON" : "OFF", eventType, keyString);
+    auto data = KeyEvent(timestamp, "null", "null", keyString);
     {
         std::lock_guard<std::mutex> lk(log_m);
         log_q.push(data);
-    } 
+    }
     log_sem.release(); 
 }
 
@@ -78,8 +71,7 @@ void Producer::produceMetric(WPARAM wParam, const KBDLLHOOKSTRUCT& kbStruc)
 
 Producer::Producer()
 {
-    instance_ = this;
-    capsLockOn_ = (GetKeyState(VK_CAPITAL) & 0x0001) != 0;
+    instance_ = this; 
 }
 
 Producer::~Producer()

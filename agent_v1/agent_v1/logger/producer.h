@@ -6,7 +6,6 @@ private:
     static inline Producer* instance_ = nullptr;
     // 멤버 변수
     HHOOK hook_ = nullptr;
-    std::atomic<bool> capsLockOn_{ false };
 
      
     // 후크 관련
@@ -15,7 +14,6 @@ private:
 
     static Producer* GetInstanceFromHook();
 
-    void UpdateCapsLockState(WORD vkCode, WPARAM wParam);
     void produceLog(WPARAM wParam,
         const KBDLLHOOKSTRUCT& kbStruct);
     void produceMetric(WPARAM wParam,

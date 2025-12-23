@@ -25,6 +25,7 @@
 #include <stop_token>
 #include <queue>
 #include <algorithm>
+#include <format>
 #include <cstdint>
 #include <Windows.h>
 #pragma comment(lib, "wbemuuid.lib")
@@ -116,18 +117,10 @@ void GetWindowsOsNameVersion(std::string& outName, std::string& outVersion);
 Spec getSpec();
 
 // ======================== key_converter ========================
-std::string VkCodeToString(
-    WORD vkCode, bool shiftPressed, bool capsLockOn);
-bool IsModifierKey(WORD vkCode);
-bool IsSpecialKey(WORD vkCode);
-std::string GetBaseKeyString(WORD vkCode);
-std::string GetShiftedKeyString(WORD vkCode);
-std::string GetNumpadKeyString(WORD vkCode);
+
 
 std::string GetCurrentTimestamp();
 std::string FormatTime(const SYSTEMTIME& st);
-std::string VkCodeToHexString(WORD vkCode);
-bool IsKeyPressed(WORD vkCode);
 
 // ======================== key event structure ========================
 struct KeyEvent{
@@ -150,7 +143,7 @@ extern std::queue<std::string> recv_q;
 extern std::counting_semaphore<MAX_COUNT> recv_sem; 
 
 // ======================== metric ========================
-extern std::atomic<int64_t> g_keystrokes;
+extern std::atomic<uint64_t> g_keystrokes;
 extern std::mutex metric_m;
 extern std::counting_semaphore<MAX_COUNT> metric_sem;
 extern std::queue<json::object> metric_q;
