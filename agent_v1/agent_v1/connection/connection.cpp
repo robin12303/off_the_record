@@ -41,13 +41,19 @@ void Connection::start(std::string host, std::string port, std::string target)
 
 void Connection::send(std::string msg)
 {
-    asio::post(strand_, [self = shared_from_this(), msg = std::move(msg)]() mutable {
-        self->outq_.push_back(std::move(msg));
-        if (self->open_ && self->outq_.size() == 1) {
-            self->do_write();
-        }
+    asio::post(strand_,
+        [self = shared_from_this(), msg = std::move(msg)]() mutable {
+            // 연결이 열려있지 않으면: 정책 선택
+            // 1) 버림
+            // 2) 큐에 쌓아두고 나중에 handshake 끝나면 보내기(지금 구조는 이쪽)
+            self->outq_.push_back(std::move(msg));
+
+            if (self->open_ && self->outq_.size() == 1) {
+                self->do_write(); // 지금 막 큐가 0->1 된 순간에만 write 시작
+            }
         });
 }
+
 
 websocket::stream<tcp::socket>& Connection::ws()
 {
@@ -69,26 +75,27 @@ void Connection::do_write()
         });
 }
 
+
 void Connection::do_read()
 {
     ws_.async_read(inbuf_,
         [self = shared_from_this()](beast::error_code ec, std::size_t) {
             if (ec) return self->fail("read", ec);
 
-
-            // 받은 메시지 처리 
             std::string msg_str = beast::buffers_to_string(self->inbuf_.data());
-            self->inbuf_.consume(self->inbuf_.size()); 
+            self->inbuf_.consume(self->inbuf_.size());
 
             {
-                std::cout << "recv" << "\n";
                 std::lock_guard<std::mutex> lk(recv_m);
-                recv_q.push(msg_str);
+                recv_q.push(std::move(msg_str));
             }
             recv_sem.release();
+
             self->do_read();
         });
 }
+
+
 
 void Connection::fail(const char* what, beast::error_code ec)
 {

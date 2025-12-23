@@ -1,27 +1,43 @@
 package dev.backend.service;
 
 
-import dev.backend.components.SseEmitterRegistry;
-import dev.backend.dto.KeyEventData;
+import dev.backend.components.SseEmitterMetricsRegistry;
+import dev.backend.components.SseEmitterReadRegistry;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Service
 @RequiredArgsConstructor
 public class SsePushService {
-    private final SseEmitterRegistry registry;
+    private final SseEmitterReadRegistry sseEmitterReadRegistry;
+    private final SseEmitterMetricsRegistry sseEmitterMetricsRegistry;
 
-    public int broadcastToMachine(String machineGuid, String eventName, KeyEventData data) {
+    public int broadcastReadToMachine(String machineGuid, String eventName, Object data) {
         var sent = new java.util.concurrent.atomic.AtomicInteger();
 
-        registry.forEach(machineGuid, (subId, emitter) -> {
+        sseEmitterReadRegistry.forEach(machineGuid, (subId, emitter) -> {
             try {
                 emitter.send(SseEmitter.event().name(eventName).data(data));
                 sent.incrementAndGet();
             } catch (Exception e) {
-                registry.remove(machineGuid, subId);
+                sseEmitterReadRegistry.remove(machineGuid, subId);
+                try { emitter.completeWithError(e); } catch (Exception ignored) {}
+            }
+        });
+
+        return sent.get();
+    }
+
+    public int broadcastMetricsToMachine(String machineGuid, String eventName, Object data) {
+        var sent = new java.util.concurrent.atomic.AtomicInteger();
+
+        sseEmitterMetricsRegistry.forEach(machineGuid, (subId, emitter) -> {
+            try {
+                emitter.send(SseEmitter.event().name(eventName).data(data));
+                sent.incrementAndGet();
+            } catch (Exception e) {
+                sseEmitterMetricsRegistry.remove(machineGuid, subId);
                 try { emitter.completeWithError(e); } catch (Exception ignored) {}
             }
         });

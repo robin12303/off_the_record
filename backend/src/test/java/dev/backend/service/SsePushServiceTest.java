@@ -1,6 +1,7 @@
 package dev.backend.service;
 
-import dev.backend.components.SseEmitterRegistry;
+import dev.backend.components.SseEmitterMetricsRegistry;
+import dev.backend.components.SseEmitterReadRegistry;
 import dev.backend.dto.KeyEventData;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -12,8 +13,9 @@ class SsePushServiceTest {
 
     @Test
     void shouldIncrementSentCount_whenEmitterSendSucceeds() throws Exception {
-        SseEmitterRegistry registry = mock(SseEmitterRegistry.class);
-        SsePushService service = new SsePushService(registry);
+        SseEmitterReadRegistry readRegistry = mock(SseEmitterReadRegistry.class);
+        SseEmitterMetricsRegistry metricsRegistry = mock(SseEmitterMetricsRegistry.class);
+        SsePushService service = new SsePushService(readRegistry, metricsRegistry);
 
         SseEmitter emitter = mock(SseEmitter.class);
 
@@ -21,9 +23,9 @@ class SsePushServiceTest {
             var consumer = (java.util.function.BiConsumer<String, SseEmitter>) inv.getArgument(1);
             consumer.accept("sub1", emitter);
             return null;
-        }).when(registry).forEach(eq("M-1"), any());
+        }).when(readRegistry).forEach(eq("M-1"), any());
 
-        int sent = service.broadcastToMachine("M-1", "keyevent", new KeyEventData(
+        int sent = service.broadcastMetricsToMachine("M-1", "keyevent", new KeyEventData(
                 "2025:12:22:54",
                 "ON",
                 "DOWN",

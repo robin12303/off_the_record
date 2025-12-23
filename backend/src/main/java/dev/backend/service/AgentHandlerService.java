@@ -38,6 +38,14 @@ public class AgentHandlerService {
         log.info("handleStopRead: {}", received);
         agentCommandLogRepository.upsertByCommandId("READ",received.commandId(),received.machineGuid(),"STOP","ACCEPTED");
     }
+    public void handleStartMetrics(WebSocketSession session, ReceivedMessage received ) {
+        log.info("handleStartMetrics: {}", received);
+        agentCommandLogRepository.upsertByCommandId("METRICS",received.commandId(),received.machineGuid(),"START","ACCEPTED");
+    }
+    public void handleStopMetrics(WebSocketSession session, ReceivedMessage received ) {
+        log.info("handleStopMetrics: {}", received);
+        agentCommandLogRepository.upsertByCommandId("METRICS",received.commandId(),received.machineGuid(),"STOP","ACCEPTED");
+    }
     public void handleHeartBeat(WebSocketSession session, ReceivedMessage received ) {
         String attrGuid = (String) session.getAttributes().get("machineGuid");
         String msgGuid  = received.machineGuid();

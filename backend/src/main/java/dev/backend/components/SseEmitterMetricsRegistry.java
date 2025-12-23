@@ -1,10 +1,12 @@
 package dev.backend.components;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class SseEmitterReadRegistry {
+public class SseEmitterMetricsRegistry {
     private final ConcurrentHashMap<String, ConcurrentHashMap<String, SseEmitter>> byMachine = new ConcurrentHashMap<>();
 
     public String add(String machineGuid, SseEmitter emitter) {

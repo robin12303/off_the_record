@@ -34,5 +34,13 @@ public class FrontendController {
         agentPushService.sendCommand(machineGuid, AgentCommandRequest.readStop(machineGuid, commandId));
     }
 
+    @PostMapping("/metricsStart/{machineGuid}/{commandId}")
+    public void metricsStart(@PathVariable String machineGuid, @PathVariable String commandId) {
+        agentPushService.sendCommand(machineGuid, AgentCommandRequest.metricsStart(machineGuid, commandId));
+    }
 
+    @PostMapping("/metricsStop/{machineGuid}/{commandId}")
+    public void metricsStop(@PathVariable String machineGuid, @PathVariable String commandId) {
+        agentPushService.sendCommand(machineGuid, AgentCommandRequest.metricsStop(machineGuid, commandId));
+    }
 }

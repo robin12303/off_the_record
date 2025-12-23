@@ -1,6 +1,8 @@
 ﻿#include "pch.hpp"
 #include "log_consumer.h"
-#include "log_producer.h"
+#include "metric_consumer.h"
+#include "metric_producer.h"
+#include "producer.h"
 #include "received_message_handler.h"
 #include "heartbeat.h"
 
@@ -42,13 +44,18 @@ int main(int argc, char* argv[])
         auto conn = std::make_shared<Connection>(ioc);
         auto heartbeat = std::make_shared<Heartbeat>(ioc, conn, 5s);
         auto messageHandler = std::make_shared<MessageHandler>(conn);
-        auto log_consumer = LogConsumer(conn);
-        auto log_producer = LogProducer();
-      
+        auto log_consumer = std::make_shared<LogConsumer>(conn);
+        auto metrifc_consumer = std::make_shared<MetricConsumer>(conn);
+
+        auto metric_producer = MetricProducer();
+        auto producer = Producer();
+       
+        metrifc_consumer->start();
         messageHandler->start();
         heartbeat->start();
-        log_producer.start();
-        log_consumer.start();
+        metric_producer.start();
+        producer.start();
+        log_consumer->start();
         conn->start(host, port, target);
         // Windows 메시지 루프
         MSG msg;

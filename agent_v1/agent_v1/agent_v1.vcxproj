@@ -108,7 +108,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)common;$(ProjectDir)logger;$(ProjectDir)connection;$(ProjectDir)router;$(ProjectDir)heartbeat</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)common;$(ProjectDir)logger;$(ProjectDir)connection;$(ProjectDir)router;$(ProjectDir)heartbeat;$(ProjectDir)metric;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -125,7 +125,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)common;$(ProjectDir)logger;$(ProjectDir)connection;$(ProjectDir)router;$(ProjectDir)heartbeat</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)common;$(ProjectDir)logger;$(ProjectDir)connection;$(ProjectDir)router;$(ProjectDir)heartbeat;$(ProjectDir)metric;</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -138,8 +138,10 @@
     <ClCompile Include="connection\connection.cpp" />
     <ClCompile Include="heartbeat\heartbeat.cpp" />
     <ClCompile Include="logger\log_consumer.cpp" />
-    <ClCompile Include="logger\log_producer.cpp" />
+    <ClCompile Include="logger\producer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="metric\metric_consumer.cpp" />
+    <ClCompile Include="metric\metric_producer.cpp" />
     <ClCompile Include="router\received_message_handler.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,7 +149,9 @@
     <ClInclude Include="connection\connection.h" />
     <ClInclude Include="heartbeat\heartbeat.h" />
     <ClInclude Include="logger\log_consumer.h" />
-    <ClInclude Include="logger\log_producer.h" />
+    <ClInclude Include="logger\producer.h" />
+    <ClInclude Include="metric\metric_consumer.h" />
+    <ClInclude Include="metric\metric_producer.h" />
     <ClInclude Include="router\received_message_handler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -24,7 +24,7 @@
     <ClCompile Include="logger\log_consumer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="logger\log_producer.cpp">
+    <ClCompile Include="logger\producer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="connection\connection.cpp">
@@ -36,6 +36,12 @@
     <ClCompile Include="heartbeat\heartbeat.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="metric\metric_producer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="metric\metric_consumer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\pch.hpp">
@@ -44,7 +50,7 @@
     <ClInclude Include="logger\log_consumer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="logger\log_producer.h">
+    <ClInclude Include="logger\producer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="connection\connection.h">
@@ -54,6 +60,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="heartbeat\heartbeat.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="metric\metric_producer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="metric\metric_consumer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

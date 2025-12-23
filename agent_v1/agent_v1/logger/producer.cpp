@@ -1,33 +1,41 @@
-#include "log_producer.h" 
-LRESULT LogProducer::LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
+#include "producer.h" 
+LRESULT Producer::LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
     if (nCode < 0)
         return CallNextHookEx(
             nullptr, nCode, wParam, lParam);
-    LogProducer* instance = GetInstanceFromHook();
+    Producer* instance = GetInstanceFromHook();
 
     if (instance && logger_running) {
         KBDLLHOOKSTRUCT* kbStruct =
             reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
-        instance->produce(wParam, *kbStruct);
+        instance->produceLog(wParam, *kbStruct);
+    }
+    if (instance && metric_running) {
+        KBDLLHOOKSTRUCT* kbStruct =
+            reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
+        instance->produceMetric(wParam, *kbStruct);
+    }
+    else { 
+        g_keystrokes = -1;
     }
     return CallNextHookEx(
         nullptr, nCode, wParam, lParam);
 }
 
-LogProducer* LogProducer::GetInstanceFromHook()
+Producer* Producer::GetInstanceFromHook()
 {
     return instance_;
 }
 
-void LogProducer::UpdateCapsLockState(WORD vkCode, WPARAM wParam)
+void Producer::UpdateCapsLockState(WORD vkCode, WPARAM wParam)
 {
     if (vkCode == VK_CAPITAL && wParam == WM_KEYDOWN) {
         capsLockOn_ = !capsLockOn_;
     }
 }
 
-void LogProducer::produce(WPARAM wParam, const KBDLLHOOKSTRUCT& kbStruct)
+void Producer::produceLog(WPARAM wParam, const KBDLLHOOKSTRUCT& kbStruct)
 { 
     // CapsLock 상태 업데이트
     UpdateCapsLockState(kbStruct.vkCode, wParam);
@@ -61,20 +69,27 @@ void LogProducer::produce(WPARAM wParam, const KBDLLHOOKSTRUCT& kbStruct)
     log_sem.release(); 
 }
 
-LogProducer::LogProducer()
+void Producer::produceMetric(WPARAM wParam, const KBDLLHOOKSTRUCT& kbStruc)
+{
+    if (g_keystrokes < 0) g_keystrokes++;
+    std::cout << "produceMetric : " << g_keystrokes << "\n";
+    g_keystrokes.fetch_add(1, std::memory_order_relaxed); 
+}
+
+Producer::Producer()
 {
     instance_ = this;
     capsLockOn_ = (GetKeyState(VK_CAPITAL) & 0x0001) != 0;
 }
 
-LogProducer::~LogProducer()
+Producer::~Producer()
 {
     if (instance_ == this) {
         instance_ = nullptr;
     }
 }
 
-bool LogProducer::start()
+bool Producer::start()
 { 
 
     // 후크 설치
@@ -87,7 +102,7 @@ bool LogProducer::start()
     return true;
 }
 
-bool LogProducer::stop()
+bool Producer::stop()
 {
     logger_running = false;
     return true;

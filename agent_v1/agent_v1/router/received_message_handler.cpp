@@ -81,8 +81,35 @@ void MessageHandler::loop(std::stop_token st)
                 conn_->send(json::serialize(resp));
             }
             else if (prefix == "HEARTBEAT") {
-
+                // TO-DO
             }
+            else if (prefix == "METRICS") {
+                // TO-DO
+                if (taskType == "START") {
+                    if (metric_running) {
+                        resp["payload"] = "ALREADY_RUNNING";
+                    }
+                    else {
+                        g_keystrokes = 0;
+                        metric_running = true;
+                        resp["payload"] = "OK";
+                    }
+                }
+                else if (taskType == "STOP") {
+                    if (!metric_running) {
+                        resp["payload"] = "ALREADY_STOPPED";
+                    }
+                    else {
+                        g_keystrokes = -1;
+                        metric_running = false;
+                        resp["payload"] = "OK";
+                    }
+                }
+                else {
+                    resp["payload"] = "RESPONSE_ERROR";
+                }
+                conn_->send(json::serialize(resp));
+            }// 
         }
        
     }

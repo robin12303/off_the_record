@@ -22,7 +22,7 @@
 
     </div>
 
-    <pre class="log">text_log:
+    <pre class="log">metrics_log:
 {{ text_log }}</pre>
   </div>
 </template>
@@ -66,12 +66,12 @@ export default {
       try {
         if (this.input && this.clientId) {
           await api.post(
-              `/api/backend/readStop/${encodeURIComponent(this.input)}/${encodeURIComponent(this.clientId)}`
+              `/api/backend/metricsStop/${encodeURIComponent(this.input)}/${encodeURIComponent(this.clientId)}`
           );
-          console.log("[LogView] readStop sent");
+          console.log("[MetricsView] metricsStop sent");
         }
       } catch (e) {
-        console.log("[LogView] readStop failed:", e);
+        console.log("[MetricsView] metricsStop failed:", e);
       }
     },
 
@@ -79,16 +79,16 @@ export default {
       if (this.isLoading) return;
       if (!this.input) return;
 
-      console.log("[LogView] Scan:", this.input);
+      console.log("[MetricsView] Scan:", this.input);
       this.isLoading = true;
 
       try {
         const resp = await api.post(
-            `/api/backend/readStart/${encodeURIComponent(this.input)}/${encodeURIComponent(this.clientId)}`
+            `/api/backend/metricsStart/${encodeURIComponent(this.input)}/${encodeURIComponent(this.clientId)}`
         );
         this.recentAgents = resp.data;
 
-        const sse_url = `${this.API_BASE}/api/sse/stream/read/${encodeURIComponent(this.input)}`;
+        const sse_url = `${this.API_BASE}/api/sse/stream/metrics/${encodeURIComponent(this.input)}`;
 
         if (this.es) this.es.close();
         this.es = new EventSource(sse_url);
@@ -96,10 +96,10 @@ export default {
         // ✅ 연결 상태 ON (connected 이벤트를 기다렸다가 켜도 되고, 여기서 켜도 됨)
         this.isConnected = true;
 
-        this.es.addEventListener("key_event", (e) => {
+        this.es.addEventListener("metric_event", (e) => {
           const data = JSON.parse(e.data);
-          const { timeStamp, capsLock, eventType, keyString } = data;
-          this.text_log += `${timeStamp}\t${capsLock}\t${eventType}\t${keyString}\n`;
+          const { timeStamp, windowMs, windowEndMs, keystrokes } = data;
+          this.text_log += `${timeStamp}\t${windowMs}\t${windowEndMs}\t${keystrokes}\n`;
         });
 
         this.es.addEventListener("connected", (e) => {

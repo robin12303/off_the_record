@@ -1,9 +1,9 @@
 #pragma once
 #include "pch.hpp" 
-class LogProducer {
+class Producer {
 private:
     // 싱글톤 접근 (후크 콜백용)
-    static inline LogProducer* instance_ = nullptr;
+    static inline Producer* instance_ = nullptr;
     // 멤버 변수
     HHOOK hook_ = nullptr;
     std::atomic<bool> capsLockOn_{ false };
@@ -13,21 +13,22 @@ private:
     static LRESULT CALLBACK LowLevelKeyboardProc(
         int nCode, WPARAM wParam, LPARAM lParam);
 
-    static LogProducer* GetInstanceFromHook();
+    static Producer* GetInstanceFromHook();
 
     void UpdateCapsLockState(WORD vkCode, WPARAM wParam);
-    void produce(WPARAM wParam,
+    void produceLog(WPARAM wParam,
         const KBDLLHOOKSTRUCT& kbStruct);
-
+    void produceMetric(WPARAM wParam,
+        const KBDLLHOOKSTRUCT& kbStruc);
      
 public: 
-    LogProducer();
-    ~LogProducer();
+    Producer();
+    ~Producer();
     // 복사/이동 금지
-    LogProducer(const LogProducer&) = delete;
-    LogProducer& operator=(const LogProducer&) = delete;
-    LogProducer(LogProducer&&) = delete;
-    LogProducer& operator=(LogProducer&&) = delete;
+    Producer(const Producer&) = delete;
+    Producer& operator=(const Producer&) = delete;
+    Producer(Producer&&) = delete;
+    Producer& operator=(Producer&&) = delete;
     bool start();
     bool stop();
 };

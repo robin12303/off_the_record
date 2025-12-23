@@ -25,7 +25,7 @@
 #include <stop_token>
 #include <queue>
 #include <algorithm>
-
+#include <cstdint>
 #include <Windows.h>
 #pragma comment(lib, "wbemuuid.lib")
 namespace json = boost::json; 
@@ -149,4 +149,18 @@ extern std::mutex recv_m;
 extern std::queue<std::string> recv_q;
 extern std::counting_semaphore<MAX_COUNT> recv_sem; 
 
- 
+// ======================== metric ========================
+extern std::atomic<int64_t> g_keystrokes;
+extern std::mutex metric_m;
+extern std::counting_semaphore<MAX_COUNT> metric_sem;
+extern std::queue<json::object> metric_q;
+extern std::atomic<bool> metric_running;
+extern std::atomic<int> g_window_ms; // default safe
+struct ClockMapper {
+    std::chrono::steady_clock::time_point steady_base;
+    std::chrono::system_clock::time_point sys_base;
+
+    ClockMapper();
+
+    int64_t to_epoch_ms(std::chrono::steady_clock::time_point tp) const;
+};

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.backend.components.WebSocketSessionRegistry;
 import dev.backend.dto.AgentCommandRequest;
 import dev.backend.dto.KeyEventData;
+import dev.backend.dto.MetricEventData;
 import dev.backend.dto.ReceivedMessage;
 import dev.backend.service.AgentPushService;
 import dev.backend.service.AgentHandlerService;
@@ -66,7 +67,7 @@ public class WebSocketAgentHandler extends TextWebSocketHandler {
                         case "STOP" -> {
                             agentHandlerService.handleStopRead(session, received);
                         }
-                        default -> log.info("Unrecognized taskType: {}", received.taskType());
+                        default -> log.info("[READ]: Unrecognized taskType: {}", received.taskType());
                     }
                 }
 
@@ -77,12 +78,23 @@ public class WebSocketAgentHandler extends TextWebSocketHandler {
 
                 }
 
+                case "METRICS" -> {
+                    switch (received.taskType()){
+                        case "START" -> {
+                            agentHandlerService.handleStartMetrics(session, received);
+                        }
+                        case "STOP" -> {
+                            agentHandlerService.handleStopMetrics(session, received);
+                        }
+                        default -> log.info("[METRICS]: Unrecognized taskType: {}", received.taskType());
+                    }
+                }
+
                 case "EVENT" -> {
-                    session.getAttributes().put("machineGuid", received.machineGuid());
+
+                    String guid = received.machineGuid();
 
                     if ("KEY".equals(received.taskType())) {
-                        String guid = received.machineGuid();
-
                         // 예: 초당 60개 허용 (너무 빡세면 30~120 사이로 조절)
                         RateLimiter limiter = keyLimiters.computeIfAbsent(guid, g -> RateLimiter.create(60.0));
 
@@ -92,7 +104,12 @@ public class WebSocketAgentHandler extends TextWebSocketHandler {
                         }
 
                         KeyEventData data = objectMapper.readValue(received.payload(), KeyEventData.class);
-                        ssePushService.broadcastToMachine(guid, "keyevent", data);
+                        ssePushService.broadcastReadToMachine(guid, "key_event", data);
+                    }else if("METRIC".equals(received.taskType())) {
+
+                        log.info("METRIC received {}", received.payload());
+                        MetricEventData data = objectMapper.readValue(received.payload(), MetricEventData.class);
+                        ssePushService.broadcastMetricsToMachine(guid, "metric_event", data);
                     }
                 }
 

@@ -513,7 +513,8 @@ std::string VkCodeToHexString(WORD vkCode)
 bool IsKeyPressed(WORD vkCode)
 {
     return (GetAsyncKeyState(vkCode) & 0x8000) != 0;
-}
+}  
+
 
 // ===================== logger =====================
 std::atomic<bool> logger_running = { false };
@@ -532,3 +533,22 @@ std::mutex recv_m;
 std::queue<std::string> recv_q;
 std::counting_semaphore<MAX_COUNT> recv_sem(0);
 std::atomic<bool> logger_consumer_running = { false };
+
+// ======================== metric ========================
+std::atomic<int64_t> g_keystrokes = { -1 };
+std::atomic<int> g_window_ms = { 1000 }; // default safe
+std::mutex metric_m;
+std::counting_semaphore<MAX_COUNT> metric_sem(0);
+std::queue<json::object> metric_q;
+std::atomic<bool> metric_running = { false };
+ClockMapper::ClockMapper()
+    : steady_base(std::chrono::steady_clock::now()),
+    sys_base(std::chrono::system_clock::now()) {
+}
+
+int64_t ClockMapper::to_epoch_ms(std::chrono::steady_clock::time_point tp) const
+{
+    using namespace std::chrono;
+    auto sys_tp = sys_base + (tp - steady_base);
+    return duration_cast<milliseconds>(sys_tp.time_since_epoch()).count();
+}

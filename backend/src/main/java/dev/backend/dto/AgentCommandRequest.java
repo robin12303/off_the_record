@@ -17,6 +17,12 @@ public record AgentCommandRequest(
     public static AgentCommandRequest readStart(String machineGuid, String commandId) {
         return new AgentCommandRequest("READ", commandId, machineGuid, "START");
     }
+    public static AgentCommandRequest metricsStart(String machineGuid, String commandId) {
+        return new AgentCommandRequest("METRICS", commandId, machineGuid, "START");
+    }
+    public static AgentCommandRequest metricsStop(String machineGuid, String commandId) {
+        return new AgentCommandRequest("METRICS", commandId, machineGuid, "STOP");
+    }
     public static AgentCommandRequest Hello() {
         return new AgentCommandRequest("HEARTBEAT", "HEARTBEAT", "HEARTBEAT", "OK");
     }
