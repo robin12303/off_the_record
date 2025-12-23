@@ -301,7 +301,9 @@ data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
 <img width="1131" height="366" alt="dashboard" src="https://github.com/user-attachments/assets/946871c3-c613-486d-92f9-dd3b3fb8f418" />
 
 4) **Log.vue**
-<img width="1734" height="916" alt="log" src="https://github.com/user-attachments/assets/79354516-c0e6-4ce9-98dc-70f2ea593144" />
+<img width="476" height="607" alt="log_view" src="https://github.com/user-attachments/assets/00e65043-dc33-4214-aa1c-6890878afa14" />
+5) **Metrics.vue**
+<img width="519" height="663" alt="metrics_view" src="https://github.com/user-attachments/assets/592209a5-1683-469e-a471-454027659647" />
 
 ### [Agent]
 1) **정보 수집 경고 팝업창**
