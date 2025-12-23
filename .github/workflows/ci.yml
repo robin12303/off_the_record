@@ -17,5 +17,10 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
+      - name: Make gradlew executable
+        working-directory: backend
+        run: chmod +x ./gradlew
+
       - name: Gradle build & test
+        working-directory: backend
         run: ./gradlew clean test
