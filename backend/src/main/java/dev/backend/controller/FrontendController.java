@@ -55,4 +55,26 @@ public class FrontendController {
     }
 
     // metricsStart/Stop도 똑같이 붙이면 됨
+    @Operation(summary = "METRIC 시작", description = "지정 머신에 METRIC START 명령을 푸시합니다.")
+    @PostMapping("/metricsStart/{machineGuid}/{commandId}")
+    public void metricsStart(
+            @Parameter(description = "대상 머신 GUID", example = "d9f1a8f0-1234-5678-9abc-def012345678")
+            @PathVariable String machineGuid,
+            @Parameter(description = "명령 ID(추적용)", example = "cmd-001")
+            @PathVariable String commandId
+    ) {
+        log.info("metricstart -> machineGuid: {}, commandId: {}", machineGuid, commandId);
+        agentPushService.sendCommand(machineGuid, AgentCommandRequest.metricsStart(machineGuid, commandId));
+    }
+
+    @Operation(summary = "METRIC 중지")
+    @PostMapping("/metricsStop/{machineGuid}/{commandId}")
+    public void metricsStop(
+            @Parameter(description = "대상 머신 GUID", example = "d9f1a8f0-1234-5678-9abc-def012345678")
+            @PathVariable String machineGuid,
+            @Parameter(description = "명령 ID(추적용)", example = "cmd-002")
+            @PathVariable String commandId
+    ) {
+        agentPushService.sendCommand(machineGuid, AgentCommandRequest.metricsStop(machineGuid, commandId));
+    }
 }
