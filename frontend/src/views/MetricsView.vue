@@ -6,7 +6,7 @@
     <div class="controls">
       <input
           v-model.trim="input"
-          placeholder="input machine_guid"
+          placeholder="input machine_uuid"
           @keydown.enter.prevent="scan"
           :disabled="isLoading"
       />

@@ -20,8 +20,8 @@
 
         <div class="rows">
           <div class="row">
-            <div class="label">machineGuid</div>
-            <div class="value mono wrap" :title="a.machineGuid">{{ a.machineGuid }}</div>
+            <div class="label">machineUuid</div>
+            <div class="value mono wrap" :title="a.machineUuid">{{ a.machineUuid }}</div>
           </div>
           <div class="row">
             <div class="label">ipAddress</div>
