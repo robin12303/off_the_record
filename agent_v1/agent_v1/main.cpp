@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
         std::string host = (argc > 1) ? argv[1] : DEFAULT_HOST;
         std::string port = (argc > 2) ? argv[2] : DEFAULT_PORT;
         std::string target = (argc > 3) ? argv[3] : DEFAULT_TARGET;
-
+        std::string uuid = LoadOrCreateInstallId();
         std::cout << "Connecting to host=" << host
             << " port=" << port
             << " target=" << target << "\n";
