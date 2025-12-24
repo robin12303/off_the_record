@@ -58,15 +58,15 @@ class AgentPushServiceUnitTest {
     void sendCommand_success_sendsMessage_and_upsertsLog_and_returnsTrue() throws Exception {
         AgentPushService sut = new AgentPushService(registry, agentCommandLogRepository, om);
 
-        String machineGuid = "m1";
+        String machineUuid = "m1";
         String commandId = "cmd-1";
-        AgentCommandRequest cmd = AgentCommandRequest.readStop(machineGuid, commandId);
+        AgentCommandRequest cmd = AgentCommandRequest.readStop(machineUuid, commandId);
 
-        when(registry.get(machineGuid)).thenReturn(session);
+        when(registry.get(machineUuid)).thenReturn(session);
         when(session.isOpen()).thenReturn(true);
         when(om.writeValueAsString(cmd)).thenReturn("{\"ok\":true}");
 
-        boolean ok = sut.sendCommand(machineGuid, cmd);
+        boolean ok = sut.sendCommand(machineUuid, cmd);
 
         assertTrue(ok);
 
@@ -79,7 +79,7 @@ class AgentPushServiceUnitTest {
         verify(agentCommandLogRepository).upsertByCommandId(
                 eq(cmd.prefix()),
                 eq(cmd.commandId()),
-                eq(cmd.machineGuid()),
+                eq(cmd.machineUuid()),
                 anyString(),              // 보통 cmd.taskType() 자리 ("STOP"/"START"/"OK")
                 eq("PENDING")
         );
@@ -91,20 +91,20 @@ class AgentPushServiceUnitTest {
     void sendCommand_whenSendFails_removesSession_and_returnsFalse() throws Exception {
         AgentPushService sut = new AgentPushService(registry, agentCommandLogRepository, om);
 
-        String machineGuid = "m1";
-        AgentCommandRequest cmd = AgentCommandRequest.readStop(machineGuid, "cmd-1");
+        String machineUuid = "m1";
+        AgentCommandRequest cmd = AgentCommandRequest.readStop(machineUuid, "cmd-1");
 
-        when(registry.get(machineGuid)).thenReturn(session);
+        when(registry.get(machineUuid)).thenReturn(session);
         when(session.isOpen()).thenReturn(true);
         when(om.writeValueAsString(cmd)).thenReturn("{\"ok\":true}");
 
         doThrow(new RuntimeException("boom"))
                 .when(session).sendMessage(any(TextMessage.class));
 
-        boolean ok = sut.sendCommand(machineGuid, cmd);
+        boolean ok = sut.sendCommand(machineUuid, cmd);
 
         assertFalse(ok);
-        verify(registry).remove(machineGuid, session);
+        verify(registry).remove(machineUuid, session);
         verify(agentCommandLogRepository, never()).upsertByCommandId(any(), any(), any(), any(), any());
     }
 }

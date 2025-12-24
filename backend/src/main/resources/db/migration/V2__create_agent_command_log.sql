@@ -3,7 +3,7 @@ CREATE TABLE agent_command_log (
     id BIGINT NOT NULL AUTO_INCREMENT,
     prefix VARCHAR(50) NOT NULL,
     command_id VARCHAR(50) NOT NULL,
-    machine_guid CHAR(36) NOT NULL,
+    machine_uuid CHAR(36) NOT NULL,
     task_type VARCHAR(20) NOT NULL,
 
     status VARCHAR(20) DEFAULT 'PENDING',
@@ -15,6 +15,6 @@ CREATE TABLE agent_command_log (
 
         UNIQUE KEY uq_agent_command_id (command_id),
 
-        KEY idx_machine_guid (machine_guid),
-        KEY idx_machine_guid_updated_at (machine_guid, updated_at)
+        KEY idx_machine_uuid (machine_uuid),
+        KEY idx_machine_uuid_updated_at (machine_uuid, updated_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

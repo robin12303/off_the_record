@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 public record RecentResponse(
         Long id,
-        String machineGuid,
+        String machineUuid,
         String ipAddress,
         String hostName,
         String cpuName,
@@ -19,7 +19,7 @@ public record RecentResponse(
     public static RecentResponse from(Agent b) {
         return new RecentResponse(
                 b.getId(),
-                b.getMachineGuid(),
+                b.getMachineUuid(),
                 b.getIpAddress(),
                 b.getHostName(),
                 b.getCpuName(),

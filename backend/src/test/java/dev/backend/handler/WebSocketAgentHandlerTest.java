@@ -42,7 +42,7 @@ public class WebSocketAgentHandlerTest {
         {
           "prefix":"HEARTBEAT",
           "commandId":"c1",
-          "machineGuid":"M-123",
+          "machineUuid":"M-123",
           "timestamp":"t",
           "taskType":"PING",
           "payload":"{}"

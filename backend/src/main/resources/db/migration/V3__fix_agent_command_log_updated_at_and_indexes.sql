@@ -11,7 +11,7 @@ ALTER TABLE agent_command_log
         ON UPDATE CURRENT_TIMESTAMP;
 
 -- 2) 잘못된 인덱스 제거 (V2에서 idx_machine_guid가 command_id에 걸려있던 상태를 정리)
-DROP INDEX idx_machine_guid ON agent_command_log;
+DROP INDEX idx_machine_uuid ON agent_command_log;
 
--- 3) 올바른 인덱스 생성 (엔티티 @Index(name="idx_machine_guid", columnList="machine_guid")와 일치)
-CREATE INDEX idx_machine_guid ON agent_command_log (machine_guid);
+-- 3) 올바른 인덱스 생성 (엔티티 @Index(name="idx_machine_uuid", columnList="idx_machine_uuid")와 일치)
+CREATE INDEX idx_machine_uuid ON agent_command_log (machine_uuid);

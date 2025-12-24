@@ -12,20 +12,20 @@ public interface AgentCommandLogRepository extends JpaRepository<AgentCommandLog
     @Transactional
     @Query(value = """
     INSERT INTO agent_command_log (
-        prefix, command_id, machine_guid, task_type, status
+        prefix, command_id, machine_uuid, task_type, status
     ) VALUES (
-        :prefix, :commandId, :machineGuid, :taskType, :status
+        :prefix, :commandId, :machineUuid, :taskType, :status
     )
     ON DUPLICATE KEY UPDATE
         prefix       = VALUES(prefix),
-        machine_guid = VALUES(machine_guid),
+        machine_uuid = VALUES(machine_uuid),
         task_type    = VALUES(task_type),
         status       = VALUES(status)
     """, nativeQuery = true)
     int upsertByCommandId(
             @Param("prefix") String prefix,
             @Param("commandId") String commandId,
-            @Param("machineGuid") String machineGuid,
+            @Param("machineUuid") String machineUuid,
             @Param("taskType") String taskType,
             @Param("status") String status
     );

@@ -2,7 +2,7 @@
 CREATE TABLE agents
 (
     id BIGINT NOT NULL AUTO_INCREMENT,      -- 내부 PK
-    machine_guid CHAR(36) NOT NULL,         -- 장비 UUID
+    machine_uuid CHAR(36) NOT NULL,         -- 장비 UUID
     ip_address VARCHAR(45),                 -- IPv4/IPv6 (의미: observed or reported로 고정)
 
     host_name VARCHAR(255),                  -- 장비 이름
@@ -14,6 +14,6 @@ CREATE TABLE agents
     last_seen_at DATETIME NOT NULL,         -- 마지막 보고 시각
 
     PRIMARY KEY (id),
-    UNIQUE KEY uq_agents_machine_guid (machine_guid)
+    UNIQUE KEY uq_agents_machine_uuid (machine_uuid)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

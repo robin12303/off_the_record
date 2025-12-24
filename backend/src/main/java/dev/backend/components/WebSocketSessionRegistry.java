@@ -8,24 +8,24 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class WebSocketSessionRegistry {
-    private final Map<String, WebSocketSession> byMachineGuid = new ConcurrentHashMap<>();
+    private final Map<String, WebSocketSession> byMachineUuid = new ConcurrentHashMap<>();
 
     public void put(String machineGuid, WebSocketSession session) {
-        WebSocketSession old = byMachineGuid.put(machineGuid, session);
+        WebSocketSession old = byMachineUuid.put(machineGuid, session);
         if (old != null && old != session && old.isOpen()) {
             try { old.close(); } catch (Exception ignored) {}
         }
     }
 
-    public void remove(String machineGuid, WebSocketSession session) {
-        byMachineGuid.remove(machineGuid, session);
+    public void remove(String machineUuid, WebSocketSession session) {
+        byMachineUuid.remove(machineUuid, session);
     }
 
     public void remove(WebSocketSession session) {
-        byMachineGuid.entrySet().removeIf(e -> e.getValue() == session);
+        byMachineUuid.entrySet().removeIf(e -> e.getValue() == session);
     }
 
     public WebSocketSession get(String machineGuid) {
-        return byMachineGuid.get(machineGuid);
+        return byMachineUuid.get(machineGuid);
     }
 }

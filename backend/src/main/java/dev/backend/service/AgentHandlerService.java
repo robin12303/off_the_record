@@ -32,23 +32,23 @@ public class AgentHandlerService {
     private final ObjectMapper objectMapper;
     public void handleStartRead(WebSocketSession session, ReceivedMessage received ) {
         log.info("handleStartRead: {}", received);
-        agentCommandLogRepository.upsertByCommandId("READ",received.commandId(),received.machineGuid(),"START","ACCEPTED");
+        agentCommandLogRepository.upsertByCommandId("READ",received.commandId(),received.machineUuid(),"START","ACCEPTED");
     }
     public void handleStopRead(WebSocketSession session, ReceivedMessage received ) {
         log.info("handleStopRead: {}", received);
-        agentCommandLogRepository.upsertByCommandId("READ",received.commandId(),received.machineGuid(),"STOP","ACCEPTED");
+        agentCommandLogRepository.upsertByCommandId("READ",received.commandId(),received.machineUuid(),"STOP","ACCEPTED");
     }
     public void handleStartMetrics(WebSocketSession session, ReceivedMessage received ) {
         log.info("handleStartMetrics: {}", received);
-        agentCommandLogRepository.upsertByCommandId("METRICS",received.commandId(),received.machineGuid(),"START","ACCEPTED");
+        agentCommandLogRepository.upsertByCommandId("METRICS",received.commandId(),received.machineUuid(),"START","ACCEPTED");
     }
     public void handleStopMetrics(WebSocketSession session, ReceivedMessage received ) {
         log.info("handleStopMetrics: {}", received);
-        agentCommandLogRepository.upsertByCommandId("METRICS",received.commandId(),received.machineGuid(),"STOP","ACCEPTED");
+        agentCommandLogRepository.upsertByCommandId("METRICS",received.commandId(),received.machineUuid(),"STOP","ACCEPTED");
     }
     public void handleHeartBeat(WebSocketSession session, ReceivedMessage received ) {
-        String attrGuid = (String) session.getAttributes().get("machineGuid");
-        String msgGuid  = received.machineGuid();
+        String attrGuid = (String) session.getAttributes().get("machineUuid");
+        String msgGuid  = received.machineUuid();
         String ipAddress = extractIpOnly(session);
         log.info("attrGuid(session): {}", attrGuid);
         log.info("msgGuid(received): {}", msgGuid);
@@ -62,23 +62,23 @@ public class AgentHandlerService {
             // payload(JSON 텍스트 문자열) → HeartBeat record
             HeartBeat hb = objectMapper.readValue(received.payload(), HeartBeat.class);
 
-            if(!Objects.equals(hb.machineGuid(), msgGuid)) {
+            if(!Objects.equals(hb.machineUuid(), msgGuid)) {
                 kick(session, attrGuid, msgGuid);
                 return;
             }
-            if (hb.machineGuid() == null || hb.machineGuid().isBlank()) {
+            if (hb.machineUuid() == null || hb.machineUuid().isBlank()) {
                 log.warn("HB parse suspicious (machineGuid missing). payload={}", received.payload());
                 return;
             }
             // 필드별로 보기 (원하면 이게 더 명확)
             log.info("HB fields machineGuid={} hostName={} cpuName={} gpuName={} ramTotalMb={} osName={} osVersion={}",
-                    hb.machineGuid(), hb.hostName(), hb.cpuName(), hb.gpuName(),
+                    hb.machineUuid(), hb.hostName(), hb.cpuName(), hb.gpuName(),
                     hb.ramTotalMb(), hb.osName(), hb.osVersion());
 
             LocalDateTime ts = LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault());
 
-            agentRepository.upsertByMachineGuid(
-                    hb.machineGuid(),
+            agentRepository.upsertByMachineUuid(
+                    hb.machineUuid(),
                     ipAddress,
                     hb.hostName(),
                     hb.cpuName(),

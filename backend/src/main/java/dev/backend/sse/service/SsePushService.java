@@ -13,15 +13,15 @@ public class SsePushService {
     private final SseEmitterReadRegistry sseEmitterReadRegistry;
     private final SseEmitterMetricsRegistry sseEmitterMetricsRegistry;
 
-    public int broadcastReadToMachine(String machineGuid, String eventName, Object data) {
+    public int broadcastReadToMachine(String machineUuid, String eventName, Object data) {
         var sent = new java.util.concurrent.atomic.AtomicInteger();
 
-        sseEmitterReadRegistry.forEach(machineGuid, (subId, emitter) -> {
+        sseEmitterReadRegistry.forEach(machineUuid, (subId, emitter) -> {
             try {
                 emitter.send(SseEmitter.event().name(eventName).data(data));
                 sent.incrementAndGet();
             } catch (Exception e) {
-                sseEmitterReadRegistry.remove(machineGuid, subId);
+                sseEmitterReadRegistry.remove(machineUuid, subId);
                 try { emitter.completeWithError(e); } catch (Exception ignored) {}
             }
         });
@@ -29,15 +29,15 @@ public class SsePushService {
         return sent.get();
     }
 
-    public int broadcastMetricsToMachine(String machineGuid, String eventName, Object data) {
+    public int broadcastMetricsToMachine(String machineUuid, String eventName, Object data) {
         var sent = new java.util.concurrent.atomic.AtomicInteger();
 
-        sseEmitterMetricsRegistry.forEach(machineGuid, (subId, emitter) -> {
+        sseEmitterMetricsRegistry.forEach(machineUuid, (subId, emitter) -> {
             try {
                 emitter.send(SseEmitter.event().name(eventName).data(data));
                 sent.incrementAndGet();
             } catch (Exception e) {
-                sseEmitterMetricsRegistry.remove(machineGuid, subId);
+                sseEmitterMetricsRegistry.remove(machineUuid, subId);
                 try { emitter.completeWithError(e); } catch (Exception ignored) {}
             }
         });

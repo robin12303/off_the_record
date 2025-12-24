@@ -37,28 +37,28 @@ class FrontendControllerUnitTest {
 
     @Test
     void readStart_calls_sendCommand_with_readStart_request() {
-        String machineGuid = "d9f1a8f0-1234-5678-9abc-def012345678";
+        String machineUuid = "d9f1a8f0-1234-5678-9abc-def012345678";
         String commandId = "cmd-001";
 
-        controller.readStart(machineGuid, commandId);
+        controller.readStart(machineUuid, commandId);
 
         verify(agentPushService).sendCommand(
-                eq(machineGuid),
-                eq(AgentCommandRequest.readStart(machineGuid, commandId))
+                eq(machineUuid),
+                eq(AgentCommandRequest.readStart(machineUuid, commandId))
         );
         verifyNoInteractions(frontendService);
     }
 
     @Test
     void readStop_calls_sendCommand_with_readStop_request() {
-        String machineGuid = "d9f1a8f0-1234-5678-9abc-def012345678";
+        String machineUuid = "d9f1a8f0-1234-5678-9abc-def012345678";
         String commandId = "cmd-002";
 
-        controller.readStop(machineGuid, commandId);
+        controller.readStop(machineUuid, commandId);
 
         verify(agentPushService).sendCommand(
-                eq(machineGuid),
-                eq(AgentCommandRequest.readStop(machineGuid, commandId))
+                eq(machineUuid),
+                eq(AgentCommandRequest.readStop(machineUuid, commandId))
         );
         verifyNoInteractions(frontendService);
     }

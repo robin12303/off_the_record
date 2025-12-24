@@ -14,7 +14,7 @@ public interface AgentMetricsRepository extends JpaRepository<AgentMetric, Long>
     @Transactional
     @Query(value = """
     INSERT INTO agent_metrics
-    (machine_guid, window_ms, window_end_ms, keystrokes, queue_len, dropped, latency_p95_ms, reconnects)
+    (machine_uuid, window_ms, window_end_ms, keystrokes, queue_len, dropped, latency_p95_ms, reconnects)
     VALUES (:machineGuid, :windowMs, :windowEndMs, :keystrokes, :queueLen, :dropped, :latencyP95Ms, :reconnects)
     """, nativeQuery = true)
     int insertMetric(
@@ -31,7 +31,7 @@ public interface AgentMetricsRepository extends JpaRepository<AgentMetric, Long>
     @Transactional
     @Query(value = """
     INSERT INTO agent_metrics
-    (machine_guid, window_ms, window_end_ms, keystrokes)
+    (machine_uuid, window_ms, window_end_ms, keystrokes)
     VALUES (:machineGuid, :windowMs, :windowEndMs, :keystrokes)
     """, nativeQuery = true)
     int insertRequiredOnly(

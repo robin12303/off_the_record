@@ -3,7 +3,7 @@ package dev.backend.dto;
 public record AgentCommandResponse(
         String prefix,
         String commandId,
-        String machineId,
+        String machineUuid,
         String taskType,
         String status
 ) {

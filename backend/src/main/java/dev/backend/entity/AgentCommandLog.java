@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
                 @UniqueConstraint(name = "uq_agent_command_id", columnNames = "command_id")
         },
         indexes = {
-                @Index(name = "idx_machine_guid", columnList = "machine_guid"),
-                @Index(name = "idx_machine_guid_updated_at", columnList = "machine_guid, updated_at")
+                @Index(name = "idx_machine_uuid", columnList = "machine_guid"),
+                @Index(name = "idx_machine_uuid_updated_at", columnList = "machine_uuid, updated_at")
         }
 )
 @Getter
@@ -34,8 +34,8 @@ public class AgentCommandLog {
     @Column(name = "command_id", nullable = false, length = 50)
     private String commandId;
 
-    @Column(name = "machine_guid", nullable = false, length = 36)
-    private String machineGuid;
+    @Column(name = "machine_uuid", nullable = false, length = 36)
+    private String machineUuid;
 
     @Column(name = "task_type", nullable = false, length = 20)
     private String taskType; // 'TASK', 'CONFIG', 'HEARTBEAT' 같은 값
