@@ -41,8 +41,8 @@ using tcp = asio::ip::tcp;
 
 constexpr int MAX_COUNT = 1024;
  
-static std::string NewUuid();
-static std::string LoadOrCreateInstallId();
+std::string NewUuid();
+std::string LoadOrCreateInstallId();
 // -------------------- UTF16 <-> UTF8 --------------------
 std::string WideToUtf8(const std::wstring& w);
 std::wstring Trim(const std::wstring& s);
