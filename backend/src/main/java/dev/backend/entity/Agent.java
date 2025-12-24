@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "agents",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uq_agents_machine_guid", columnNames = "machine_guid")
+                @UniqueConstraint(name = "uq_agents_machine_uuid", columnNames = "machine_uuid")
         }
 )
 @Getter
@@ -24,8 +24,8 @@ public class Agent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "machine_guid", nullable = false, length = 36)
-    private String machineGuid;
+    @Column(name = "machine_uuid", nullable = false, length = 36)
+    private String machineUuid;
 
     @Column(name = "ip_address", length = 45)
     private String ipAddress;

@@ -32,17 +32,17 @@ public class SseController {
     private final SseEmitterMetricsRegistry metricsRegistry;
 
     private SseEmitter subscribe(
-            String machineGuid,
+            String machineUuid,
             BiFunction<String, SseEmitter, String> add,
             BiConsumer<String, String> remove
     ) {
         SseEmitter emitter = new SseEmitter(0L);
-        String subId = add.apply(machineGuid, emitter);
+        String subId = add.apply(machineUuid, emitter);
 
         AtomicBoolean cleaned = new AtomicBoolean(false);
         Runnable cleanup = () -> {
             if (cleaned.compareAndSet(false, true)) {
-                remove.accept(machineGuid, subId);
+                remove.accept(machineUuid, subId);
             }
         };
 
@@ -67,7 +67,7 @@ public class SseController {
     @Operation(
             summary = "READ SSE 구독",
             description = """
-            특정 machineGuid의 READ 스트림을 구독합니다.
+            특정 machineUuid의 READ 스트림을 구독합니다.
             클라이언트는 EventSource로 접속하세요.
             이벤트 예: connected, (이후 read 이벤트들...)
             """
@@ -84,9 +84,9 @@ public class SseController {
                     )
             )
     )
-    @GetMapping(value = "/stream/read/{machineGuid}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter stream(@PathVariable String machineGuid) {
-        return subscribe(machineGuid, registry::add, registry::remove);
+    @GetMapping(value = "/stream/read/{machineUuid}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter stream(@PathVariable String machineUuid) {
+        return subscribe(machineUuid, registry::add, registry::remove);
     }
 
     @Operation(
@@ -105,8 +105,8 @@ public class SseController {
                     )
             )
     )
-    @GetMapping(value = "/stream/metrics/{machineGuid}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter streamMetrics(@PathVariable String machineGuid) {
-        return subscribe(machineGuid, metricsRegistry::add, metricsRegistry::remove);
+    @GetMapping(value = "/stream/metrics/{machineUuid}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter streamMetrics(@PathVariable String machineUuid) {
+        return subscribe(machineUuid, metricsRegistry::add, metricsRegistry::remove);
     }
 }

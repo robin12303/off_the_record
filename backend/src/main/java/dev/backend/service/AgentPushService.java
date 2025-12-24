@@ -27,7 +27,7 @@ public class AgentPushService {
                 agentCommandLogRepository.upsertByCommandId(
                         command.prefix(),
                         command.commandId(),
-                        command.machineGuid(),
+                        command.machineUuid(),
                         command.taskType(),
                         "PENDING"
                 );

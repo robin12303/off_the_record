@@ -30,8 +30,8 @@ public class AgentMetric {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "machine_guid", nullable = false, length = 64)
-    private String machineGuid;
+    @Column(name = "machine_uuid", nullable = false, length = 64)
+    private String machineUuid;
 
     @Column(name = "window_ms", nullable = false)
     private Integer windowMs;

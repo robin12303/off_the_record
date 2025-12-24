@@ -12,23 +12,23 @@ public record AgentCommandRequest(
         @Schema(description = "명령 ID(추적용)", example = "cmd-20251223-0001")
         String commandId,
 
-        @Schema(description = "대상 머신 GUID", example = "d9f1a8f0-1234-5678-9abc-def012345678")
-        String machineGuid,
+        @Schema(description = "대상 머신 UUID", example = "d9f1a8f0-1234-5678-9abc-def012345678")
+        String machineUuid,
 
         @Schema(description = "작업 타입", example = "START", allowableValues = {"START", "STOP", "OK"})
         String taskType
 ) {
-    public static AgentCommandRequest readStop(String machineGuid, String commandId) {
-        return new AgentCommandRequest("READ", commandId, machineGuid, "STOP");
+    public static AgentCommandRequest readStop(String machineUuid, String commandId) {
+        return new AgentCommandRequest("READ", commandId, machineUuid, "STOP");
     }
-    public static AgentCommandRequest readStart(String machineGuid, String commandId) {
-        return new AgentCommandRequest("READ", commandId, machineGuid, "START");
+    public static AgentCommandRequest readStart(String machineUuid, String commandId) {
+        return new AgentCommandRequest("READ", commandId, machineUuid, "START");
     }
-    public static AgentCommandRequest metricsStart(String machineGuid, String commandId) {
-        return new AgentCommandRequest("METRICS", commandId, machineGuid, "START");
+    public static AgentCommandRequest metricsStart(String machineUuid, String commandId) {
+        return new AgentCommandRequest("METRICS", commandId, machineUuid, "START");
     }
-    public static AgentCommandRequest metricsStop(String machineGuid, String commandId) {
-        return new AgentCommandRequest("METRICS", commandId, machineGuid, "STOP");
+    public static AgentCommandRequest metricsStop(String machineUuid, String commandId) {
+        return new AgentCommandRequest("METRICS", commandId, machineUuid, "STOP");
     }
     public static AgentCommandRequest hello() {
         return new AgentCommandRequest("HEARTBEAT", "HEARTBEAT", "HEARTBEAT", "OK");

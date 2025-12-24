@@ -43,10 +43,10 @@ public class WebSocketAgentHandler extends TextWebSocketHandler {
     }
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        String machineGuid = (String) session.getAttributes().get("machineGuid");
-        if (machineGuid != null) {
-            registry.remove(machineGuid, session);
-            keyLimiters.remove(machineGuid); // ✅ 메모리 정리
+        String machineUuid = (String) session.getAttributes().get("machineUuid");
+        if (machineUuid != null) {
+            registry.remove(machineUuid, session);
+            keyLimiters.remove(machineUuid); // ✅ 메모리 정리
         }
         log.info("Closed {} status={}", session.getId(), status);
     }
@@ -71,8 +71,8 @@ public class WebSocketAgentHandler extends TextWebSocketHandler {
                 }
 
                 case "HEARTBEAT" -> {
-                    session.getAttributes().put("machineGuid", received.machineGuid());
-                    registry.put(received.machineGuid(), session);
+                    session.getAttributes().put("machineUuid", received.machineUuid());
+                    registry.put(received.machineUuid(), session);
                     agentHandlerService.handleHeartBeat(session, received);
 
                 }
@@ -91,7 +91,7 @@ public class WebSocketAgentHandler extends TextWebSocketHandler {
 
                 case "EVENT" -> {
 
-                    String guid = received.machineGuid();
+                    String guid = received.machineUuid();
 
                     if ("KEY".equals(received.taskType())) {
                         // 예: 초당 60개 허용 (너무 빡세면 30~120 사이로 조절)

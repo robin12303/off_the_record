@@ -1,7 +1,7 @@
 package dev.backend.dto;
 
 public record HeartBeat(
-        String machineGuid,
+        String machineUuid,
         String hostName,
         String cpuName,
         String gpuName,
