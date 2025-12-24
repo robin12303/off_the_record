@@ -2,157 +2,132 @@
   <header class="app-header">
     <nav class="nav">
       <div class="nav-left">
-        <router-link to="/" class="link" exact-active-class="active">Home</router-link>
+        <router-link to="/home" class="link" exact-active-class="active">Home</router-link>
         <router-link to="/about" class="link" exact-active-class="active">About</router-link>
         <router-link to="/dashboard" class="link" exact-active-class="active">DashBoard</router-link>
         <router-link to="/log" class="link" exact-active-class="active">Log</router-link>
         <router-link to="/metrics" class="link" exact-active-class="active">Metrics</router-link>
       </div>
 
-
+      <div class="nav-right">
+        <button class="btn" @click="onLogout" :disabled="loggingOut">
+          {{ loggingOut ? "Logging out..." : "Logout" }}
+        </button>
+      </div>
     </nav>
   </header>
 </template>
 
-<script setup lang="ts">
-import { useRouter } from "vue-router";
 
-const router = useRouter();
-
+<script>
+import api from "@/api"; // 너가 만든 axios 인스턴스
+export default {
+  name: "AppHeader",
+  data() {
+    return {
+      loggingOut: false,
+      // localStorage 변경 감지용(같은 탭에서 logout하면 즉시 반영)
+      authTick: 0,
+    };
+  },
+  mounted() {
+    // 다른 탭에서 로그인/로그아웃하면 상태 갱신
+    window.addEventListener("storage", this.onStorage);
+  },
+  beforeUnmount() {
+    window.removeEventListener("storage", this.onStorage);
+  },
+  methods: {
+    onStorage() {
+      this.authTick++; // computed 재평가 트리거
+    },
+    async onLogout() {
+      this.loggingOut = true;
+      try {
+        // 서버에 refresh 쿠키 폐기 요청 (withCredentials 켜져있어야 쿠키 포함됨)
+        await api.post("/api/auth/logout");
+      } catch (e) {
+        // 서버가 죽었든 뭐든, 클라 토큰은 지워야 로그아웃처럼 보임
+        // (인간 UX를 위해서)
+      } finally {
+        localStorage.removeItem("access_token");
+        this.authTick++;
+        this.loggingOut = false;
+        this.$router.push("/");
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
-/* 색은 변수로 빼서 다크모드도 대충 사람처럼 보이게 */
 .app-header {
-  --bg: rgba(255, 255, 255, 0.86);
-  --border: rgba(15, 23, 42, 0.12);
-  --text: #0f172a;
-  --muted: rgba(15, 23, 42, 0.78);
-  --hover: rgba(15, 23, 42, 0.06);
-
-  --danger: #b42318;
-  --danger-bg: rgba(180, 35, 24, 0.10);
-  --danger-border: rgba(180, 35, 24, 0.28);
-
-  position: sticky;
-  top: 0;
-  z-index: 10;
-
-  background: var(--bg);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border);
-}
-
-@media (prefers-color-scheme: dark) {
-  .app-header {
-    --bg: rgba(15, 23, 42, 0.72);
-    --border: rgba(148, 163, 184, 0.18);
-    --text: #e2e8f0;
-    --muted: rgba(226, 232, 240, 0.82);
-    --hover: rgba(226, 232, 240, 0.08);
-
-    --danger: #ff6b6b;
-    --danger-bg: rgba(255, 107, 107, 0.10);
-    --danger-border: rgba(255, 107, 107, 0.26);
-  }
+  border-bottom: 1px solid #eee;
+  background: #fff;
 }
 
 .nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  max-width: 1100px;
-  margin: 0 auto;
   padding: 12px 16px;
-  gap: 12px;
 }
 
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
+.nav-left,
 .nav-right {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
+/* ✅ 왼쪽 router-link용: a태그 기본 링크룩 제거 + 버튼처럼 */
 .link {
-  color: var(--text);
   text-decoration: none;
-  opacity: 0.85;
-
-  padding: 8px 10px;
+  color: inherit;
+  padding: 8px 12px;
   border-radius: 10px;
-
-  transition: opacity 140ms ease, background-color 140ms ease;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
 }
 
 .link:hover {
-  opacity: 1;
-  background: var(--hover);
+  background: #f5f5f5;
+  border-color: #eee;
 }
 
+/* exact-active-class="active"가 붙는 클래스 */
 .active {
-  opacity: 1;
-  font-weight: 700;
-  background: var(--hover);
+  background: #111;
+  color: #fff;
+  border-color: #111;
 }
 
-/* ✅ 개선된 로그아웃 버튼 */
-.logout {
+/* ✅ 오른쪽 버튼 (button + router-link 둘 다 동일 룩) */
+.btn {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-
-  padding: 8px 12px;
-  border-radius: 999px;
-
-  border: 1px solid var(--danger-border);
-  background: var(--danger-bg);
-  color: var(--danger);
-
-  font-weight: 700;
-  letter-spacing: 0.2px;
-
-  cursor: pointer;
-  user-select: none;
-
-  transition: transform 120ms ease, background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
-}
-
-.logout:hover {
-  border-color: var(--danger);
-}
-
-.logout:active {
-  transform: translateY(1px);
-}
-
-.logout:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35);
-}
-
-.logout-icon {
-  font-size: 14px;
   line-height: 1;
-  opacity: 0.9;
+  text-decoration: none; /* router-link가 btn일 때 밑줄 제거 */
+  color: inherit;
 }
 
-@media (max-width: 640px) {
-  .nav {
-    padding: 10px 12px;
-  }
-  .link {
-    padding: 7px 9px;
-  }
-  .logout {
-    padding: 7px 11px;
-  }
+.btn:hover {
+  background: #f5f5f5;
+}
+
+.btn:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.link-btn {
+  text-decoration: none;
 }
 </style>
