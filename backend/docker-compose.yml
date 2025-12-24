@@ -12,7 +12,7 @@ services:
     volumes:
       - otr_mysql:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -prootpass"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -prootpass"]
       interval: 5s
       timeout: 3s
       retries: 30
@@ -26,13 +26,16 @@ services:
         condition: service_healthy
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     environment:
-      SPRING_PROFILES_ACTIVE: local  # local 프로필이어야 import 동작 :contentReference[oaicite:2]{index=2}
+      SPRING_PROFILES_ACTIVE: local
 
-      # application-local.yml이 이걸 읽음 :contentReference[oaicite:3]{index=3}
-      OFF_THE_RECORD_DB_URL: jdbc:mysql://db:3306/off_the_record?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
-      OFF_THE_RECORD_DB_USERNAME: app
-      OFF_THE_RECORD_DB_PASSWORD: apppass
+      # application-local.yml이 이걸 읽음
+      OFF_THE_RECORD_DB_URL: ${OFF_THE_RECORD_DB_URL}
+      OFF_THE_RECORD_DB_USERNAME: ${OFF_THE_RECORD_DB_USERNAME}
+      OFF_THE_RECORD_DB_PASSWORD: ${OFF_THE_RECORD_DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
 
 volumes:
   otr_mysql:
