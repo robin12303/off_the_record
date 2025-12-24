@@ -29,6 +29,7 @@
 
 <script>
 import api from "@/api/index.js";
+import { startSseMetrics } from "@/api/sse.js";
 
 export default {
   data() {
@@ -37,7 +38,7 @@ export default {
       input: "",
       text_log: "",
       clientId: null,
-      es: null,
+      stopSse: null,
       recentAgents: null,
       isLoading: false,
       isConnected: false, // ✅ 추가
@@ -54,15 +55,15 @@ export default {
   },
   methods: {
     async stop() {
-      // 1) SSE 먼저 끊기 (UI 즉시 반응)
-      if (this.es) {
-        this.es.close();
-        this.es = null;
+      // ✅ 1) SSE 끊기
+      if (this.stopSse) {
+        this.stopSse();
+        this.stopSse = null;
       }
       this.isConnected = false;
       this.isLoading = false;
 
-      // 2) 서버에 readStop 알리기
+      // ✅ 2) 서버에 metricsStop 알리기
       try {
         if (this.input && this.clientId) {
           await api.post(
@@ -88,30 +89,31 @@ export default {
         );
         this.recentAgents = resp.data;
 
-        const sse_url = `${this.API_BASE}/api/sse/stream/metrics/${encodeURIComponent(this.input)}`;
+        // ✅ 기존 SSE 끊고 새로 시작
+        if (this.stopSse) {
+          this.stopSse();
+          this.stopSse = null;
+        }
 
-        if (this.es) this.es.close();
-        this.es = new EventSource(sse_url);
-
-        // ✅ 연결 상태 ON (connected 이벤트를 기다렸다가 켜도 되고, 여기서 켜도 됨)
-        this.isConnected = true;
-
-        this.es.addEventListener("metric_event", (e) => {
-          const data = JSON.parse(e.data);
-          const { timeStamp, windowMs, windowEndMs, keystrokes } = data;
-          this.text_log += `${timeStamp}\t${windowMs}\t${windowEndMs}\t${keystrokes}\n`;
+        this.stopSse = startSseMetrics(this.input, {
+          onConnected: (data) => {
+            console.log("connected:", data);
+            this.isConnected = true;
+          },
+          onMetricEvent: (raw) => {
+            const data = JSON.parse(raw);
+            const { timeStamp, windowMs, windowEndMs, keystrokes } = data;
+            this.text_log += `${timeStamp}\t${windowMs}\t${windowEndMs}\t${keystrokes}\n`;
+          },
+          onError: (err) => {
+            console.log("SSE error:", err);
+            this.stop();
+          },
         });
 
-        this.es.addEventListener("connected", (e) => {
-          console.log("connected:", e.data);
-          // 여기서 isConnected = true로 해도 됨 (서버가 connected 이벤트를 확실히 보내는 경우)
-        });
+        // 서버가 connected 이벤트 안 보내면 여기서 켜도 됨:
+        // this.isConnected = true;
 
-        this.es.onerror = (err) => {
-          console.log("SSE error:", err);
-          // ✅ 에러 나면 자동으로 Stop 상태로 (원하면 유지 가능)
-          this.stop();
-        };
       } catch (e) {
         console.log(e);
         this.stop();
