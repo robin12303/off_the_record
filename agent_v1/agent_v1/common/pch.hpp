@@ -28,7 +28,10 @@
 #include <format>
 #include <cstdint>
 #include <Windows.h>
+#include <fstream>
+#include <filesystem>
 #pragma comment(lib, "wbemuuid.lib")
+#pragma comment(lib, "Rpcrt4.lib")
 namespace json = boost::json; 
 namespace asio = boost::asio;
 namespace beast = boost::beast;
@@ -38,7 +41,8 @@ using tcp = asio::ip::tcp;
 
 constexpr int MAX_COUNT = 1024;
  
-
+static std::string NewUuid();
+static std::string LoadOrCreateInstallId();
 // -------------------- UTF16 <-> UTF8 --------------------
 std::string WideToUtf8(const std::wstring& w);
 std::wstring Trim(const std::wstring& s);
