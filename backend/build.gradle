@@ -48,7 +48,8 @@ dependencies {
     testImplementation platform("org.testcontainers:testcontainers-bom:2.0.2")
     testImplementation "org.testcontainers:testcontainers-junit-jupiter"
     testImplementation "org.testcontainers:testcontainers-mysql"
-
+    testImplementation 'org.springframework.security:spring-security-test' // ✅ MockMvc로 인증 테스트할 때
+    testImplementation "org.springframework.boot:spring-boot-test-autoconfigure"
     // === drop ===
     implementation("com.google.guava:guava:33.2.1-jre")
 
@@ -59,8 +60,6 @@ dependencies {
     implementation "io.jsonwebtoken:jjwt-api:0.12.5"
     runtimeOnly "io.jsonwebtoken:jjwt-impl:0.12.5"
     runtimeOnly "io.jsonwebtoken:jjwt-jackson:0.12.5"
-
-
 }
 
 tasks.named('test') {

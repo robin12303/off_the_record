@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.backend.components.WebSocketSessionRegistry;
 import dev.backend.service.AgentHandlerService;
 import dev.backend.service.AgentPushService;
-import dev.backend.service.SsePushService;
+import dev.backend.sse.SsePushService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.socket.TextMessage;
