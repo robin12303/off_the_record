@@ -4,8 +4,9 @@ class MessageHandler {
 private:
 	std::jthread t_;
 	std::shared_ptr<Connection> conn_;
+	const std::string uuid_;
 public:
-	MessageHandler(std::shared_ptr<Connection> conn);
+	MessageHandler(const std::string& uuid, std::shared_ptr<Connection> conn);
 	~MessageHandler();
 	void start();
 	void stop();

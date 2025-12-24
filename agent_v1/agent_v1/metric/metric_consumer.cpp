@@ -20,7 +20,7 @@ void MetricConsumer::loop(std::stop_token st)
 
             json::object resp;
             resp["prefix"] = "EVENT";                 // 하나로 통일 추천
-            resp["machineGuid"] = getSpec().machine_guid;
+            resp["machineUuid"] = uuid_;
             resp["payload"] = json::serialize(payload);
             resp["taskType"] = "METRIC";
 
@@ -30,8 +30,8 @@ void MetricConsumer::loop(std::stop_token st)
     }
 }
 
-MetricConsumer::MetricConsumer(std::shared_ptr<Connection> conn)
-	: conn_(conn)
+MetricConsumer::MetricConsumer(const std::string& uuid,std::shared_ptr<Connection> conn)
+	: conn_(conn), uuid_(uuid)
 {
 }
 

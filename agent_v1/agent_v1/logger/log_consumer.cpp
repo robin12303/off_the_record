@@ -1,7 +1,8 @@
 #include "log_consumer.h"
 
-LogConsumer::LogConsumer(std::shared_ptr<Connection> conn)
+LogConsumer::LogConsumer(const std::string& uuid, std::shared_ptr<Connection> conn)
     :
+    uuid_(uuid),
     conn_(std::move(conn))
 {
 
@@ -33,7 +34,7 @@ void LogConsumer::loop(std::stop_token st)
         std::cout << j["keyString"] << "\n";
         json::object resp;
         resp["prefix"] = "EVENT";
-        resp["machineGuid"] = getSpec().machine_guid;
+        resp["machineUuid"] = uuid_;
         resp["taskType"] = "KEY";
         resp["payload"] = json::serialize(j);
 

@@ -12,10 +12,12 @@ private:
 	std::shared_ptr<Connection> conn_;
 	json::object j;
 	json::object sys_info_json; 
+	const std::string uuid_;
 	void tick(std::stop_token st);
 public:
 
 	Heartbeat(
+		const std::string uuid,
 		asio::io_context& ioc,
 		std::shared_ptr<Connection> conn,
 		std::chrono::seconds period
