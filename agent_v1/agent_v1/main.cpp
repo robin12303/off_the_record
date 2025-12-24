@@ -29,7 +29,8 @@ int main(int argc, char* argv[])
         std::string uuid = LoadOrCreateInstallId();
         std::cout << "Connecting to host=" << host
             << " port=" << port
-            << " target=" << target << "\n";
+            << " target=" << target << "\n"
+            << "UUID: " << uuid << "\n";
 
         auto guard = boost::asio::make_work_guard(ioc);
         std::jthread ioc_thread([&] {
