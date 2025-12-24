@@ -1,4 +1,4 @@
-package dev.backend.sse;
+package dev.backend.sse.service;
 
 
 import dev.backend.components.SseEmitterMetricsRegistry;

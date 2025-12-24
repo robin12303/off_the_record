@@ -2,9 +2,8 @@ package dev.backend.sse.service;
 
 import dev.backend.components.SseEmitterMetricsRegistry;
 import dev.backend.components.SseEmitterReadRegistry;
-import dev.backend.dto.KeyEventData;
-import dev.backend.dto.MetricEventData;
-import dev.backend.sse.SsePushService;
+import dev.backend.sse.controller.dto.KeyEventData;
+import dev.backend.sse.controller.dto.MetricEventData;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 

@@ -2,12 +2,12 @@ package dev.backend.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.backend.components.WebSocketSessionRegistry;
-import dev.backend.dto.KeyEventData;
-import dev.backend.dto.MetricEventData;
+import dev.backend.sse.controller.dto.KeyEventData;
+import dev.backend.sse.controller.dto.MetricEventData;
 import dev.backend.dto.ReceivedMessage;
 import dev.backend.service.AgentPushService;
 import dev.backend.service.AgentHandlerService;
-import dev.backend.sse.SsePushService;
+import dev.backend.sse.service.SsePushService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

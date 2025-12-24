@@ -1,4 +1,4 @@
-package dev.backend.dto;
+package dev.backend.sse.controller.dto;
 
 public record MetricEventData(
         String timeStamp,
