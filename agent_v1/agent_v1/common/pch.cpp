@@ -1,6 +1,6 @@
 #include "pch.hpp"
 
-std::string NewUuid()
+static std::string NewUuid()
 {
     UUID u{};
     RPC_STATUS st = UuidCreate(&u);
@@ -13,7 +13,7 @@ std::string NewUuid()
     RpcStringFreeA(&s);
     return out;
 }
-std::string LoadOrCreateInstallId()
+static std::string LoadOrCreateInstallId()
 {
     // ProgramData 같은 곳 추천. (예시는 실행 폴더에 .install_id)
     const std::string path = ".install_id";
