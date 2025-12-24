@@ -1,5 +1,38 @@
 #include "pch.hpp"
 
+std::string NewUuid()
+{
+    UUID u{};
+    RPC_STATUS st = UuidCreate(&u);
+    if (st != RPC_S_OK && st != RPC_S_UUID_LOCAL_ONLY) return {};
+
+    RPC_CSTR s = nullptr;
+    if (UuidToStringA(&u, &s) != RPC_S_OK || !s) return {};
+
+    std::string out(reinterpret_cast<const char*>(s));
+    RpcStringFreeA(&s);
+    return out;
+}
+std::string LoadOrCreateInstallId()
+{
+    // ProgramData 같은 곳 추천. (예시는 실행 폴더에 .install_id)
+    const std::string path = ".install_id";
+
+    // load
+    if (std::filesystem::exists(path)) {
+        std::ifstream in(path);
+        std::string id;
+        std::getline(in, id);
+        if (!id.empty()) return id;
+    }
+
+    // create
+    std::string id = NewUuid();
+    std::ofstream out(path, std::ios::trunc);
+    out << id;
+    return id;
+}
+
 // -------------------- UTF16 <-> UTF8 --------------------
 static std::string WideToUtf8(const std::wstring& w) {
     if (w.empty()) return {};
