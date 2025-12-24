@@ -14,10 +14,12 @@ void Heartbeat::tick(std::stop_token st)
 }
 
 Heartbeat::Heartbeat(
+	const std::string uuid,
 	asio::io_context& ioc, 
 	std::shared_ptr<Connection> conn, 
 	std::chrono::seconds period)
 	:
+	uuid_(uuid),
 	timer_(asio::make_strand(ioc)),
 	conn_(std::move(conn)),
 	period_(period)
@@ -27,7 +29,7 @@ Heartbeat::Heartbeat(
 	sys_info_json["ramTotalMb"] = getSpec().ram;
 	sys_info_json["osName"] = getSpec().os_name;
 	sys_info_json["osVersion"] = getSpec().os_version;
-	sys_info_json["machineGuid"] = getSpec().machine_guid;
+	sys_info_json["machineUuid"] = uuid_;
 	sys_info_json["hostName"] = getSpec().host_name;
 
 	auto payload = json::serialize(sys_info_json);
@@ -38,7 +40,7 @@ Heartbeat::Heartbeat(
 	j["commandId"] = "N/A";
 	j["taskType"] = "HEARTBEAT";
 	j["payload"] = payload;
-	j["machineGuid"] = o.at("machineGuid").as_string();
+	j["machineUuid"] = uuid_;
 
 }
 Heartbeat::~Heartbeat()

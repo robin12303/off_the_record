@@ -1,6 +1,6 @@
 #include "received_message_handler.h"
-MessageHandler::MessageHandler(std::shared_ptr<Connection> conn)
-    : conn_(std::move(conn))
+MessageHandler::MessageHandler(const std::string& uuid, std::shared_ptr<Connection> conn)
+    : uuid_(uuid), conn_(std::move(conn))
 {
 
 }
@@ -42,7 +42,7 @@ void MessageHandler::loop(std::stop_token st)
         else {
             std::string prefix = std::string(data["prefix"].as_string());
             std::string commandId = std::string(data["commandId"].as_string());
-            std::string machineGuid = std::string(data["machineGuid"].as_string());
+            std::string machineUuid = uuid_;
             std::string taskType = std::string(data["taskType"].as_string());
             // ≈∏¿”Ω∫≈∆«¡
 
@@ -53,7 +53,7 @@ void MessageHandler::loop(std::stop_token st)
 
             resp["prefix"] = prefix;
             resp["commandId"] = commandId;
-            resp["machineGuid"] = machineGuid;
+            resp["machineUuid"] = machineUuid;
             resp["taskType"] = taskType;
             std::string timestamp = FormatTime(st);
             if (prefix == "READ") {

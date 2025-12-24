@@ -43,10 +43,10 @@ int main(int argc, char* argv[])
             }
             });
         auto conn = std::make_shared<Connection>(ioc);
-        auto heartbeat = std::make_shared<Heartbeat>(ioc, conn, 5s);
-        auto messageHandler = std::make_shared<MessageHandler>(conn);
-        auto log_consumer = std::make_shared<LogConsumer>(conn);
-        auto metrifc_consumer = std::make_shared<MetricConsumer>(conn);
+        auto heartbeat = std::make_shared<Heartbeat>(uuid,ioc, conn, 5s);
+        auto messageHandler = std::make_shared<MessageHandler>(uuid,conn);
+        auto log_consumer = std::make_shared<LogConsumer>(uuid, conn);
+        auto metrifc_consumer = std::make_shared<MetricConsumer>(uuid, conn);
 
         auto metric_producer = MetricProducer();
         auto producer = Producer();
