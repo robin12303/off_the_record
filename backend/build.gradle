@@ -28,7 +28,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-json"
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation "org.springframework.boot:spring-boot-starter-actuator"
-
+    implementation 'org.springframework.boot:spring-boot-starter-security' // BCrypt만 써도 됨
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
@@ -54,6 +54,11 @@ dependencies {
 
     // === SWAGGER ===
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0"
+
+    // === JWT ====
+    implementation "io.jsonwebtoken:jjwt-api:0.12.5"
+    runtimeOnly "io.jsonwebtoken:jjwt-impl:0.12.5"
+    runtimeOnly "io.jsonwebtoken:jjwt-jackson:0.12.5"
 
 
 }

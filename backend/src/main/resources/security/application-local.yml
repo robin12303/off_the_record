@@ -13,6 +13,7 @@ spring:
     open-in-view: false
   flyway:
     enabled: true
+
 management:
   endpoints:
     web:
@@ -22,3 +23,10 @@ management:
         allowed-origin-patterns: "http://localhost:*"
         allowed-methods: "GET,OPTIONS"
         allowed-headers: "*"
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    accessTtlSeconds: 900
+  refresh:
+    ttlSeconds: 1209600
