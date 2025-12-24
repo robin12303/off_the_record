@@ -99,15 +99,20 @@ export default {
       if (this.error) return;
 
       this.loading = true;
+      if (this.form.password.length < 8) {
+        this.error.value = "비밀번호는 최소 8자 이상이어야 합니다.";
+        return;
+      }
       try {
         const payload = {
           email: this.form.email.trim(),
           password: this.form.password,
         };
+        console.log("signup payload:", payload);
 
         const { data } = await api.post("/api/auth/signup", payload);
         console.log("signup ok:", data);
-
+        console.log("signup payload:", payload);
         this.ok = true;
 
         // ✅ 1) signup 응답이 토큰을 주는 구조면: 바로 로그인 처리
