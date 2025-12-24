@@ -8,6 +8,23 @@ on:
 jobs:
   build-test:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: off_the_record
+          MYSQL_USER: app
+          MYSQL_PASSWORD: apppass
+          MYSQL_ROOT_PASSWORD: rootpass
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -prootpass"
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=30
+
     steps:
       - uses: actions/checkout@v4
 
@@ -23,4 +40,10 @@ jobs:
 
       - name: Gradle build & test
         working-directory: backend
+        env:
+          SPRING_PROFILES_ACTIVE: local
+          SPRING_DATASOURCE_URL: jdbc:mysql://127.0.0.1:3306/off_the_record?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+          SPRING_DATASOURCE_USERNAME: app
+          SPRING_DATASOURCE_PASSWORD: apppass
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: ./gradlew clean test
