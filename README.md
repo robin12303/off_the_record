@@ -1,4 +1,4 @@
-# 프로젝트: Off the record (개발: 김연성)[![agent-v1-ci](https://github.com/robin12303/off_the_record3/actions/workflows/agent_v1_ci.yml/badge.svg)](https://github.com/robin12303/off_the_record3/actions/workflows/agent_v1_ci.yml)[![backend](https://github.com/robin12303/off_the_record3/actions/workflows/backend_ci.yml/badge.svg)](https://github.com/robin12303/off_the_record3/actions/workflows/backend_ci.yml) 
+# 프로젝트: Off the record (개발: 김연성)[![agent-v1-ci](https://github.com/robin12303/off_the_record3/actions/workflows/agent_v1_ci.yml/badge.svg)](https://github.com/robin12303/off_the_record3/actions/workflows/agent_v1_ci.yml)[![backend](https://github.com/robin12303/off_the_record3/actions/workflows/backend_ci.yml/badge.svg)](https://github.com/robin12303/off_the_record3/actions/workflows/backend_ci.yml)[![frontend-ci](https://github.com/robin12303/off_the_record3/actions/workflows/frontend_ci.yml/badge.svg)](https://github.com/robin12303/off_the_record3/actions/workflows/frontend_ci.yml) 
 - [GitHub 링크](https://github.com/robin12303/off_the_record)
 - [Notion 링크](https://www.notion.so/2d0401ce7bab80eb8704c2c5dce7c4d5?pvs=21)
 
