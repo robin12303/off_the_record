@@ -337,14 +337,7 @@ std::string FormatTime(const SYSTEMTIME& st)
     return oss.str();
 }
 
-// ===================== logger =====================
-
-
-// ===================== KeyEventStructure =====================
-KeyEvent::KeyEvent(const std::string& _timeStamp,const std::string& _capsLock, const std::string& _eventType, const std::string& _keyString)
-    : timeStamp(_timeStamp), capsLock(_capsLock), eventType(_eventType), keyString(_keyString) {
-};
-
+ 
 //======================== received message ========================
 std::mutex recv_m;
 std::queue<std::string> recv_q;

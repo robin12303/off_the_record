@@ -88,9 +88,7 @@ public:
 
     std::vector<std::wstring> QueryStringList(const std::wstring& className, const std::wstring& propName);
 
-};
-
-// -------------------- GetMachineGuid -------------------- 
+}; 
 
 // -------------------- GetHostNameW --------------------
 std::wstring GetHostNameW(bool fqdn);
@@ -114,25 +112,13 @@ bool TryGetInstalledRamGb(double& outGb);
 
 void GetWindowsOsNameVersion(std::string& outName, std::string& outVersion);
 
-Spec getSpec();
-
-// ======================== key_converter ========================
+Spec getSpec(); 
 
 
 std::string GetCurrentTimestamp();
 std::string FormatTime(const SYSTEMTIME& st);
 
-// ======================== key event structure ========================
-struct KeyEvent{
-    std::string timeStamp;
-    std::string capsLock;
-    std::string eventType;
-    std::string keyString;
-    KeyEvent(const std::string &timeStamp, const std::string& _capsLock, const std::string& _eventType, const std::string& _keyString);
-}; 
-// ======================== logger ========================
-
-
+ 
 
 //======================== received message ========================
 extern std::mutex recv_m;
