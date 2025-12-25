@@ -1,80 +1,98 @@
 package dev.backend.auth.service;
+
 import dev.backend.auth.controller.dto.IssuedTokens;
-import dev.backend.auth.controller.dto.LoginRequest;
 import dev.backend.auth.controller.dto.SignupRequest;
 import dev.backend.auth.entity.User;
 import dev.backend.auth.repository.UserRepository;
 import dev.backend.exception.ApiException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
 import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-public class AuthServiceTest {
-    @Mock UserRepository userRepository;
-    @Mock PasswordEncoder passwordEncoder;
-    @Mock JwtService jwtService;
-    @Mock RefreshTokenService refreshTokenService;
+@Testcontainers
+@SpringBootTest
+@Transactional
+class AuthServiceIntegrationTest {
 
-    AuthService authService;
+    @Container
+    static final MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0")
+            .withDatabaseName("testdb")
+            .withUsername("test")
+            .withPassword("test");
 
-    @BeforeEach
-    void setUp() {
-        authService = new AuthService(userRepository, passwordEncoder, jwtService, refreshTokenService);
+    @DynamicPropertySource
+    static void overrideProps(DynamicPropertyRegistry r) {
+        r.add("spring.datasource.url", mysql::getJdbcUrl);
+        r.add("spring.datasource.username", mysql::getUsername);
+        r.add("spring.datasource.password", mysql::getPassword);
+        r.add("spring.datasource.driver-class-name", mysql::getDriverClassName);
+
+        // Flyway 쓰면 켜두는 게 보통 “진짜 통합”에 더 가까움
+        r.add("spring.flyway.enabled", () -> true);
+
+        // ✅ JwtService가 읽는 프로퍼티 키에 맞춰서 바꿔야 함 (예시는 흔한 형태)
+        r.add("jwt.secret", () -> "test-secret-test-secret-test-secret-test-secret");
+        r.add("jwt.access-ttl-seconds", () -> "3600");
+        r.add("jwt.refresh-ttl-seconds", () -> "1209600");
     }
 
-    // ---------- signup ----------
+    @Autowired AuthService authService;
+    @Autowired UserRepository userRepository;
+    @Autowired PasswordEncoder passwordEncoder;
+
+    @BeforeEach
+    void clean() {
+        userRepository.deleteAll();
+    }
+
     @Test
     void signup_throws409_whenEmailExists() {
-        SignupRequest req = new SignupRequest("Test@Email.com", "pw");
-        when(userRepository.existsByEmail("test@email.com")).thenReturn(true);
+        // given: 이미 유저가 존재
+        User u = new User("test@email.com", passwordEncoder.encode("pw"));
+        userRepository.save(u);
 
-        ApiException ex = catchThrowableOfType(() -> authService.signup(req), ApiException.class);
+        // when
+        ApiException ex = catchThrowableOfType(
+                () -> authService.signup(new SignupRequest("  Test@Email.com  ", "pw")),
+                ApiException.class
+        );
 
+        // then
         assertThat(ex.getStatus()).isEqualTo(HttpStatus.CONFLICT);
         assertThat(ex.getCode()).isEqualTo("EMAIL_ALREADY_EXISTS");
-
-        verify(userRepository).existsByEmail("test@email.com");
-        verifyNoMoreInteractions(userRepository);
-        verifyNoInteractions(passwordEncoder, jwtService, refreshTokenService);
     }
 
     @Test
     void signup_returnsTokens_andSavesLowercasedTrimmedEmail() {
-        SignupRequest req = new SignupRequest("  Test@Email.com  ", "pw");
+        // when
+        IssuedTokens out = authService.signup(new SignupRequest("  Test@Email.com  ", "pw"));
 
-        when(userRepository.existsByEmail("test@email.com")).thenReturn(false);
-        when(passwordEncoder.encode("pw")).thenReturn("hash");
+        // then: 토큰이 실제로 발급됨 (Mockito 없음)
+        assertThat(out.accessToken()).isNotBlank();
+        assertThat(out.refreshTokenRaw()).isNotBlank();
+        assertThat(out.accessExpiresInSeconds()).isGreaterThan(0);
 
-        // save() 결과로 id가 있는 User를 반환해야 access 발급이 가능
-        User saved = new User("test@email.com", "hash");
-        saved.setId(10L); // <- 아래 주석 참고
-        when(userRepository.save(any(User.class))).thenReturn(saved);
+        // then: DB에 실제 저장 + 이메일 정규화 확인
+        // ⚠️ findByEmail이 없다면 UserRepository에 추가하거나 다른 방식으로 조회
+        Optional<User> savedOpt = userRepository.findByEmail("test@email.com");
+        User saved = savedOpt.orElseThrow();
 
-        when(jwtService.issueAccessToken(10L, "test@email.com")).thenReturn("access.jwt");
-        when(jwtService.getAccessTtlSeconds()).thenReturn(3600L);
-
-        // RefreshTokenService.issue()가 반환하는 타입에 맞춰서 수정
-        when(refreshTokenService.issue(10L)).thenReturn(new RefreshTokenService.Issued("raw.refresh", null));
-
-        IssuedTokens out = authService.signup(req);
-
-        assertThat(out.accessToken()).isEqualTo("access.jwt");
-        assertThat(out.accessExpiresInSeconds()).isEqualTo(3600L);
-        assertThat(out.refreshTokenRaw()).isEqualTo("raw.refresh");
-
-        // 저장된 유저 이메일이 정규화 되었는지 확인
-        ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
-        verify(userRepository).save(captor.capture());
-        assertThat(captor.getValue().getEmail()).isEqualTo("test@email.com");
-        assertThat(captor.getValue().getPasswordHash()).isEqualTo("hash");
+        assertThat(saved.getEmail()).isEqualTo("test@email.com");
+        assertThat(saved.getPasswordHash()).isNotBlank();
+        assertThat(saved.getPasswordHash()).isNotEqualTo("pw");
+        assertThat(passwordEncoder.matches("pw", saved.getPasswordHash())).isTrue();
     }
 }

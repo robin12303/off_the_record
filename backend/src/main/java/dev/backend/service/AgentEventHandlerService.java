@@ -1,7 +1,5 @@
 package dev.backend.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.backend.dto.ReceivedMessage;
 import dev.backend.repository.AgentMetricsRepository;
 import dev.backend.sse.controller.dto.MetricEventData;

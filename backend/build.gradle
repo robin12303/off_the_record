@@ -53,6 +53,8 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 
     // === Test (Boot 4 권장) ===
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testImplementation "org.springframework.boot:spring-boot-starter-data-jpa-test"
     testImplementation "org.springframework.boot:spring-boot-starter-security-test" // 시큐리티 테스트하면
     testImplementation platform("org.testcontainers:testcontainers-bom:2.0.2")
