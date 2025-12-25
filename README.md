@@ -45,7 +45,7 @@
 * CI 및 테스트로 동작을 검증하고, Docker Compose로 로컬 재현 가능하도록 구성
 
 ---
-## Architecture
+## 아키텍처
 <img width="965" height="744" alt="아키텍처6" src="https://github.com/user-attachments/assets/e2550f4f-0b7b-4f1f-8d2b-7527f8a54081" />
 
 ## Features
@@ -82,10 +82,10 @@
 
 ## 실행 방법
 
-### Prerequisites
+### 요구사항
 
 * Docker Desktop (추천)
-* 로컬 실행 시: Windows, JDK 17+, Node.js 18+, (선택) MySQL
+* 로컬 실행 시: Windows, JDK 17+, Node.js 18+, MySQL
 
 ---
 
