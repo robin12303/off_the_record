@@ -5,7 +5,6 @@
         <router-link to="/home" class="link" exact-active-class="active">Home</router-link>
         <router-link to="/about" class="link" exact-active-class="active">About</router-link>
         <router-link to="/dashboard" class="link" exact-active-class="active">DashBoard</router-link>
-        <router-link to="/log" class="link" exact-active-class="active">Log</router-link>
         <router-link to="/metrics" class="link" exact-active-class="active">Metrics</router-link>
       </div>
 
