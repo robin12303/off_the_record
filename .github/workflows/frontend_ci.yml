@@ -4,24 +4,28 @@ on:
   push:
     paths:
       - "frontend/**"
-      - ".github/workflows/frontend-ci.yml"
+      - ".github/workflows/frontend_ci.yml"
   pull_request:
     paths:
       - "frontend/**"
 
 jobs:
-  build-test:
+  build:
     runs-on: ubuntu-latest
 
     defaults:
       run:
         working-directory: frontend
 
+    env:
+      VITE_API_URL: http://localhost:8080
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Node
-      - uses: actions/setup-node@v4
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: "npm"
@@ -30,10 +34,10 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Lint (if exists)
+      - name: Lint (if present)
         run: npm run lint --if-present
 
-      - name: Unit tests (if exists)
+      - name: Unit tests (if present)
         run: npm test --if-present
 
       - name: Build
