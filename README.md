@@ -2,50 +2,49 @@
 - [GitHub 링크](https://github.com/robin12303/off_the_record)
 - [Notion 링크](https://www.notion.so/2d0401ce7bab80eb8704c2c5dce7c4d5?pvs=21)
 
-**Off the record**는 Windows 환경에서 C++로 만든 에이전트가 시스템 이벤트를 실시간으로 수집하고, 이를 Spring Boot 백엔드로 전송해 **MySQL에 저장**하며, 동시에 **SSE(Server-Sent Events)** 로 Vue 대시보드에 실시간 스트리밍하는 학습용 프로젝트입니다.
+**Off the record**는 Windows 환경의 C++ 에이전트가 시스템 이벤트를 실시간으로 집계하고, Spring Boot 백엔드로 전송해 **MySQL에 저장**한 뒤, **SSE(Server-Sent Events)** 로 Vue 대시보드에 실시간 스트리밍하는 학습용 프로젝트입니다.
 
-에이전트–서버–대시보드까지 이어지는 전체 흐름을 직접 구현하면서, **멀티스레딩/비동기 처리(WebSocket·SSE)** 기반의 이벤트 파이프라인 구조를 이해하고 검증하는 데 초점을 맞췄습니다.
+에이전트–서버–대시보드까지 이어지는 전체 데이터 흐름을 직접 구현하면서 **멀티스레딩(Producer–Consumer) + 비동기 I/O(WebSocket/SSE)** 기반의 이벤트 파이프라인을 설계·검증하는 데 초점을 맞췄습니다.
 
-> ⚠️ 윤리/보안 주의
-> 
-> 
-> 본 프로젝트는 학습·실험 목적의 구현이며, 사용자 동의 없이 사용하면 안 됩니다.
-> 
-> 또한 비밀번호/개인정보 등 민감 정보가 포함될 수 있는 입력은 **저장/전송 대상에서 제외**하도록 필터링 또는 마스킹이 필요합니다.
+> ⚠️ 윤리/보안 (중요)
 >
+> * 본 프로젝트는 **학습/실험 목적**이며, **사용자 명시적 동의 없이 사용하지 않습니다.**
+> * 에이전트는 **입력 “내용”을 수집하지 않으며**, 전송 데이터는 **집계/메트릭 중심**으로 제한합니다.
+>   (민감 정보가 포함될 수 있는 원문 입력/키 코드 등은 저장·전송하지 않도록 설계)
+> * 실제 사용 환경에서는 **추가적인 안전장치(화이트리스트, 마스킹, 최소 권한, 보관 기간 제한)** 가 필요합니다.
 
 ---
 
-## 소개
+## Overview
 
-**Windows 이벤트를 실시간 수집 → 서버 저장/스트리밍까지 연결한 멀티스레드 이벤트 처리 시스템**
+**Windows → WebSocket → Backend 저장/스트리밍 → SSE 대시보드**로 이어지는 실시간 이벤트 파이프라인
 
 ### Architecture
 
-- **C++ Agent (Windows)** → **WebSocket (Boost.Asio)** → **Spring Boot Backend** → **SSE** → **Vue Dashboard**
+* **C++ Agent (Windows)** → **WebSocket (Boost.Asio/Beast)** → **Spring Boot Backend** → **MySQL(JPA)**
+* Backend → **SSE** → **Vue Dashboard**
 
 ### C++ Agent (Windows)
 
-- WinAPI로 **키보드 이벤트 실시간 캡처**
-- 이벤트를 **JSON 직렬화** 후 WebSocket으로 전송
-- `std::jthread`로 I/O 컨텍스트를 별도 스레드에서 실행
-- `std::counting_semaphore + std::mutex` 기반 **Producer–Consumer 이벤트 큐**
-- 별도 스레드 **Heartbeat**로 연결 유지
+* WinAPI 기반 이벤트를 **실시간 집계/직렬화(JSON)** 후 WebSocket 전송
+* `std::jthread`로 I/O 컨텍스트를 별도 스레드에서 실행
+* `std::counting_semaphore + std::mutex` 기반 **Producer–Consumer 큐**
+* 별도 스레드 **Heartbeat**로 연결 유지/복구
 
 ### Backend (Spring Boot)
 
-- WebSocket 세션 관리 (**WebSocketAgentHandler**)
-- **RateLimiter**로 초당 이벤트 처리량 제한
-- 수신 이벤트 **MySQL(JPA)** 저장 + 동시에 **SSE로 대시보드 실시간 스트리밍**
-- `/readStart`, `/readStop` REST API로 스트리밍 제어
+* WebSocket 세션 관리 (**WebSocketAgentHandler**)
+* **Rate Limiting**으로 과도한 이벤트 유입 제어
+* 수신 이벤트 **MySQL 저장 + SSE로 실시간 스트리밍**
+* `/readStart`, `/readStop` REST API로 스트리밍 제어
 
 ### Key Points
 
-- 멀티스레딩 + 비동기 처리 기반의 **저지연 실시간 이벤트 파이프라인**
-- WebSocket / REST / SSE를 결합한 **복합 통신 구조 설계 및 구현**
+* 멀티스레딩 + 비동기 통신을 결합한 **저지연 이벤트 파이프라인**
+* WebSocket / REST / SSE를 결합한 **복합 통신 구조 설계 및 구현**
+* CI 및 테스트로 동작을 검증하고, Docker Compose로 로컬 재현 가능하도록 구성
 
 ---
-
 ## Architecture
 <img width="965" height="744" alt="아키텍처6" src="https://github.com/user-attachments/assets/e2550f4f-0b7b-4f1f-8d2b-7527f8a54081" />
 
