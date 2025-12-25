@@ -19,7 +19,7 @@
 
 **Windows → WebSocket → Backend 저장/스트리밍 → SSE 대시보드**로 이어지는 실시간 이벤트 파이프라인
 
-### Architecture
+### 아키텍처
 
 * **C++ Agent (Windows)** → **WebSocket (Boost.Asio/Beast)** → **Spring Boot Backend** → **MySQL(JPA)**
 * Backend → **SSE** → **Vue Dashboard**
