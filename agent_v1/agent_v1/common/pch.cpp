@@ -284,7 +284,7 @@ Spec getSpec()
     }
 
     try {
-        spec.machine_guid = WideToUtf8(GetMachineGuid());
+        spec.machine_guid = "\0";
     }
     catch (const std::exception& e) {
         spec.machine_guid = "(unknown)";
