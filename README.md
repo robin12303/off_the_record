@@ -22,6 +22,9 @@
 ### 아키텍처
 <img width="965" height="744" alt="아키텍처6" src="https://github.com/user-attachments/assets/e2550f4f-0b7b-4f1f-8d2b-7527f8a54081" />
 
+### 데이터베이스 설계
+<img width="1058" height="814" alt="db_diagram" src="https://github.com/user-attachments/assets/4d7f8828-25aa-4d3e-b372-4cd39b437050" />
+
 ### C++ Agent (Windows)
 
 * WinAPI 기반 이벤트를 **실시간 집계/직렬화(JSON)** 후 WebSocket 전송
