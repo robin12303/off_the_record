@@ -20,7 +20,7 @@
 **Windows → WebSocket → Backend 저장/스트리밍 → SSE 대시보드**로 이어지는 실시간 이벤트 파이프라인
 
 ### 아키텍처
-
+<img width="965" height="744" alt="아키텍처6" src="https://github.com/user-attachments/assets/e2550f4f-0b7b-4f1f-8d2b-7527f8a54081" />
 * **C++ Agent (Windows)** → **WebSocket (Boost.Asio/Beast)** → **Spring Boot Backend** → **MySQL(JPA)**
 * Backend → **SSE** → **Vue Dashboard**
 
@@ -45,8 +45,6 @@
 * CI 및 테스트로 동작을 검증하고, Docker Compose로 로컬 재현 가능하도록 구성
 
 ---
-## 아키텍처
-<img width="965" height="744" alt="아키텍처6" src="https://github.com/user-attachments/assets/e2550f4f-0b7b-4f1f-8d2b-7527f8a54081" />
 
 ## Features
 
