@@ -182,7 +182,7 @@ Visual Studio를 다시 열고 빌드합니다.
 ---
 
 
-## API Spec
+## API 명세서
 
 ### REST API
 
