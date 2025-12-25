@@ -319,7 +319,7 @@ data: {"timeStamp":"2025-12-21T11:12:42Z","eventType":"KEYDOWN","count":1}
 ]
 ```
 
-## Screenshots
+## 스크린
 ### [Frontend]
 1) **Home.vue**
 <img width="1342" height="1038" alt="about" src="https://github.com/user-attachments/assets/e63e4173-9bcb-480c-a81a-c4295864d7b4" />
