@@ -34,7 +34,7 @@
 * WebSocket 세션 관리 (**WebSocketAgentHandler**)
 * **Rate Limiting**으로 과도한 이벤트 유입 제어
 * 수신 이벤트 **MySQL 저장 + SSE로 실시간 스트리밍**
-* `/readStart`, `/readStop` REST API로 스트리밍 제어
+* `/metricsStart`, `/metricsStop` REST API로 스트리밍 제어
 
 ### Key Points
 
