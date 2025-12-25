@@ -42,7 +42,7 @@ jobs:
         shell: powershell
         run: |
           .\\extern\\vcpkg\\vcpkg.exe install boost-json boost-beast --triplet x64-windows
-
+          .\extern\vcpkg\vcpkg.exe integrate install
       - name: Build (MSBuild vcxproj)
         shell: powershell
         run: |
