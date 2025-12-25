@@ -178,48 +178,9 @@ Visual Studio를 다시 열고 빌드합니다.
 ---
 
 
+---
+
 ## API 명세서
-
-### REST API
-
-| Name                  | Method | Endpoint                               | Request     | Response            |
-| --------------------- | ------ | -------------------------------------- | ----------- | ------------------- |
-| Start agent streaming | POST   | `/matricsStart/{machineUuid}/{commandId}` | Path params | (예시) `202 Accepted` |
-| Stop agent streaming  | POST   | `/matricsStop/{machineUuid}/{commandId}`  | Path params | (예시) `202 Accepted` |
-
-**Path Params**
-
-* `machineUuid`: 에이전트 식별자
-* `commandId`: 요청 식별자(클라이언트에서 생성)
-
-**Response (example)**
-
-```json
-{
-  "commandId": "abc-123",
-  "accepted": true
-}
-```
- 
-
----
-
-### SSE
-
-| Name            | Method | Endpoint                | Request     | Response            |
-| --------------- | ------ | ----------------------- | ----------- | ------------------- |
-| Open SSE stream | GET    | `/stream/{machineGuid}` | Path params | `text/event-stream` |
-
-**Event (example)**
-
-```text
-event: metric_event
-data: {"timeStamp":"...","windowMs":"KEYDOWN","keystrokes":"A"}
-```
-
----
-
-## API Spec
 
 ### 공통
 
@@ -232,7 +193,7 @@ data: {"timeStamp":"...","windowMs":"KEYDOWN","keystrokes":"A"}
 ## REST API (Agent Control)
 
 | Name                 | Method | Endpoint                                   | Response       |
-| ----------------------- | ------ | ------------------------------------------ | -------------- |
+| -------------------- | ------ | ------------------------------------------ | -------------- |
 | 에이전트 스트리밍 시작 | POST   | `/metrics/start/{machineUuid}/{commandId}` | `202 Accepted` |
 | 에이전트 스트리밍 종료 | POST   | `/metrics/stop/{machineUuid}/{commandId}`  | `202 Accepted` |
 
