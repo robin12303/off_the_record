@@ -13,9 +13,6 @@ private:
         int nCode, WPARAM wParam, LPARAM lParam);
 
     static Producer* GetInstanceFromHook();
-
-    void produceLog(WPARAM wParam,
-        const KBDLLHOOKSTRUCT& kbStruct);
     void produceMetric(WPARAM wParam,
         const KBDLLHOOKSTRUCT& kbStruc);
      

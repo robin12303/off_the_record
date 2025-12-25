@@ -136,10 +136,7 @@ struct KeyEvent{
 }; 
 // ======================== logger ========================
 
-extern std::atomic<bool> logger_running;
-extern std::mutex log_m;
-extern std::counting_semaphore<MAX_COUNT> log_sem;
-extern std::queue<KeyEvent> log_q;
+
 
 //======================== received message ========================
 extern std::mutex recv_m;

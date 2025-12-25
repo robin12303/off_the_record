@@ -56,31 +56,7 @@ void MessageHandler::loop(std::stop_token st)
             resp["machineUuid"] = machineUuid;
             resp["taskType"] = taskType;
             std::string timestamp = FormatTime(st);
-            if (prefix == "READ") {
-                if (taskType == "START") {
-                    if (logger_running) {
-                        resp["payload"] = "ALREADY_RUNNING";
-                    }
-                    else {
-                        logger_running = true;
-                        resp["payload"] = "OK";
-                    }
-                }
-                else if (taskType == "STOP") {
-                    if (!logger_running) {
-                        resp["payload"] = "ALREADY_STOPPED";
-                    }
-                    else {
-                        logger_running = false;
-                        resp["payload"] = "OK";
-                    }
-                }
-                else {
-                    resp["payload"] = "RESPONSE_ERROR";
-                }
-                conn_->send(json::serialize(resp));
-            }
-            else if (prefix == "HEARTBEAT") {
+            if (prefix == "HEARTBEAT") {
                 // TO-DO
             }
             else if (prefix == "METRICS") {
