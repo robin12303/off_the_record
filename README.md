@@ -50,35 +50,36 @@
 
 ## Features
 
-### C++ Agent
+### C++ Agent (Windows)
 
-- Windows 시스템 이벤트 수집 (예: 키 이벤트)
-- 이벤트 JSON 직렬화
-- WebSocket으로 백엔드에 전송
-- (선택) 연결/재연결, Heartbeat
+* Windows 이벤트를 **실시간 집계/메트릭화** (예: 입력 발생 빈도, 세션/상태 이벤트)
+* 이벤트를 **JSON으로 직렬화**
+* **WebSocket(Boost.Asio/Beast)** 로 백엔드 전송
+* 연결 유지/복구: **Heartbeat + 재연결 로직** (선택)
 
 ### Java Backend (Spring Boot)
 
-- WebSocket 연결 수신 및 에이전트 세션 관리
-- 이벤트 처리 및 DB 저장(MySQL)
-- 실시간 스트리밍(SSE)
-- Agent 제어용 REST API (Start/Stop)
+* WebSocket 수신 및 **에이전트 세션 관리**
+* 이벤트 **검증/레이트 리밋** 후 DB 저장 (**MySQL, JPA**)
+* 대시보드로 **SSE 실시간 스트리밍**
+* Agent 제어용 REST API (**Start/Stop**)
 
 ### Vue Dashboard
 
-- 실시간 이벤트 표시(SSE)
-- 에이전트 연결 상태 표시
-- Start/Stop 등 제어 요청(REST)
+* SSE 기반 **실시간 이벤트/메트릭 시각화**
+* 에이전트 연결 상태(Online/Offline, last heartbeat) 표시
+* Start/Stop 등 제어 요청(REST)
 
 ---
 
 ## Tech Stack
 
-- **Agent**: C++ (WinAPI), `std::jthread`, semaphore
-- **Backend**: Java 17, Spring Boot, WebSocket, JPA, Flyway, MySQL
-- **Frontend**: Vue
+* **Agent**: C++20, WinAPI, `std::jthread`, `std::counting_semaphore`, Boost.Asio/Beast/JSON
+* **Backend**: Java 17, Spring Boot, WebSocket, SSE, JPA, Flyway, MySQL
+* **Frontend**: Vue (Vite)
 
 ---
+
 
 ## 실행 방법
 
