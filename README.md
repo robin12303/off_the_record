@@ -319,7 +319,8 @@ data: {"timeStamp":"2025-12-21T11:12:42Z","windowMs":"1000","keystrokes":1}
 
 ### [Agent]
 1) **정보 수집 경고 팝업창**
-  <img width="1117" height="629" alt="warning" src="https://github.com/user-attachments/assets/470b945e-e832-4899-8a8e-7ac80c7e550e" />
+  <img width="1116" height="631" alt="warning" src="https://github.com/user-attachments/assets/dc5c7505-f3e9-4b34-89a4-83ab2b741853" />
+
 
 2) **동의 후 실행 화면**
   <img width="1118" height="631" alt="running" src="https://github.com/user-attachments/assets/163e6580-aee9-4cf0-8b15-7fae481f2265" />
