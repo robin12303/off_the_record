@@ -81,95 +81,115 @@
 ---
 
 
-## 실행 방법
+지금 “실행 방법”은 내용은 다 있는데, **중간중간 튀는 블록(> 인용, 빈 줄, ‘bash 코드 복사’ 같은 찌꺼기)** 때문에 읽는 사람이 바로 피곤해져. 그리고 Agent 파트는 지금 그대로면 “Boost 설치? vcpkg? 어디서? 어떤 패키지?”가 애매해서 또 막힘.
 
-### Prerequisites
-- Docker Desktop (추천)
-- (로컬 실행 시) Windows, JDK 17+, Node.js, MySQL
+README 실행 섹션은 원칙이 하나야: **3분 안에 켤 수 있게**, 그리고 **실패 포인트(환경변수/포트/의존성) 딱 짚기**.
+
+아래는 네 내용을 유지하면서 **정리 + 오해 줄임 + 실제로 따라 하면 되는 형태**로 재작성한 버전이야. 그대로 교체해도 됨.
 
 ---
 
-### 1) Backend + MySQL (Docker Compose)
+## 실행 방법
+
+### Prerequisites
+
+* Docker Desktop (추천)
+* 로컬 실행 시: Windows, JDK 17+, Node.js 18+, (선택) MySQL
+
+---
+
+## 1) Backend + MySQL (Docker Compose)
 
 ```bash
 docker compose up --build
 ```
 
- 
-
-> Health check:
-> 
+확인:
 
 ```bash
 curl http://localhost:8080/actuator/health
 ```
 
-> Logs:
-> 
+로그:
 
 ```bash
 docker compose logs -f backend
 ```
 
-> Stop:
-> 
+종료:
 
 ```bash
 docker compose down
 ```
 
-> DB 초기화(선택):
-> 
+DB 초기화(선택):
 
 ```bash
 docker compose down -v
 ```
 
 > Docker Compose 실행 시 DB 접속 정보는 compose 환경변수로 설정됩니다.
-> 
 
-> **테스트 품질**
-> 
-- `./gradlew test`로 단위/통합 테스트 실행
-- Testcontainers로 로컬/환경 차이 없이 DB 의존성 재현 가능하게 구성
-- WebSocket 메시지 파싱 오류(Invalid JSON)에서도 서버가 죽지 않도록 예외 안전성 검증
-
->
-### 2) Frontend
+### 테스트 (Backend)
 
 ```bash
+./gradlew test
+```
+
+* 단위/통합 테스트 포함
+* Testcontainers로 DB 의존성을 재현 가능하게 구성
+* Invalid JSON(WebSocket) 등 예외 상황에서 서버가 종료되지 않도록 검증
+
+---
+
+## 2) Frontend (Vue)
+
+```powershell
 $env:VITE_API_URL="http://localhost:8080"
+npm ci
 npm run dev
 ```
 
-### 3) Agent (Windows / Visual Studio)
-
-#### Prerequisites
-- Windows 10/11
-- Visual Studio (C++ Desktop Development workload)
-- **Boost C++ Libraries** (required)
-
-#### Build / Run
-1. Repository를 클론합니다.
-2. `agent/agent.slnx` 를 Visual Studio로 엽니다.
-3. 빌드 구성(예: Debug/x64)을 선택합니다.
-4. Build 후 실행합니다.
-
-#### Boost Setup (Windows)
-이 프로젝트는 Boost를 사용하므로, 아래 중 한 방식으로 Boost include/lib 경로가 잡혀 있어야 합니다.
-
-**Option A) vcpkg 사용 (권장)**
-1. vcpkg 설치 후 Boost 설치:
-   ```bash
-   vcpkg install boost
-Visual Studio와 연동:
-
-bash
-코드 복사
-vcpkg integrate install
-Visual Studio에서 다시 열고 빌드합니다.
+> 기본 포트: `http://localhost:5173` (Vite 기본)
 
 ---
+
+## 3) Agent (Windows)
+
+### Prerequisites
+
+* Windows 10/11
+* Visual Studio 2022 (Desktop development with C++)
+* Boost (Boost.Asio/Beast/JSON 사용)
+
+### Build / Run
+
+1. Repository 클론
+2. `agent_v1/agent_v1/agent_v1.vcxproj` (또는 `.sln/.slnx`)를 Visual Studio로 열기
+3. 구성: `x64` + `Debug`(또는 `Release`) 선택
+4. 빌드 후 실행
+
+### Boost Setup (권장: vcpkg)
+
+> 아래 방식은 Boost include/lib 경로를 자동으로 구성합니다.
+
+```powershell
+git clone https://github.com/microsoft/vcpkg extern/vcpkg
+.\extern\vcpkg\bootstrap-vcpkg.bat
+.\extern\vcpkg\vcpkg.exe install boost-asio boost-beast boost-json --triplet x64-windows
+.\extern\vcpkg\vcpkg.exe integrate install
+```
+
+Visual Studio를 다시 열고 빌드합니다.
+
+---
+
+### CI
+
+* GitHub Actions에서 Windows 빌드/테스트가 자동 실행됩니다. (README 상단 배지 참고)
+
+---
+
 
 ## API Spec
 
