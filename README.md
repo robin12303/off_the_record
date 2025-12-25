@@ -215,8 +215,8 @@ Visual Studio를 다시 열고 빌드합니다.
 **Event example**
 
 ```text
-event: metric_event
-data: {"timeStamp":"2025-12-21T11:12:42Z","eventType":"KEYDOWN","count":1}
+event: matric_event
+data: {"timeStamp":"2025-12-21T11:12:42Z","windowMs":"1000","keystrokes":1}
 ```
 
 ---
