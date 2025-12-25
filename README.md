@@ -62,7 +62,7 @@
 
 ### Vue Dashboard
 
-* SSE 기반 **실시간 이벤트/메트릭 시각화**
+* SSE 기반 **실시간 로그/스트림 표시**
 * 에이전트 연결 상태(Online/Offline, last heartbeat) 표시
 * Start/Stop 등 제어 요청(REST)
 
