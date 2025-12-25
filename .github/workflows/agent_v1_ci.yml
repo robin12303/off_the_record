@@ -17,6 +17,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
       - name: Ensure vcpkg exists + bootstrap
         shell: powershell
         run: |
@@ -26,13 +29,19 @@ jobs:
           }
           cmd /c extern\\vcpkg\\bootstrap-vcpkg.bat
 
+      - name: Cache vcpkg
+        uses: actions/cache@v4
+        with:
+          path: |
+            extern/vcpkg/downloads
+            extern/vcpkg/installed
+            extern/vcpkg/packages
+          key: vcpkg-${{ runner.os }}-x64-windows-boostjson-beast
+
       - name: Install Boost deps via vcpkg
         shell: powershell
         run: |
           .\\extern\\vcpkg\\vcpkg.exe install boost-json boost-beast --triplet x64-windows
-
-      # vcpkg integrate는 "user-wide" 설정이라 CI에선 굳이 안 해도 됨.
-      # 대신 MSBuild에 VcpkgToolchain 경로를 넘기는 방식이 안전함.
 
       - name: Build (MSBuild vcxproj)
         shell: powershell
@@ -44,12 +53,3 @@ jobs:
             /p:VcpkgEnabled=true `
             /p:VcpkgTriplet=x64-windows `
             /p:VcpkgRoot="${{ github.workspace }}\\extern\\vcpkg"
-
-      - name: Cache vcpkg
-        uses: actions/cache@v4
-        with:
-          path: |
-            extern/vcpkg/downloads
-            extern/vcpkg/installed
-            extern/vcpkg/packages
-          key: vcpkg-${{ runner.os }}-${{ hashFiles('**/vcpkg.json') }}
