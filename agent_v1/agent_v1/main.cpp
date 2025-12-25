@@ -83,13 +83,16 @@ static bool ShowConsentDialogAndConfirm()
 {
     // ⚠️ 문구는 너 프로젝트 성격에 맞게 더 강하게/약하게 조절 가능
     std::wstring msg =
-        L"[WARNING / CONSENT REQUIRED]\n\n"
-        L"This project may collect system events (e.g., keyboard input) on Windows.\n"
-        L"It is intended for learning/testing ONLY.\n\n"
-        L"- Do NOT use without the user's explicit consent.\n"
-        L"- Do NOT collect/transmit passwords or personal data.\n"
-        L"- Stop immediately if you do not agree.\n\n"
-        L"Do you understand and agree to proceed?";
+        L"[경고 / 사용자 동의 필요]\n\n"
+        L"이 프로그램은 다음 정보를 수집할 수 있습니다:\n"
+        L" - 키 입력 내용(문자/키 값) 수집 없음\n"
+        L" - 키 입력 횟수(스트로크 카운트)만 집계\n"
+        L" - CPU/GPU 모델명 등 하드웨어 식별 정보\n\n"
+        L"동의 없이 실행/배포/사용하면 안 됩니다.\n"
+        L"동의하지 않으면 즉시 종료하십시오.\n\n"
+        L"이 내용을 읽고 이해했으며, 동의하십니까?";
+
+
 
     int r = MessageBoxW(
         nullptr,
