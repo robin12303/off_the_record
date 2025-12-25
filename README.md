@@ -322,23 +322,23 @@ data: {"timeStamp":"2025-12-21T11:12:42Z","eventType":"KEYDOWN","count":1}
 ## 스크린
 ### [Frontend]
 1) **Home.vue**
-<img width="1342" height="1038" alt="about" src="https://github.com/user-attachments/assets/e63e4173-9bcb-480c-a81a-c4295864d7b4" />
+  <img width="1342" height="1038" alt="about" src="https://github.com/user-attachments/assets/e63e4173-9bcb-480c-a81a-c4295864d7b4" />
 
 2) **About.vue**
-<img width="1342" height="1038" alt="about" src="https://github.com/user-attachments/assets/4de65ec2-d894-4c4d-923b-99e1ffb580c4" />
+  <img width="1342" height="1038" alt="about" src="https://github.com/user-attachments/assets/4de65ec2-d894-4c4d-923b-99e1ffb580c4" />
 
-3) **DashBoard.vue**
-<img width="1131" height="366" alt="dashboard" src="https://github.com/user-attachments/assets/946871c3-c613-486d-92f9-dd3b3fb8f418" />
+4) **DashBoard.vue**
+  <img width="1131" height="366" alt="dashboard" src="https://github.com/user-attachments/assets/946871c3-c613-486d-92f9-dd3b3fb8f418" />
 
-4) **Metrics.vue**
-<img width="519" height="663" alt="metrics_view" src="https://github.com/user-attachments/assets/592209a5-1683-469e-a471-454027659647" />
+5) **Metrics.vue**
+  <img width="519" height="663" alt="metrics_view" src="https://github.com/user-attachments/assets/592209a5-1683-469e-a471-454027659647" />
 
 ### [Agent]
 1) **정보 수집 경고 팝업창**
-<img width="1117" height="629" alt="warning" src="https://github.com/user-attachments/assets/470b945e-e832-4899-8a8e-7ac80c7e550e" />
+  <img width="1117" height="629" alt="warning" src="https://github.com/user-attachments/assets/470b945e-e832-4899-8a8e-7ac80c7e550e" />
 
 2) **동의 후 실행 화면**
-<img width="1118" height="631" alt="running" src="https://github.com/user-attachments/assets/163e6580-aee9-4cf0-8b15-7fae481f2265" />
+  <img width="1118" height="631" alt="running" src="https://github.com/user-attachments/assets/163e6580-aee9-4cf0-8b15-7fae481f2265" />
 
 
 ## Status
