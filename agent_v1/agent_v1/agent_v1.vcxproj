@@ -137,7 +137,6 @@
     <ClCompile Include="common\pch.cpp" />
     <ClCompile Include="connection\connection.cpp" />
     <ClCompile Include="heartbeat\heartbeat.cpp" />
-    <ClCompile Include="logger\log_consumer.cpp" />
     <ClCompile Include="logger\producer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="metric\metric_consumer.cpp" />
@@ -148,7 +147,6 @@
     <ClInclude Include="common\pch.hpp" />
     <ClInclude Include="connection\connection.h" />
     <ClInclude Include="heartbeat\heartbeat.h" />
-    <ClInclude Include="logger\log_consumer.h" />
     <ClInclude Include="logger\producer.h" />
     <ClInclude Include="metric\metric_consumer.h" />
     <ClInclude Include="metric\metric_producer.h" />

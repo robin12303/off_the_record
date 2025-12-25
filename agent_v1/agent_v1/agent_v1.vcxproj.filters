@@ -21,9 +21,6 @@
     <ClCompile Include="common\pch.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="logger\log_consumer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="logger\producer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -45,9 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\pch.hpp">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="logger\log_consumer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="logger\producer.h">
