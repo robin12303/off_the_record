@@ -68,7 +68,7 @@
 
 ---
 
-## Tech Stack
+## 기술 스택
 
 * **Agent**: C++20, WinAPI, `std::jthread`, `std::counting_semaphore`, Boost.Asio/Beast/JSON
 * **Backend**: Java 17, Spring Boot, WebSocket, SSE, JPA, Flyway, MySQL
