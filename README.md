@@ -231,10 +231,10 @@ data: {"timeStamp":"...","windowMs":"KEYDOWN","keystrokes":"A"}
 
 ## REST API (Agent Control)
 
-| Name                    | Method | Endpoint                                   | Response       |
+| Name                 | Method | Endpoint                                   | Response       |
 | ----------------------- | ------ | ------------------------------------------ | -------------- |
-| Start metrics streaming | POST   | `/metrics/start/{machineUuid}/{commandId}` | `202 Accepted` |
-| Stop metrics streaming  | POST   | `/metrics/stop/{machineUuid}/{commandId}`  | `202 Accepted` |
+| 에이전트 스트리밍 시작 | POST   | `/metrics/start/{machineUuid}/{commandId}` | `202 Accepted` |
+| 에이전트 스트리밍 종료 | POST   | `/metrics/stop/{machineUuid}/{commandId}`  | `202 Accepted` |
 
 **Response example**
 
