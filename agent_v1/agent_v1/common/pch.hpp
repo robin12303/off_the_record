@@ -1,6 +1,4 @@
 #pragma once 
-#define WIN32_LEAN_AND_MEAN
-#define _WIN32_DCOM
 #include <boost/asio.hpp>
 #include <boost/beast.hpp> 
 #include <boost/json.hpp> 
@@ -10,8 +8,7 @@
 #include <iostream> 
 #include <string> 
 #include <thread>
-#include <chrono>
-#include <string>
+#include <chrono> 
 #include <unordered_map>
 #include <sstream>
 #include <iomanip> 

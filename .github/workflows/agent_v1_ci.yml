@@ -1,0 +1,54 @@
+name: agent-ci
+
+on:
+  push:
+    paths:
+      - "agent_v1/**"
+      - "extern/vcpkg/**"
+      - ".github/workflows/agent_ci.yml"
+  pull_request:
+    paths:
+      - "agent_v1/**"
+
+jobs:
+  windows-msvc:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Bootstrap vcpkg
+        shell: powershell
+        run: |
+          .\extern\vcpkg\bootstrap-vcpkg.bat
+
+      # (선택) 캐시: vcpkg downloads/installed 캐시해서 속도 올림
+      - name: Cache vcpkg
+        uses: actions/cache@v4
+        with:
+          path: |
+            extern/vcpkg/downloads
+            extern/vcpkg/installed
+            extern/vcpkg/packages
+          key: vcpkg-${{ runner.os }}-${{ hashFiles('**/vcpkg.json') }}
+
+      - name: Configure (CMake preset)
+        shell: powershell
+        working-directory: agent_v1/agent_v1
+        run: |
+          cmake --preset ci-msvc
+
+      - name: Build (CMake preset)
+        shell: powershell
+        working-directory: agent_v1/agent_v1
+        run: |
+          cmake --build --preset ci-msvc
+
+      - name: Test (ctest, if present)
+        shell: powershell
+        working-directory: agent_v1/agent_v1
+        run: |
+          ctest --test-dir build/ci-msvc -C Release --output-on-failure
