@@ -404,10 +404,6 @@ std::string FormatTime(const SYSTEMTIME& st)
 }
 
 // ===================== logger =====================
-std::atomic<bool> logger_running = { false };
-std::mutex log_m;
-std::counting_semaphore<MAX_COUNT> log_sem(0);
-std::queue<KeyEvent> log_q;
 
 
 // ===================== KeyEventStructure =====================
