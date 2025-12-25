@@ -46,10 +46,13 @@ jobs:
       - name: Build (MSBuild vcxproj)
         shell: powershell
         run: |
-          msbuild agent_v1\\agent_v1\\agent_v1.vcxproj `
+          msbuild agent_v1\agent_v1\agent_v1.vcxproj `
             /m `
             /p:Configuration=Release `
             /p:Platform=x64 `
+            /p:PlatformToolset=v143 `
             /p:VcpkgEnabled=true `
             /p:VcpkgTriplet=x64-windows `
-            /p:VcpkgRoot="${{ github.workspace }}\\extern\\vcpkg"
+            /p:VcpkgRoot="${{ github.workspace }}\extern\vcpkg"
+
+  
