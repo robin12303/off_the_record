@@ -15,10 +15,10 @@ public interface AgentMetricsRepository extends JpaRepository<AgentMetric, Long>
     @Query(value = """
     INSERT INTO agent_metrics
     (machine_uuid, window_ms, window_end_ms, keystrokes, queue_len, dropped, latency_p95_ms, reconnects)
-    VALUES (:machineGuid, :windowMs, :windowEndMs, :keystrokes, :queueLen, :dropped, :latencyP95Ms, :reconnects)
+    VALUES (:machineUuid, :windowMs, :windowEndMs, :keystrokes, :queueLen, :dropped, :latencyP95Ms, :reconnects)
     """, nativeQuery = true)
     int insertMetric(
-            @Param("machineGuid") String machineGuid,
+            @Param("machineUuid") String machineUuid,
             @Param("windowMs") int windowMs,
             @Param("windowEndMs") long windowEndMs,
             @Param("keystrokes") long keystrokes,
@@ -32,10 +32,10 @@ public interface AgentMetricsRepository extends JpaRepository<AgentMetric, Long>
     @Query(value = """
     INSERT INTO agent_metrics
     (machine_uuid, window_ms, window_end_ms, keystrokes)
-    VALUES (:machineGuid, :windowMs, :windowEndMs, :keystrokes)
+    VALUES (:machineUuid, :windowMs, :windowEndMs, :keystrokes)
     """, nativeQuery = true)
     int insertRequiredOnly(
-            @Param("machineGuid") String machineGuid,
+            @Param("machineUuid") String machineUuid,
             @Param("windowMs") int windowMs,
             @Param("windowEndMs") long windowEndMs,
             @Param("keystrokes") long keystrokes

@@ -2,6 +2,7 @@ package dev.backend.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.backend.components.WebSocketSessionRegistry;
+import dev.backend.service.AgentEventHandlerService;
 import dev.backend.sse.controller.dto.KeyEventData;
 import dev.backend.sse.controller.dto.MetricEventData;
 import dev.backend.dto.ReceivedMessage;
@@ -27,6 +28,7 @@ public class WebSocketAgentHandler extends TextWebSocketHandler {
     private final WebSocketSessionRegistry registry;
     private final ObjectMapper objectMapper;
     private final AgentHandlerService agentHandlerService;
+    private final AgentEventHandlerService agentEventHandlerService;
     private final SsePushService ssePushService;
 
     // machineGuid별 limiter
@@ -108,6 +110,7 @@ public class WebSocketAgentHandler extends TextWebSocketHandler {
 
                         log.info("METRIC received {}", received.payload());
                         MetricEventData data = objectMapper.readValue(received.payload(), MetricEventData.class);
+                        agentEventHandlerService.handleMetricEvent(received,data);
                         ssePushService.broadcastMetricsToMachine(guid, "metric_event", data);
                     }
                 }
