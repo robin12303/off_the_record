@@ -21,8 +21,6 @@
 
 ### 아키텍처
 <img width="965" height="744" alt="아키텍처6" src="https://github.com/user-attachments/assets/e2550f4f-0b7b-4f1f-8d2b-7527f8a54081" />
-* **C++ Agent (Windows)** → **WebSocket (Boost.Asio/Beast)** → **Spring Boot Backend** → **MySQL(JPA)**
-* Backend → **SSE** → **Vue Dashboard**
 
 ### C++ Agent (Windows)
 
