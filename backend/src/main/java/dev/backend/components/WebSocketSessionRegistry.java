@@ -21,10 +21,6 @@ public class WebSocketSessionRegistry {
         byMachineUuid.remove(machineUuid, session);
     }
 
-    public void remove(WebSocketSession session) {
-        byMachineUuid.entrySet().removeIf(e -> e.getValue() == session);
-    }
-
     public WebSocketSession get(String machineGuid) {
         return byMachineUuid.get(machineGuid);
     }

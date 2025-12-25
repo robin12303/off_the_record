@@ -4,6 +4,7 @@ import dev.backend.auth.controller.dto.IssuedTokens;
 import dev.backend.auth.controller.dto.LoginRequest;
 import dev.backend.auth.controller.dto.SignupRequest;
 import dev.backend.auth.entity.User;
+import dev.backend.auth.repository.UserRepository;
 import dev.backend.exception.ApiException;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;

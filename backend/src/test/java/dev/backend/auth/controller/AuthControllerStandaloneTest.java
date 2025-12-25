@@ -5,7 +5,7 @@ import dev.backend.auth.controller.dto.IssuedTokens;
 import dev.backend.auth.controller.dto.SignupRequest;
 import dev.backend.auth.service.AuthService;
 import dev.backend.auth.service.RefreshTokenService;
-import dev.backend.auth.service.UserRepository;
+import dev.backend.auth.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

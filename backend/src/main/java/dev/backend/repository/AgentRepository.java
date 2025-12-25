@@ -46,7 +46,6 @@ public interface AgentRepository extends JpaRepository<Agent, Long> {
             @Param("osVersion") String osVersion,
             @Param("lastSeenAt") LocalDateTime lastSeenAt
     );
-
     Optional<Agent> findByMachineUuid(String machineUuid);
 
     // 확장성 좋은 버전

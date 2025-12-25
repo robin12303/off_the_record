@@ -1,5 +1,4 @@
-package dev.backend.auth;
-import dev.backend.auth.service.JwtService;
+package dev.backend.auth.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;

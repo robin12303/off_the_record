@@ -18,12 +18,6 @@ public record AgentCommandRequest(
         @Schema(description = "작업 타입", example = "START", allowableValues = {"START", "STOP", "OK"})
         String taskType
 ) {
-    public static AgentCommandRequest readStop(String machineUuid, String commandId) {
-        return new AgentCommandRequest("READ", commandId, machineUuid, "STOP");
-    }
-    public static AgentCommandRequest readStart(String machineUuid, String commandId) {
-        return new AgentCommandRequest("READ", commandId, machineUuid, "START");
-    }
     public static AgentCommandRequest metricsStart(String machineUuid, String commandId) {
         return new AgentCommandRequest("METRICS", commandId, machineUuid, "START");
     }

@@ -25,42 +25,43 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
-    implementation "org.springframework.boot:spring-boot-starter-json"
+    implementation 'org.springframework.boot:spring-boot-starter-json'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-security' // BCrypt만 써도 됨
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    // DB
-    implementation "org.springframework.boot:spring-boot-starter-flyway"
-    implementation "org.flywaydb:flyway-mysql"
-    runtimeOnly "com.mysql:mysql-connector-j"
-
+    // === DB ===
+    implementation 'org.springframework.boot:spring-boot-starter-flyway'
+    implementation 'org.flywaydb:flyway-mysql'
+    runtimeOnly 'com.mysql:mysql-connector-j'
 
     // === Lombok ===
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // === Test ===
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // === Guava ===
+    implementation 'com.google.guava:guava:33.2.1-jre'
+
+    // === Swagger ===
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0'
+
+    // === JWT ====
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
+
+    // === Test (Boot 4 권장) ===
+    testImplementation "org.springframework.boot:spring-boot-starter-data-jpa-test"
+    testImplementation "org.springframework.boot:spring-boot-starter-security-test" // 시큐리티 테스트하면
     testImplementation platform("org.testcontainers:testcontainers-bom:2.0.2")
     testImplementation "org.testcontainers:testcontainers-junit-jupiter"
     testImplementation "org.testcontainers:testcontainers-mysql"
-    testImplementation 'org.springframework.security:spring-security-test' // ✅ MockMvc로 인증 테스트할 때
-    testImplementation "org.springframework.boot:spring-boot-test-autoconfigure"
-    // === drop ===
-    implementation("com.google.guava:guava:33.2.1-jre")
-
-    // === SWAGGER ===
-    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0"
-
-    // === JWT ====
-    implementation "io.jsonwebtoken:jjwt-api:0.12.5"
-    runtimeOnly "io.jsonwebtoken:jjwt-impl:0.12.5"
-    runtimeOnly "io.jsonwebtoken:jjwt-jackson:0.12.5"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+    testRuntimeOnly "com.h2database:h2"
 }
+
 
 tasks.named('test') {
     useJUnitPlatform()

@@ -3,7 +3,6 @@ package dev.backend.controller;
 
 import dev.backend.dto.AgentCommandRequest;
 import dev.backend.dto.RecentResponse;
-import dev.backend.service.AgentPushService;
 import dev.backend.service.FrontendService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,35 +22,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class FrontendController {
 
     private final FrontendService frontendService;
-    private final AgentPushService agentPushService;
 
     @Operation(summary = "최근 에이전트 목록 조회")
     @GetMapping("/recent")
     public List<RecentResponse> recent(){
         return frontendService.recent();
-    }
-
-    @Operation(summary = "READ 시작", description = "지정 머신에 READ START 명령을 푸시합니다.")
-    @PostMapping("/readStart/{machineUuid}/{commandId}")
-    public void readStart(
-            @Parameter(description = "대상 머신 UUID", example = "d9f1a8f0-1234-5678-9abc-def012345678")
-            @PathVariable String machineUuid,
-            @Parameter(description = "명령 ID(추적용)", example = "cmd-001")
-            @PathVariable String commandId
-    ) {
-        log.info("readStart -> machineUuid: {}, commandId: {}", machineUuid, commandId);
-        agentPushService.sendCommand(machineUuid, AgentCommandRequest.readStart(machineUuid, commandId));
-    }
-
-    @Operation(summary = "READ 중지")
-    @PostMapping("/readStop/{machineUuid}/{commandId}")
-    public void readStop(
-            @Parameter(description = "대상 머신 GUID", example = "d9f1a8f0-1234-5678-9abc-def012345678")
-            @PathVariable String machineUuid,
-            @Parameter(description = "명령 ID(추적용)", example = "cmd-002")
-            @PathVariable String commandId
-    ) {
-        agentPushService.sendCommand(machineUuid, AgentCommandRequest.readStop(machineUuid, commandId));
     }
 
     // metricsStart/Stop도 똑같이 붙이면 됨
@@ -64,7 +39,7 @@ public class FrontendController {
             @PathVariable String commandId
     ) {
         log.info("metric start -> machineUuid: {}, commandId: {}", machineUuid, commandId);
-        agentPushService.sendCommand(machineUuid, AgentCommandRequest.metricsStart(machineUuid, commandId));
+        frontendService.sendCommand(machineUuid, AgentCommandRequest.metricsStart(machineUuid, commandId));
     }
 
     @Operation(summary = "METRIC 중지")
@@ -75,6 +50,6 @@ public class FrontendController {
             @Parameter(description = "명령 ID(추적용)", example = "cmd-002")
             @PathVariable String commandId
     ) {
-        agentPushService.sendCommand(machineUuid, AgentCommandRequest.metricsStop(machineUuid, commandId));
+        frontendService.sendCommand(machineUuid, AgentCommandRequest.metricsStop(machineUuid, commandId));
     }
 }

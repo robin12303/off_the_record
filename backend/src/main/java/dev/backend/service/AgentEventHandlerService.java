@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AgentEventHandlerService {
     private final AgentMetricsRepository agentMetricsRepository;
-    public void handleMetricEvent(ReceivedMessage received, MetricEventData eventData){
+    public void MetricEvent(ReceivedMessage received, MetricEventData eventData){
         agentMetricsRepository.insertRequiredOnly(received.machineUuid(),eventData.windowMs(),eventData.windowEndMs(),eventData.keystrokes()
                 );
     }

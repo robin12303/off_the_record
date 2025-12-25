@@ -1,4 +1,4 @@
-package dev.backend.auth.service;
+package dev.backend.auth.repository;
 
 import dev.backend.auth.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

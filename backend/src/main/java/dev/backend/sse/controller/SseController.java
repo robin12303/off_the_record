@@ -1,7 +1,6 @@
 package dev.backend.sse.controller;
 
 import dev.backend.components.SseEmitterMetricsRegistry;
-import dev.backend.components.SseEmitterReadRegistry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -28,7 +27,6 @@ import java.util.function.BiFunction;
 @RequiredArgsConstructor
 public class SseController {
 
-    private final SseEmitterReadRegistry registry;
     private final SseEmitterMetricsRegistry metricsRegistry;
 
     private SseEmitter subscribe(
@@ -62,31 +60,6 @@ public class SseController {
         }
 
         return emitter;
-    }
-
-    @Operation(
-            summary = "READ SSE 구독",
-            description = """
-            특정 machineUuid의 READ 스트림을 구독합니다.
-            클라이언트는 EventSource로 접속하세요.
-            이벤트 예: connected, (이후 read 이벤트들...)
-            """
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "SSE 스트림(text/event-stream)",
-            content = @Content(
-                    mediaType = "text/event-stream",
-                    schema = @Schema(type = "string", description = "SSE 프레임(event/data 라인)"),
-                    examples = @ExampleObject(
-                            name = "connected event",
-                            value = "event: connected\ndata: ok\nretry: 3000\n\n"
-                    )
-            )
-    )
-    @GetMapping(value = "/stream/read/{machineUuid}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter stream(@PathVariable String machineUuid) {
-        return subscribe(machineUuid, registry::add, registry::remove);
     }
 
     @Operation(
