@@ -34,7 +34,7 @@
 * WebSocket 세션 관리 (**WebSocketAgentHandler**)
 * **Rate Limiting**으로 과도한 이벤트 유입 제어
 * 수신 이벤트 **MySQL 저장 + SSE로 실시간 스트리밍**
-* `/metricsStart`, `/metricsStop` REST API로 스트리밍 제어
+* `/matricsStart`, `/matricsStop` REST API로 스트리밍 제어
 
 ### Key Points
 
@@ -192,8 +192,8 @@ Visual Studio를 다시 열고 빌드합니다.
 
 | Name                 | Method | Endpoint                                   | Response       |
 | -------------------- | ------ | ------------------------------------------ | -------------- |
-| 에이전트 스트리밍 시작 | POST   | `/metrics/start/{machineUuid}/{commandId}` | `202 Accepted` |
-| 에이전트 스트리밍 종료 | POST   | `/metrics/stop/{machineUuid}/{commandId}`  | `202 Accepted` |
+| 에이전트 스트리밍 시작 | POST   | `/matricsStart/{machineUuid}/{commandId}` | `202 Accepted` |
+| 에이전트 스트리밍 종료 | POST   | `/matricsStop/{machineUuid}/{commandId}`  | `202 Accepted` |
 
 **Response example**
 
@@ -330,7 +330,7 @@ data: {"timeStamp":"2025-12-21T11:12:42Z","eventType":"KEYDOWN","count":1}
 4) **DashBoard.vue**
   <img width="1131" height="366" alt="dashboard" src="https://github.com/user-attachments/assets/946871c3-c613-486d-92f9-dd3b3fb8f418" />
 
-5) **Metrics.vue**
+5) **Matrics.vue**
   <img width="519" height="663" alt="metrics_view" src="https://github.com/user-attachments/assets/592209a5-1683-469e-a471-454027659647" />
 
 ### [Agent]
