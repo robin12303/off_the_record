@@ -1,5 +1,5 @@
 # 프로젝트: Off the record (김연성)[![agent-v1-ci](https://github.com/robin12303/off_the_record3/actions/workflows/agent_v1_ci.yml/badge.svg)](https://github.com/robin12303/off_the_record3/actions/workflows/agent_v1_ci.yml)[![backend](https://github.com/robin12303/off_the_record3/actions/workflows/backend_ci.yml/badge.svg)](https://github.com/robin12303/off_the_record3/actions/workflows/backend_ci.yml)[![frontend-ci](https://github.com/robin12303/off_the_record3/actions/workflows/frontend_ci.yml/badge.svg)](https://github.com/robin12303/off_the_record3/actions/workflows/frontend_ci.yml) 
-- [GitHub 링크](https://github.com/robin12303/off_the_record)
+- [GitHub 링크](https://github.com/robin12303/off_the_record3)
 - [Notion 링크](https://www.notion.so/2d0401ce7bab80eb8704c2c5dce7c4d5?pvs=21)
 
 **Off the record**는 Windows 환경의 C++ 에이전트가 시스템 이벤트를 실시간으로 집계하고, Spring Boot 백엔드로 전송해 **MySQL에 저장**한 뒤, **SSE(Server-Sent Events)** 로 Vue 대시보드에 실시간 스트리밍하는 학습용 프로젝트입니다.
