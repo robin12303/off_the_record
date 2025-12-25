@@ -197,12 +197,12 @@ Visual Studio를 다시 열고 빌드합니다.
 
 | Name                  | Method | Endpoint                               | Request     | Response            |
 | --------------------- | ------ | -------------------------------------- | ----------- | ------------------- |
-| Start agent streaming | POST   | `/readStart/{machineGuid}/{commandId}` | Path params | (예시) `202 Accepted` |
-| Stop agent streaming  | POST   | `/readStop/{machineGuid}/{commandId}`  | Path params | (예시) `202 Accepted` |
+| Start agent streaming | POST   | `/matricsStart/{machineUuid}/{commandId}` | Path params | (예시) `202 Accepted` |
+| Stop agent streaming  | POST   | `/matricsStop/{machineUuid}/{commandId}`  | Path params | (예시) `202 Accepted` |
 
 **Path Params**
 
-* `machineGuid`: 에이전트 식별자
+* `machineUuid`: 에이전트 식별자
 * `commandId`: 요청 식별자(클라이언트에서 생성)
 
 **Response (example)**
@@ -226,88 +226,153 @@ Visual Studio를 다시 열고 빌드합니다.
 **Event (example)**
 
 ```text
-event: key_event
-data: {"timeStamp":"...","eventType":"KEYDOWN","keyString":"A"}
+event: metric_event
+data: {"timeStamp":"...","windowMs":"KEYDOWN","keystrokes":"A"}
 ```
 
 ---
 
-### WebSocket
+## API Spec
 
-* Endpoint: (예시) `/ws/agent`
-* Payload: JSON string
+### 공통
 
-#### Agent → Backend
+* Base URL: `http://localhost:8080`
+* `machineUuid`: 에이전트 식별자(UUID)
+* `commandId`: 요청 식별자(UUID, 클라이언트 생성)
 
-| Type      | Prefix    | TaskType  | Payload        |
-| --------- | --------- | --------- | -------------- |
-| Key event | READ      | START     | `string(json)` |
-| Key event | READ      | STOP      | `string(json)` |
-| Heartbeat | HEARTBEAT | HEARTBEAT | `string(json)` |
+---
 
-**API 요청 및 응답 예시**
-1) Command 요청 예시 (Web/Backend → Agent)
+## REST API (Agent Control)
+
+| Name                    | Method | Endpoint                                   | Response       |
+| ----------------------- | ------ | ------------------------------------------ | -------------- |
+| Start metrics streaming | POST   | `/metrics/start/{machineUuid}/{commandId}` | `202 Accepted` |
+| Stop metrics streaming  | POST   | `/metrics/stop/{machineUuid}/{commandId}`  | `202 Accepted` |
+
+**Response example**
+
 ```json
 {
-  "prefix": "READ",
-  "commandId": "web-6855092-fd5c-4249-86d0-c54e2d3f39bc",
-  "machineGuid": "********-****-****-****-********",
-  "taskType": "START"
+  "commandId": "abc-123",
+  "accepted": true
 }
 ```
-2) Command 요청 예시 (Web/Backend → Agent, STOP)  
+
+---
+
+## SSE (Dashboard Streaming)
+
+| Name            | Method | Endpoint                | Response            |
+| --------------- | ------ | ----------------------- | ------------------- |
+| Open SSE stream | GET    | `/stream/{machineUuid}` | `text/event-stream` |
+
+**Event example**
+
+```text
+event: metric_event
+data: {"timeStamp":"2025-12-21T11:12:42Z","eventType":"KEYDOWN","count":1}
+```
+
+---
+
+## WebSocket (Agent ↔ Backend)
+
+* Endpoint: `/ws/agent`
+* Payload: JSON
+
+### Message Envelope (권장)
 
 ```json
 {
-  "prefix": "READ",
+  "type": "METRIC_EVENT",
+  "machineUuid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "commandId": "optional-uuid",
+  "payload": { }
+}
+```
+
+### 1) Command (Backend → Agent)
+
+**START**
+
+```json
+{
+  "type": "COMMAND",
   "commandId": "web-6855092c-fd5c-4249-86d0-c54e2d3f39bc",
-  "machineGuid": "1111-11-1111-1111-111111111",
-  "taskType": "START"
+  "machineUuid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "payload": { "action": "START" }
 }
 ```
-3) Key Event 메시지 예시
+
+**STOP**
 
 ```json
 {
-  "prefix": "READ",
-  "commandId": "N/A",
-  "taskType": "EVENT",
-  "machineGuid": "11111-11-11-11-1111111",
-  "payload": "{\"timeStamp\":\"2025-12-21 11:12:42\",\"capsLock\":\"OFF\",\"eventType\":\"KEY_DOWN\",\"keyString\":\"a\"}"
+  "type": "COMMAND",
+  "commandId": "web-6855092c-fd5c-4249-86d0-c54e2d3f39bc",
+  "machineUuid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "payload": { "action": "STOP" }
 }
 ```
-4) Heartbeat
+
+### 2) Metric Event (Agent → Backend)
 
 ```json
 {
-  "prefix": "HEARTBEAT",
-  "commandId": "N/A",
-  "taskType": "HEARTBEAT",
-  "payload": "{\"cpuName\":\"Intel(R) ...\",\"gpuName\":\"NVIDIA ...\",\"ramTotalMb\":32768,\"osName\":\"Windows 11\",\"osVersion\":\"10.0.22631\",\"machineGuid\":\"{A1B2-C3D4-...}\",\"hostName\":\"DESKTOP-XXXX\"}",
-  "machineGuid": "{A1B2-C3D4-...}"
+  "type": "METRIC_EVENT",
+  "machineUuid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "payload": {
+    "timeStamp": "2025-12-21T11:12:42Z",
+    "windowMs": 1000,
+    "keystrokes": 12
+  }
 }
-
 ```
 
-5) Frontend 응답 예시 (Web/Backend → Frontend, /api/recent)
+### 3) Heartbeat (Agent → Backend)
+
+```json
+{
+  "type": "HEARTBEAT",
+  "machineUuid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "payload": {
+    "hostName": "DESKTOP-XXXX",
+    "osName": "Windows 11",
+    "osVersion": "10.0.22631",
+    "cpuName": "Intel(R) ...",
+    "gpuName": "NVIDIA ...",
+    "ramTotalMb": 32768
+  }
+}
+```
+
+---
+
+## REST (Frontend 용 예시)
+
+### Recent agents
+
+`GET /api/recent`
+
+**Response example**
 
 ```json
 [
-    {
-        "id": 1,
-         "machineGuid": "11111-11-11-11-1111111",
-        "ipAddress": "0:0:0:0:0:0:0:1",
-        "hostName": "device",
-        "cpuName": "12th Gen Intel(R) Core(TM) i7-12700K",
-        "gpuName": "Intel(R) UHD Graphics 770",
-        "ramTotalMb": "32.00 GB",
-        "osName": "Windows 10 Pro",
-        "osVersion": "24H2 (6.3.26100.7462)",
-        "lastSeenAt": "2025-12-21T10:56:09"
-    }
+  {
+    "id": 1,
+    "machineUuid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "ipAddress": "::1",
+    "hostName": "device",
+    "cpuName": "12th Gen Intel(R) Core(TM) i7-12700K",
+    "gpuName": "Intel(R) UHD Graphics 770",
+    "ramTotalMb": 32768,
+    "osName": "Windows 10 Pro",
+    "osVersion": "24H2",
+    "lastSeenAt": "2025-12-21T10:56:09"
+  }
 ]
 ```
----
+
 ## Screenshots
 ### [Frontend]
 1) **Home.vue**
