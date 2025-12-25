@@ -341,5 +341,5 @@ data: {"timeStamp":"2025-12-21T11:12:42Z","eventType":"KEYDOWN","count":1}
   <img width="1118" height="631" alt="running" src="https://github.com/user-attachments/assets/163e6580-aee9-4cf0-8b15-7fae481f2265" />
 
 
-## Status
-In progress / Experimental
+## 현재 진행 상황
+베터 버전
