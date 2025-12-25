@@ -53,7 +53,7 @@
 ## Features
 
 ### C++ Agent
-
+[![agent-v1-ci](https://github.com/robin12303/off_the_record3/actions/workflows/agent_v1_ci.yml/badge.svg)](https://github.com/robin12303/off_the_record3/actions/workflows/agent_v1_ci.yml)
 - Windows 시스템 이벤트 수집 (예: 키 이벤트)
 - 이벤트 JSON 직렬화
 - WebSocket으로 백엔드에 전송
