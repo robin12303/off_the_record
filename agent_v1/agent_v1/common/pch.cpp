@@ -168,73 +168,7 @@ std::vector<std::wstring> Wmi::QueryStringList(const std::wstring& className, co
     }
     return out;
 }
-
-// -------------------- GetMachineGuid --------------------
-std::wstring GetMachineGuid()
-{
-    const wchar_t* subKey = L"SOFTWARE\\Microsoft\\Cryptography";
-    const wchar_t* valueName = L"MachineGuid";
-
-    HKEY hKey = nullptr;
-
-    // 64-bit 레지스트리 뷰 강제 (32-bit 앱이더라도 64-bit 뷰로 읽게 함)
-    LONG rc = RegOpenKeyExW(
-        HKEY_LOCAL_MACHINE,
-        subKey,
-        0,
-        KEY_READ | KEY_WOW64_64KEY,
-        &hKey
-    );
-
-    // 일부 환경(32bit OS 등)에서는 KEY_WOW64_64KEY가 의미 없거나 실패할 수 있으니 fallback
-    if (rc != ERROR_SUCCESS) {
-        rc = RegOpenKeyExW(HKEY_LOCAL_MACHINE, subKey, 0, KEY_READ, &hKey);
-    }
-
-    if (rc != ERROR_SUCCESS) {
-        throw std::runtime_error("RegOpenKeyExW failed: " + std::to_string(rc));
-    }
-
-    // 꼭 닫아라. 인간은 자꾸 이걸 까먹더라.
-    struct KeyCloser {
-        HKEY k;
-        ~KeyCloser() { if (k) RegCloseKey(k); }
-    } closer{ hKey };
-
-    DWORD type = 0;
-    DWORD sizeBytes = 0;
-
-    // 이제는 "열어둔 키 핸들(hKey)" 기준으로 읽기: lpSubKey = nullptr
-    rc = RegGetValueW(
-        hKey,
-        nullptr,
-        valueName,
-        RRF_RT_REG_SZ,
-        &type,
-        nullptr,
-        &sizeBytes
-    );
-    if (rc != ERROR_SUCCESS) {
-        throw std::runtime_error("RegGetValueW(size) failed: " + std::to_string(rc));
-    }
-
-    std::vector<wchar_t> buf(sizeBytes / sizeof(wchar_t));
-
-    rc = RegGetValueW(
-        hKey,
-        nullptr,
-        valueName,
-        RRF_RT_REG_SZ,
-        &type,
-        buf.data(),
-        &sizeBytes
-    );
-    if (rc != ERROR_SUCCESS) {
-        throw std::runtime_error("RegGetValueW(read) failed: " + std::to_string(rc));
-    }
-
-    return std::wstring(buf.data());
-}
+ 
 
 // -------------------- GetHostNameW --------------------
 std::wstring GetHostNameW(bool fqdn)

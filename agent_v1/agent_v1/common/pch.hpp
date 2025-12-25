@@ -93,8 +93,7 @@ public:
 
 };
 
-// -------------------- GetMachineGuid --------------------
-std::wstring GetMachineGuid();
+// -------------------- GetMachineGuid -------------------- 
 
 // -------------------- GetHostNameW --------------------
 std::wstring GetHostNameW(bool fqdn);
