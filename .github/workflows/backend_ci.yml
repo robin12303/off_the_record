@@ -1,14 +1,19 @@
-name: backend
+name: backend-ci
 
 on:
   push:
     branches: [ "main", "master", "develop" ]
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend-ci.yml"   # 워크플로우 수정 시에도 돌게
   pull_request:
+    paths:
+      - "backend/**"
+      - ".github/workflows/backend-ci.yml"
 
 jobs:
   build-test:
     runs-on: ubuntu-latest
-
     services:
       mysql:
         image: mysql:8.0
@@ -33,7 +38,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: "17"
 
       - name: Set up Gradle (cache)
         uses: gradle/actions/setup-gradle@v5
