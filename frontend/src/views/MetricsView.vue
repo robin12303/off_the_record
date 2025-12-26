@@ -50,11 +50,12 @@ export default {
     console.log("clientId fixed:", this.clientId);
   },
   unmounted() {
+    this.stop()
     if (this.es) this.es.close();
-    this.stop();
   },
   methods: {
     async stop() {
+      console.log("[MetricsView] stop called", new Error().stack);
       // ✅ 1) SSE 끊기
       if (this.stopSse) {
         this.stopSse();
@@ -107,7 +108,6 @@ export default {
           },
           onError: (err) => {
             console.log("SSE error:", err);
-            this.stop();
           },
         });
 
@@ -116,7 +116,6 @@ export default {
 
       } catch (e) {
         console.log(e);
-        this.stop();
       } finally {
         this.isLoading = false;
       }
