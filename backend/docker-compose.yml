@@ -30,12 +30,11 @@ services:
       - .env
     environment:
       SPRING_PROFILES_ACTIVE: local
-
-      # application-local.yml이 이걸 읽음
-      OFF_THE_RECORD_DB_URL: ${OFF_THE_RECORD_DB_URL}
-      OFF_THE_RECORD_DB_USERNAME: ${OFF_THE_RECORD_DB_USERNAME}
-      OFF_THE_RECORD_DB_PASSWORD: ${OFF_THE_RECORD_DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
+      # ↓↓↓ 이 4줄은 삭제 (env_file이 이미 넣어줌)
+      # OFF_THE_RECORD_DB_URL: ${OFF_THE_RECORD_DB_URL}
+      # OFF_THE_RECORD_DB_USERNAME: ${OFF_THE_RECORD_DB_USERNAME}
+      # OFF_THE_RECORD_DB_PASSWORD: ${OFF_THE_RECORD_DB_PASSWORD}
+      # JWT_SECRET: ${JWT_SECRET}
 
 volumes:
   otr_mysql:

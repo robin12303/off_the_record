@@ -8,6 +8,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
 
 import java.time.Instant;
 
@@ -47,5 +48,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .internalServerError()
                 .body(new ApiError("INTERNAL_ERROR", "Server error", Instant.now()));
+    }
+
+    @ExceptionHandler(AsyncRequestNotUsableException.class)
+    public ResponseEntity<Void> handleAsyncNotUsable(AsyncRequestNotUsableException e) {
+        // 클라이언트가 연결 끊은 케이스: 보통 응답 줄 필요도 없음
+        return ResponseEntity.noContent().build();
     }
 }
