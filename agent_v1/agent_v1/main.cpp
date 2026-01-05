@@ -48,11 +48,6 @@ int main(int argc, char* argv[])
             << " target=" << target << "\n"
             << "UUID: " << uuid << "\n";
 
-        // ⚠️ 주의: 전역 guard가 이미 있는데, 여기서 다시 guard를 새로 만들고 있음.
-        // 여기 auto guard는 "전역 guard"를 가리는(섀도잉) 지역 변수다.
-        // 기능상 큰 문제는 없을 수 있지만, 혼란을 줄이려면 하나만 유지하는 게 좋음.
-        auto guard = boost::asio::make_work_guard(ioc);
-
         // io_context를 별도 스레드에서 run()
         // - 네트워크 async 작업 콜백들이 이 스레드에서 실행된다.
         std::jthread ioc_thread([&] {
