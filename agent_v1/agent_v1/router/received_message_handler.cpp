@@ -65,8 +65,7 @@ void MessageHandler::loop(std::stop_token st)
                     if (metric_running) {
                         resp["payload"] = "ALREADY_RUNNING";
                     }
-                    else {
-                        g_keystrokes = 0;
+                    else { 
                         metric_running = true;
                         resp["payload"] = "OK";
                     }
@@ -75,8 +74,7 @@ void MessageHandler::loop(std::stop_token st)
                     if (!metric_running) {
                         resp["payload"] = "ALREADY_STOPPED";
                     }
-                    else {
-                        g_keystrokes = -1;
+                    else { 
                         metric_running = false;
                         resp["payload"] = "OK";
                     }
